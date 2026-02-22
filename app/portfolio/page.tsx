@@ -1,7 +1,6 @@
-export default function Page(){
-    return(
-        <div>This is Portfolio Page 
-        
+export default function Page() {
+    return (
+        <div>This is Portfolio Page
         </div>
     )
 }
