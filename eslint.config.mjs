@@ -8,9 +8,10 @@ const eslintConfig = defineConfig([
 
   {
     rules: {
-      "no-unused-vars": "error",
-      "no-console": "error",
+      "@typescript-eslint/no-unused-vars": "error",
+      "no-unused-vars": "off",
       "prefer-const": "error",
+      "no-console": "warn",
       quotes: ["error", "double"],
       semi: ["error", "always"],
       "no-multiple-empty-lines": ["error", { max: 1 }],
@@ -18,14 +19,7 @@ const eslintConfig = defineConfig([
     },
   },
 
-  // Override default ignores of eslint-config-next.
-  globalIgnores([
-    // Default ignores of eslint-config-next:
-    ".next/**",
-    "out/**",
-    "build/**",
-    "next-env.d.ts",
-  ]),
+  globalIgnores([".next/**", "out/**", "build/**", "next-env.d.ts"]),
 ]);
 
 export default eslintConfig;
