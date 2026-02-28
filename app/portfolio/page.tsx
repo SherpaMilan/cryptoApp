@@ -4,6 +4,3 @@ export default function Page() {
         </div>
     );
 }
-
-console.log("hi")
-
