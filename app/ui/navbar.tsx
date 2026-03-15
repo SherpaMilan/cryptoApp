@@ -1,4 +1,5 @@
 "use client";
+
 import Link from "next/link";
 import Logo from "@/app/ui/logo";
 import { usePathname } from "next/navigation";
@@ -29,7 +30,7 @@ export default function Navbar() {
   // usePathname provides current URL path of the page you’re on.
   const pathname = usePathname();
   return (
-    <div className="w-full flex items-center gap-24 ">
+    <nav className="w-full flex items-center gap-24 ">
       <div className="flex-1 flex items-center h-[48px]  ">
         <Logo />
       </div>
@@ -52,24 +53,34 @@ export default function Navbar() {
         })}
       </div>
       <div className="flex-1 flex  justify-end items-center h-[48px] gap-24  p-2">
-        <div className="relative w-[356px] h-[48px] bg-[#CCCCFA66] rounded-[15px] flex items-center">
+        <form className="relative w-[356px] h-[48px] bg-[var(--brand-purple-light)]  rounded-[15px] flex items-center">
           <input
             type="text"
             placeholder="Search..."
-            className="peer w-full pl-10 pr-3 h-full rounded-[15px] placeholder:text-[#424286CC] bg-transparent focus:outline-none focus:ring-1 focus:ring-[#424286CC]"
+            aria-label="Search cryptocurrencies"
+            className="peer w-full pl-10 pr-3 h-full rounded-[15px] placeholder:text-[var(--brand-purple)] bg-transparent focus:outline-none focus:ring-1 focus:ring-[var(--brand-purple)]"
           />
-          <GoSearch className="absolute left-3 top-1/2 -translate-y-1/2 text-[#424286CC] peer-focus:text-[#424286CC] pointer-events-none" />
-        </div>
+          <GoSearch className="absolute left-3 top-1/2 -translate-y-1/2 border-[var(--brand-purple)] peer-focus:text-[var(--brand-purple)] pointer-events-none" />
+        </form>
 
-        <div className="rounded-[15px] flex justify-center items-center  bg-[#CCCCFA66] p-2">
-          <HiCurrencyDollar className="w-5 h-5 mr-1 fill-[#424286]" />
-          <span className="text-[#424286CC] ">USD</span>
-          <MdKeyboardArrowDown className="inline-block w-4 h-4 ml-1 fill-[#424286]" />
-        </div>
-        <div className="rounded-[15px] bg-[#CCCCFA66] p-2 w-[48px] h-[48px] flex justify-center items-center">
-          <FiMoon className="w-6 h-6 stroke-[#424286] fill-none" />
-        </div>
+        {/* TODO: implement currency dropdown later in the project*/}
+        <button
+          aria-label="Select currency"
+          className="rounded-[15px] flex justify-center items-center  bg-[var(--brand-purple-light)] cursor-pointer p-2"
+        >
+          <HiCurrencyDollar className="w-5 h-5 mr-1 fill-[var(--brand-purple)]" />
+          <span className="text-[var(--brand-purple)] ">USD</span>
+          <MdKeyboardArrowDown className="inline-block  ml-1  border-[var(--brand-purple)] " />
+        </button>
+
+        {/* TODO: implement dark mode toggle later in the project*/}
+        <button
+          aria-label="Toggle dark mode"
+          className="rounded-[15px] bg-[var(--brand-purple-light)] p-2 w-[48px] h-[48px] flex justify-center items-center cursor-pointer "
+        >
+          <FiMoon className="w-6 h-6 border-[var(--brand-purple)] fill-none" />
+        </button>
       </div>
-    </div>
+    </nav>
   );
 }
