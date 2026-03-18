@@ -30,11 +30,13 @@ export default function Navbar() {
   // usePathname provides current URL path of the page you’re on.
   const pathname = usePathname();
   return (
-    <nav className="w-full flex items-center gap-24 ">
+       <div className="max-w-[1440px] mx-auto flex justify-between items-center h-[80px] px-[72px] box-border ">
+  <nav className="w-full flex items-center justify-between ">
       <div className="flex-1 flex items-center h-[48px]  ">
         <Logo />
       </div>
-      <div className="flex items-center gap-10 h-[48px]">
+
+      <div className="flex flex-1 items-center justify-center h-[48px] gap-6">
         {links.map((link) => {
           const isActive = pathname === link.href;
           const ActiveIcon = isActive ? link.boldIcon : link.defaultIcon;
@@ -52,7 +54,8 @@ export default function Navbar() {
           );
         })}
       </div>
-      <div className="flex-1 flex  justify-end items-center h-[48px] gap-24  p-2">
+
+      <div className="flex flex-1  justify-end items-center h-[48px]  space-x-4 ">
         <form className="relative w-[356px] h-[48px] bg-[var(--brand-purple-light)]  rounded-[15px] flex items-center">
           <input
             type="text"
@@ -81,6 +84,10 @@ export default function Navbar() {
           <FiMoon className="w-6 h-6 border-[var(--brand-purple)] fill-none" />
         </button>
       </div>
+
     </nav>
+ 
+       </div>
+  
   );
 }

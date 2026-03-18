@@ -5,6 +5,8 @@
   --foreground: #171717;
   --brand-purple-light: #ccccfa66;
   --brand-purple: #424286;
+  --brand-white: #ffffff;
+  --brand-gray: #F3F5F9;
 }
 
 @theme inline {
