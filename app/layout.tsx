@@ -3,7 +3,6 @@ import Navbar from "./ui/navbar";
 import { Space_Grotesk } from "next/font/google";
 import type { Metadata } from "next";
 import Topbar from "./ui/topbar";
-
 const spaceGrotesk = Space_Grotesk({
   weight: ["400", "500", "600"],
   subsets: ["latin"],
@@ -32,8 +31,6 @@ export default function RootLayout({
         <div className="w-full bg-[var(--brand-white)]">
           <Navbar />
         </div>
-
-   
 
         {children}
       </body>

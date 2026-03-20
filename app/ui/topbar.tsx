@@ -9,5 +9,5 @@ export default function Topbar() {
             <h1 className="text-sm text-[var(--brand-white)]">Placeholder</h1>
             <h1 className="text-sm text-[var(--brand-white)]">Placeholder</h1>
           </div>
-  )
+  );
 }
