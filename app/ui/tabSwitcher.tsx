@@ -16,7 +16,10 @@ export default function TabSwitcher() {
       <div className="max-w-[1440px] mx-auto px-[72px] ">
         <nav className="flex w-[506px] h-[53px] bg-[var(--brand-white)] rounded-[6px] p-[4px]  ">
           {tabs.map((tab) => {
-            const isActive = pathname === tab.href;
+            const isActive =
+              tab.href == "/"
+                ? pathname === "/"
+                : pathname.startsWith(tab.href);
             return (
               <Link
                 key={tab.href}
