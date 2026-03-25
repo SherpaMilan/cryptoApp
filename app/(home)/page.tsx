@@ -1,3 +1,4 @@
+import Image from "next/image";
 import getCoins from "../utils/getCoins";
 import { MdArrowDropUp, MdOutlineArrowDropDown } from "react-icons/md";
 
@@ -32,7 +33,7 @@ export default async function HomePage() {
                 className="w-[252px] h-[78px] flex flex-row items-center p-2 rounded bg-[var(--brand-white)] cursor-pointer flex-shrink-0"
               >
                 <div className="flex">
-                  <img src={coin.image} className="w-7 h-7" alt={coin.name} />
+                  <Image src={coin.image} width={28} height={28} alt={coin.name} />
                 </div>
 
                 <div className="flex flex-col justify-between ml-4 gap-2 flex-1">
