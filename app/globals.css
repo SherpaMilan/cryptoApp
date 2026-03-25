@@ -7,6 +7,8 @@
   --brand-purple: #424286;
   --brand-white: #ffffff;
   --brand-gray: #f3f5f9;
+  --brand-green: #077e77;
+  --brand-red: #fe2264;
 }
 
 @theme inline {

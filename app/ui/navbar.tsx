@@ -1,15 +1,13 @@
 "use client";
-
 import Link from "next/link";
-import Logo from "@/app/ui/logo";
+import Logo from "@/ui/logo";
 import { usePathname } from "next/navigation";
 import { VscLayers } from "react-icons/vsc";
 import { IoLayersSharp } from "react-icons/io5";
 import { RiHome9Line, RiHome9Fill } from "react-icons/ri";
 import { GoSearch } from "react-icons/go";
 import { FiMoon } from "react-icons/fi";
-import { MdKeyboardArrowDown } from "react-icons/md";
-import { HiCurrencyDollar } from "react-icons/hi2";
+import CurrencyDropdown from "@/ui/currencyDropdown";
 
 const links = [
   {
@@ -66,15 +64,7 @@ export default function Navbar() {
             <GoSearch className="absolute left-3 top-1/2 -translate-y-1/2 border-[var(--brand-purple)] peer-focus:text-[var(--brand-purple)] pointer-events-none" />
           </form>
 
-          {/* TODO: implement currency dropdown later in the project*/}
-          <button
-            aria-label="Select currency"
-            className="rounded-[15px] flex justify-center items-center  bg-[var(--brand-purple-light)] cursor-pointer p-2"
-          >
-            <HiCurrencyDollar className="w-5 h-5 mr-1 fill-[var(--brand-purple)]" />
-            <span className="text-[var(--brand-purple)] ">USD</span>
-            <MdKeyboardArrowDown className="inline-block  ml-1  border-[var(--brand-purple)] " />
-          </button>
+          <CurrencyDropdown />
 
           {/* TODO: implement dark mode toggle later in the project*/}
           <button

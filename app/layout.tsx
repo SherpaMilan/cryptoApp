@@ -3,6 +3,7 @@ import Navbar from "./ui/navbar";
 import { Space_Grotesk } from "next/font/google";
 import type { Metadata } from "next";
 import Topbar from "./ui/topbar";
+
 const spaceGrotesk = Space_Grotesk({
   weight: ["400", "500", "600"],
   subsets: ["latin"],
