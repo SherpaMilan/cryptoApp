@@ -1,22 +1,40 @@
 "use client";
 
-import { useState } from "react";
-
+import { useCurrency } from "@/context/currencyContext";
+import { useEffect, useRef, useState } from "react";
 import { HiCurrencyDollar, HiMiniCurrencyYen } from "react-icons/hi2";
 import { MdKeyboardArrowDown } from "react-icons/md";
 import { RiMoneyEuroCircleFill, RiMoneyPoundCircleFill } from "react-icons/ri";
 
 export default function CurrencyDropdown() {
+  const { defaultCurrency, setDefaultCurrency } = useCurrency();
+
   const [open, setOpen] = useState(false);
-
-  const currency = "USD"; //  FIX (static for now)
-
   const currencies = ["USD", "EUR", "JPY", "GBP", "AUD"];
+  const dropdownContainerRef = useRef<HTMLDivElement>(null);
 
-  const getIcon = (cur: string) => {
+  useEffect(() => {
+    const handleDropdown = (event: MouseEvent) => {
+      const dropdownContainer = dropdownContainerRef.current;
+      if (
+        dropdownContainer &&
+        !dropdownContainer.contains(event.target as Node)
+      ) {
+        setOpen(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleDropdown);
+    // return cleanup function
+    return () => {
+      document.removeEventListener("mousedown", handleDropdown);
+    };
+  }, []);
+
+  const getIcon = (currency: string) => {
     const baseClass = "w-5 h-5";
 
-    switch (cur) {
+    switch (currency) {
       case "EUR":
         return <RiMoneyEuroCircleFill className={baseClass} />;
       case "GBP":
@@ -31,26 +49,31 @@ export default function CurrencyDropdown() {
   };
 
   return (
-    <div className="relative inline-block">
+    <div className="relative inline-block" ref={dropdownContainerRef}>
       <button
         onClick={() => setOpen(!open)}
         className="flex items-center bg-[var(--brand-purple-light)] text-[var(--brand-purple)] rounded-[15px] px-3 py-1.5 cursor-pointer"
       >
-        {getIcon(currency)}
-        <span className="pl-1">{currency}</span>
+        {getIcon(defaultCurrency)}
+        <span className="pl-1">{defaultCurrency}</span>
         <MdKeyboardArrowDown className="ml-1" />
       </button>
 
       {open && (
         <ul className="absolute top-full left-0 mt-1 w-full bg-[var(--brand-purple-light)] shadow-md rounded-md z-10">
-          {currencies.map((cur) => (
+          {currencies.map((currency) => (
             <li
-              key={cur}
+              key={currency}
               className="group px-3 py-1.5 text-sm hover:bg-[var(--brand-purple)] cursor-pointer flex items-center gap-2 uppercase text-[var(--brand-purple)]"
-              onClick={() => setOpen(false)} //  only close dropdown
+              onClick={() => {
+                setOpen(false);
+                setDefaultCurrency(currency);
+              }}
             >
-              <span className="group-hover:text-white">{getIcon(cur)}</span>
-              <span className="group-hover:text-white">{cur}</span>
+              <span className="group-hover:text-white">
+                {getIcon(currency)}
+              </span>
+              <span className="group-hover:text-white">{currency}</span>
             </li>
           ))}
         </ul>
