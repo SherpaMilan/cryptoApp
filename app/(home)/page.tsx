@@ -1,6 +1,5 @@
 "use client";
 import Image from "next/image";
-import getCoins from "../utils/getCoins";
 import { MdArrowDropUp, MdOutlineArrowDropDown } from "react-icons/md";
 import { Coin } from "@/types/coin";
 import { useCurrency } from "@/context/currencyContext";
@@ -11,20 +10,14 @@ export default function HomePage() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const fetchCoins = async () => {
-      setLoading(true);
-      try {
-        const data = await getCoins(defaultCurrency);
-        setCoins(data);
-      } catch {
-        throw new Error("Failed to fetch coins:");
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchCoins();
+    // Browser fetch → your Next.js API route
+    fetch(`/api/coins?currency=${defaultCurrency}&perPage=100&page=1`)
+      .then((res) => res.json())
+      .then(setCoins)
+      .catch(console.error)
+      .finally(() => setLoading(false));
   }, [defaultCurrency]);
+
   if (loading) return <div>Loading coins...</div>;
 
   return (
@@ -51,6 +44,7 @@ export default function HomePage() {
                     width={28}
                     height={28}
                     alt={coin.name}
+                    style={{ width: "auto", height: "auto" }}
                   />
                 </div>
 
