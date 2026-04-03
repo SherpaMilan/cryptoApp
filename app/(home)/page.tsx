@@ -14,7 +14,6 @@ export default function HomePage() {
     fetch(`/api/coins?currency=${defaultCurrency}&perPage=100&page=1`)
       .then((res) => res.json())
       .then(setCoins)
-      .catch(console.error)
       .finally(() => setLoading(false));
   }, [defaultCurrency]);
 
