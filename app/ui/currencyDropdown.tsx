@@ -2,18 +2,23 @@
 
 import { useCurrency } from "@/context/currencyContext";
 import { useEffect, useRef, useState } from "react";
-import { HiCurrencyDollar, HiMiniCurrencyYen } from "react-icons/hi2";
+import {
+  HiMiniCurrencyDollar,
+  HiMiniCurrencyEuro,
+  HiMiniCurrencyPound,
+} from "react-icons/hi2";
 import { MdKeyboardArrowDown } from "react-icons/md";
-import { RiMoneyEuroCircleFill, RiMoneyPoundCircleFill } from "react-icons/ri";
+import { TbCoinBitcoinFilled } from "react-icons/tb";
 
 export default function CurrencyDropdown() {
   const { defaultCurrency, setDefaultCurrency } = useCurrency();
-
+  // const [mounted, setMounted] = useState(false);
   const [open, setOpen] = useState(false);
-  const currencies = ["USD", "EUR", "JPY", "GBP", "AUD"];
+  const currencies = ["USD", "EUR", "BTC", "GBP", "AUD"];
   const dropdownContainerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
+    // setMounted(true);
     const handleDropdown = (event: MouseEvent) => {
       const dropdownContainer = dropdownContainerRef.current;
       if (
@@ -36,17 +41,19 @@ export default function CurrencyDropdown() {
 
     switch (currency) {
       case "EUR":
-        return <RiMoneyEuroCircleFill className={baseClass} />;
+        return <HiMiniCurrencyEuro className={baseClass} />;
       case "GBP":
-        return <RiMoneyPoundCircleFill className={baseClass} />;
-      case "JPY":
-        return <HiMiniCurrencyYen className={baseClass} />;
+        return <HiMiniCurrencyPound className={baseClass} />;
+      case "BTC":
+        return <TbCoinBitcoinFilled className={baseClass} />;
       case "AUD":
       case "USD":
       default:
-        return <HiCurrencyDollar className={baseClass} />;
+        return <HiMiniCurrencyDollar className={baseClass} />;
     }
   };
+
+  // if (!mounted) return null; // Avoid hydration mismatch by rendering nothing on the server
 
   return (
     <div className="relative inline-block" ref={dropdownContainerRef}>

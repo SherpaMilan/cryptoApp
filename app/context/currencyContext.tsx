@@ -6,6 +6,7 @@ interface CurrencyContextType {
   defaultCurrency: string;
   setDefaultCurrency: (currency: string) => void;
 }
+
 export const CurrencyContext = createContext<CurrencyContextType | undefined>(
   undefined,
 );
@@ -15,20 +16,15 @@ export default function CurrencyProvider({
 }: {
   children: React.ReactNode;
 }) {
-  const [defaultCurrency, setDefaultCurrency] = useState("USD");
-  const [mounted, setMounted] = useState(false);
-
-  useEffect(() => {
-    const stored = localStorage.getItem("defaultCurrency");
-    if (stored) setDefaultCurrency(stored);
-    setMounted(true); // client has mounted
-  }, []);
+  const [defaultCurrency, setDefaultCurrency] = useState(() => {
+    if (typeof window === "undefined") return "USD"; // SSR safe
+    return localStorage.getItem("defaultCurrency") || "USD";
+  });
 
   useEffect(() => {
     localStorage.setItem("defaultCurrency", defaultCurrency);
   }, [defaultCurrency]);
 
-  if (!mounted) return null; // prevent hydration mismatch-Render nothing until client has mounted
   return (
     <CurrencyContext.Provider value={{ defaultCurrency, setDefaultCurrency }}>
       {children}
@@ -36,10 +32,11 @@ export default function CurrencyProvider({
   );
 }
 
-//  Hook to use the context
+// Hook
 export const useCurrency = () => {
   const context = useContext(CurrencyContext);
-  if (!context)
+  if (!context) {
     throw new Error("useCurrency must be used within CurrencyProvider");
+  }
   return context;
 };

@@ -7,6 +7,7 @@ import { useEffect, useState } from "react";
 export default function HomePage() {
   const { defaultCurrency } = useCurrency();
   const [coins, setCoins] = useState<Coin[]>([]);
+  const[error,setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -14,10 +15,15 @@ export default function HomePage() {
     fetch(`/api/coins?currency=${defaultCurrency}&perPage=100&page=1`)
       .then((res) => res.json())
       .then(setCoins)
+      .catch((err) => {
+        console.error("Error fetching coins:", err);
+        setError("Failed to fetch coin data");
+      })
       .finally(() => setLoading(false));
   }, [defaultCurrency]);
 
   if (loading) return <div>Loading coins...</div>;
+  if (error) return <div className="text-[var(--brand-red)]">{error}</div>;
 
   return (
     <div className="w-full bg-[var(--brand-gray)] py-[30px]">
