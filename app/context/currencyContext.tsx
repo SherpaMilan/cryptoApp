@@ -18,24 +18,24 @@ export default function CurrencyProvider({
   children: React.ReactNode;
 }) {
   const [defaultCurrency, setDefaultCurrency] = useState("USD");
-  const[isCurrencyLoaded,setIsCurrencyLoaded] = useState(false);
-  
+  const [isCurrencyLoaded, setIsCurrencyLoaded] = useState(false);
+
   useEffect(() => {
     const storedCurrency = localStorage.getItem("defaultCurrency");
     if (storedCurrency) {
       setDefaultCurrency(storedCurrency);
     }
     setIsCurrencyLoaded(true);
-  }, []);   // eslint-disable-next-line react-hooks/exhaustive-deps
-
+  }, []); // eslint-disable-next-line react-hooks/exhaustive-deps
 
   useEffect(() => {
     localStorage.setItem("defaultCurrency", defaultCurrency);
   }, [defaultCurrency]);
 
   return (
-    <CurrencyContext.Provider value={{ defaultCurrency, setDefaultCurrency, isCurrencyLoaded
-     }}>
+    <CurrencyContext.Provider
+      value={{ defaultCurrency, setDefaultCurrency, isCurrencyLoaded }}
+    >
       {children}
     </CurrencyContext.Provider>
   );
