@@ -2,12 +2,13 @@
 import { useCurrency } from "@/context/currencyContext";
 import getMarketData from "@/utils/getMarketData";
 import { useEffect, useState } from "react";
-import TopbarItem from "./topbaritem";
+import MarketStatsBarItem from "./marketStatsBarItem";
 import { formatCurrencyCompact } from "@/utils/formatCurrency";
 import { MdArrowDropUp, MdOutlineArrowDropDown } from "react-icons/md";
 import { MarketData } from "@/types/market";
+import MarketDataSkeleton from "./skeletons/marketDataSkeleton";
 
-export default function Topbar() {
+export default function MarketStatsBar() {
   const [marketData, setMarketData] = useState<MarketData | null>(null);
   const { defaultCurrency } = useCurrency();
 
@@ -17,18 +18,8 @@ export default function Topbar() {
       .catch((err) => console.error("Error fetching market data:", err));
   }, []);
 
-  // Skeleton loader
   if (!marketData) {
-    return (
-      <div className="max-w-[1440px] mx-auto flex justify-center items-center h-[56px] px-[72px] gap-8">
-        {[...Array(6)].map((_, idx) => (
-          <div
-            key={idx}
-            className="h-5 w-16 bg-gray-100 rounded animate-pulse"
-          />
-        ))}
-      </div>
-    );
+    return <MarketDataSkeleton />;
   }
   const currencyKey = defaultCurrency.toLowerCase();
   const marketCapChange = marketData.data.market_cap_change_percentage_24h_usd;
@@ -45,18 +36,21 @@ export default function Topbar() {
   ];
 
   return (
-    <div className="max-w-[1440px] mx-auto flex justify-center items-center h-[56px] px-[72px] gap-8">
-      <TopbarItem
+    <div
+      className="max-w-[1440px] mx-auto flex justify-center items-center h-[56px] px-[72px] gap-8 bg-[var(--brand-purple
+    )] text-sm"
+    >
+      <MarketStatsBarItem
         label="Coins"
         value={marketData.data.active_cryptocurrencies}
         logo="/logos/coins.svg"
       />
-      <TopbarItem
+      <MarketStatsBarItem
         label="Exchanges"
         value={marketData.data.markets}
         logo="/logos/exchange.svg"
       />
-      <TopbarItem
+      <MarketStatsBarItem
         value={
           <div className="flex items-center gap-1">
             {marketCapChange >= 0 ? (
@@ -72,7 +66,7 @@ export default function Topbar() {
         }
       />
 
-      <TopbarItem
+      <MarketStatsBarItem
         value={formatCurrencyCompact(
           marketData.data.total_volume[currencyKey],
           defaultCurrency,
@@ -81,7 +75,7 @@ export default function Topbar() {
 
       {/* Top Coins BTC & ETH */}
       {topCoins.map((coin) => (
-        <TopbarItem
+        <MarketStatsBarItem
           key={coin.logo}
           logo={coin.logo}
           value={`${coin.value.toFixed(2)}%`}
