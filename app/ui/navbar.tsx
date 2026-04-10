@@ -28,7 +28,7 @@ export default function Navbar() {
   // usePathname provides current URL path of the page you’re on.
   const pathname = usePathname();
   return (
-    <div className="max-w-[1440px] mx-auto flex justify-between items-center h-[80px] px-[72px] box-border ">
+    <div className="max-w-[1440px] mx-auto flex justify-between items-center h-[80px] px-[72px] box-border bg-[var(--brand-gray)]">
       <nav className="w-full flex items-center justify-between ">
         <div className="flex-1 flex items-center h-[48px]  ">
           <Logo />

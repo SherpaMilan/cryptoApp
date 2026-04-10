@@ -9,6 +9,8 @@
   --brand-gray: #f3f5f9;
   --brand-green: #077e77;
   --brand-red: #fe2264;
+  --brand-black:#181825
+  --brand-dark-gray: #e9edf3;
 }
 
 @theme inline {

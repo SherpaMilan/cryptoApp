@@ -1,6 +1,6 @@
 import "./globals.css";
 import Navbar from "./ui/navbar";
-import Topbar from "./ui/topbar";
+import MarketStatsBar from "./ui/marketStatsBar";
 import { Space_Grotesk } from "next/font/google";
 import type { Metadata } from "next";
 import CurrencyProvider from "./context/currencyContext";
@@ -27,13 +27,12 @@ export default function RootLayout({
         className={`${spaceGrotesk.variable} font-[family-name:var(--font-space-grotesk)] antialiased`}
       >
         <CurrencyProvider>
-          <div className="w-full bg-[#353570]">
-            <Topbar />
-          </div>
-          <div className="w-full bg-[var(--brand-white)]">
+          <div className="w-full ">
             <Navbar />
           </div>
-
+          <div className="w-full bg-[var(--brand-gray)]">
+            <MarketStatsBar />
+          </div>
           {children}
         </CurrencyProvider>
       </body>
