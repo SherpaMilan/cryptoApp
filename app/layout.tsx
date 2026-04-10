@@ -30,7 +30,6 @@ export default function RootLayout({
           <div className="w-full bg-[#353570]">
             <Topbar />
           </div>
-
           <div className="w-full bg-[var(--brand-white)]">
             <Navbar />
           </div>
