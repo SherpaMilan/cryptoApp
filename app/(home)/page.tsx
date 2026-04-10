@@ -4,21 +4,29 @@ import { MdArrowDropUp, MdOutlineArrowDropDown } from "react-icons/md";
 import { Coin } from "@/types/coin";
 import { useCurrency } from "@/context/currencyContext";
 import { useEffect, useState } from "react";
+import CurrencyStatisticsSkeleton from "@/ui/skeletons/currencyStatisticsSkeleton";
 export default function HomePage() {
-  const { defaultCurrency } = useCurrency();
+  const { defaultCurrency, isCurrencyLoaded } = useCurrency();
   const [coins, setCoins] = useState<Coin[]>([]);
+  const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    // Browser fetch → your Next.js API route
+    if (!isCurrencyLoaded) return; // Wait until currency is loaded before fetching coins
     fetch(`/api/coins?currency=${defaultCurrency}&perPage=100&page=1`)
       .then((res) => res.json())
       .then(setCoins)
-      .catch(console.error)
+      .catch((err) => {
+        console.error("Error fetching coins:", err);
+        setError("Failed to fetch coin data");
+      })
       .finally(() => setLoading(false));
-  }, [defaultCurrency]);
+  }, [defaultCurrency, isCurrencyLoaded]);
 
-  if (loading) return <div>Loading coins...</div>;
+  if (loading) {
+    return <CurrencyStatisticsSkeleton />;
+  }
+  if (error) return <div className="text-[var(--brand-red)]">{error}</div>;
 
   return (
     <div className="w-full bg-[var(--brand-gray)] py-[30px]">
