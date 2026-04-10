@@ -9,16 +9,16 @@ import {
 } from "react-icons/hi2";
 import { MdKeyboardArrowDown } from "react-icons/md";
 import { TbCoinBitcoinFilled } from "react-icons/tb";
+import CurrencyDropdownSkeleton from "./skeletons/currencyDropdownSkeleton";
 
 export default function CurrencyDropdown() {
-  const { defaultCurrency, setDefaultCurrency } = useCurrency();
-  // const [mounted, setMounted] = useState(false);
+  const { defaultCurrency, setDefaultCurrency, isCurrencyLoaded } =
+    useCurrency();
   const [open, setOpen] = useState(false);
   const currencies = ["USD", "EUR", "BTC", "GBP", "AUD"];
   const dropdownContainerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    // setMounted(true);
     const handleDropdown = (event: MouseEvent) => {
       const dropdownContainer = dropdownContainerRef.current;
       if (
@@ -36,6 +36,9 @@ export default function CurrencyDropdown() {
     };
   }, []);
 
+  if (!isCurrencyLoaded) {
+  return <CurrencyDropdownSkeleton />;
+  }
   const getIcon = (currency: string) => {
     const baseClass = "w-5 h-5";
 
@@ -52,8 +55,6 @@ export default function CurrencyDropdown() {
         return <HiMiniCurrencyDollar className={baseClass} />;
     }
   };
-
-  // if (!mounted) return null; // Avoid hydration mismatch by rendering nothing on the server
 
   return (
     <div className="relative inline-block" ref={dropdownContainerRef}>
