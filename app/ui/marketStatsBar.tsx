@@ -36,51 +36,50 @@ export default function MarketStatsBar() {
   ];
 
   return (
-    <div
-      className="max-w-[1440px] mx-auto flex justify-center items-center h-[56px] px-[72px] gap-8 bg-[var(--brand-purple
-    )] text-sm"
-    >
-      <MarketStatsBarItem
-        label="Coins"
-        value={marketData.data.active_cryptocurrencies}
-        logo="/logos/coins.svg"
-      />
-      <MarketStatsBarItem
-        label="Exchanges"
-        value={marketData.data.markets}
-        logo="/logos/exchange.svg"
-      />
-      <MarketStatsBarItem
-        value={
-          <div className="flex items-center gap-1">
-            {marketCapChange >= 0 ? (
-              <MdArrowDropUp className="h-5 w-5 flex-shrink-0 text-green-500" />
-            ) : (
-              <MdOutlineArrowDropDown className="h-5 w-5 flex-shrink-0 text-red-500" />
-            )}
-            {formatCurrencyCompact(
-              marketData.data.total_market_cap[currencyKey],
-              defaultCurrency,
-            )}
-          </div>
-        }
-      />
-
-      <MarketStatsBarItem
-        value={formatCurrencyCompact(
-          marketData.data.total_volume[currencyKey],
-          defaultCurrency,
-        )}
-      />
-
-      {/* Top Coins BTC & ETH */}
-      {topCoins.map((coin) => (
+    <div className="w-full bg-[var(--brand-dark-purple)]">
+      <div className="max-w-[1440px] mx-auto flex justify-center items-center h-[56px] px-[72px] gap-8 bg-[var(--brand-dark-purple)] text-sm">
         <MarketStatsBarItem
-          key={coin.logo}
-          logo={coin.logo}
-          value={`${coin.value.toFixed(2)}%`}
+          label="Coins"
+          value={marketData.data.active_cryptocurrencies}
+          logo="/logos/coins.svg"
         />
-      ))}
+        <MarketStatsBarItem
+          label="Exchanges"
+          value={marketData.data.markets}
+          logo="/logos/exchange.svg"
+        />
+        <MarketStatsBarItem
+          value={
+            <div className="flex items-center gap-1">
+              {marketCapChange >= 0 ? (
+                <MdArrowDropUp className="h-5 w-5 flex-shrink-0 text-green-500" />
+              ) : (
+                <MdOutlineArrowDropDown className="h-5 w-5 flex-shrink-0 text-red-500" />
+              )}
+              {formatCurrencyCompact(
+                marketData.data.total_market_cap[currencyKey],
+                defaultCurrency,
+              )}
+            </div>
+          }
+        />
+
+        <MarketStatsBarItem
+          value={formatCurrencyCompact(
+            marketData.data.total_volume[currencyKey],
+            defaultCurrency,
+          )}
+        />
+
+        {/* Top Coins BTC & ETH */}
+        {topCoins.map((coin) => (
+          <MarketStatsBarItem
+            key={coin.logo}
+            logo={coin.logo}
+            value={`${coin.value.toFixed(2)}%`}
+          />
+        ))}
+      </div>
     </div>
   );
 }

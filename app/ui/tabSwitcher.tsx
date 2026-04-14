@@ -26,7 +26,7 @@ export default function TabSwitcher() {
                 href={tab.href}
                 className={`w-1/2 flex items-center justify-center rounded-[6px] cursor-pointer ${
                   isActive
-                    ? "bg-[var(--brand-purple)] text-[var(--brand-white)]"
+                    ? "bg-[var(--brand-purple)] font-bold text-[var(--brand-white)]"
                     : ""
                 }`}
               >

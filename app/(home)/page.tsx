@@ -5,6 +5,7 @@ import { Coin } from "@/types/coin";
 import { useCurrency } from "@/context/currencyContext";
 import { useEffect, useState } from "react";
 import CurrencyStatisticsSkeleton from "@/ui/skeletons/currencyStatisticsSkeleton";
+
 export default function HomePage() {
   const { defaultCurrency, isCurrencyLoaded } = useCurrency();
   const [coins, setCoins] = useState<Coin[]>([]);
@@ -31,31 +32,29 @@ export default function HomePage() {
   return (
     <div className="w-full bg-[var(--brand-gray)] py-[30px]">
       <div className="max-w-[1440px] mx-auto px-[72px]">
-        <div className="text-[var(--brand-purple)] mb-9">
+        <div className="text-[var(--brand-purple-dark)] mb-9">
           Select the currency to view statistics
         </div>
 
         <div className="flex gap-4 mt-4 overflow-x-auto overflow-y-hidden whitespace-nowrap [&::-webkit-scrollbar]:hidden [scrollbar-width:none]">
-          {coins.map((coin) => {
+          {coins.map((coin, index) => {
             // double check if null, if so set to 0
             const change = coin.price_change_percentage_24h ?? 0;
             const isPositive = change > 0;
-
             return (
               <div
                 key={coin.id}
                 className="w-[252px] h-[78px] flex flex-row items-center p-2 rounded bg-[var(--brand-white)] cursor-pointer flex-shrink-0"
               >
-                <div className="flex">
+                <div className="w-8 h-8 rounded-full bg-white flex items-center justify-center flex-shrink-0 overflow-hidden">
                   <Image
                     src={coin.image}
-                    width={28}
-                    height={28}
                     alt={coin.name}
-                    style={{ width: "auto", height: "auto" }}
+                    width={32}
+                    height={32}
+                    className="object-cover"
                   />
                 </div>
-
                 <div className="flex flex-col justify-between ml-4 gap-2 flex-1">
                   <div className="font-bold font-sm">
                     {coin.name} ({coin.symbol.toUpperCase()})

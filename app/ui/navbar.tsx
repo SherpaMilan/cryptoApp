@@ -59,7 +59,7 @@ export default function Navbar() {
               type="text"
               placeholder="Search..."
               aria-label="Search cryptocurrencies"
-              className="peer w-full pl-10 pr-3 h-full rounded-[15px] placeholder:text-[var(--brand-purple)] bg-transparent focus:outline-none focus:ring-1 focus:ring-[var(--brand-purple)]"
+              className="peer w-full pl-10 pr-3 h-full rounded-[15px] placeholder:text-[var(--brand-dark)] bg-transparent focus:outline-none focus:ring-1 focus:ring-[var(--brand-purple)]"
             />
             <GoSearch className="absolute left-3 top-1/2 -translate-y-1/2 border-[var(--brand-purple)] peer-focus:text-[var(--brand-purple)] pointer-events-none" />
           </form>
