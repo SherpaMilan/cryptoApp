@@ -37,7 +37,7 @@ export default function HomePage() {
         </div>
 
         <div className="flex gap-4 mt-4 overflow-x-auto overflow-y-hidden whitespace-nowrap [&::-webkit-scrollbar]:hidden [scrollbar-width:none]">
-          {coins.map((coin, index) => {
+          {coins.map((coin) => {
             // double check if null, if so set to 0
             const change = coin.price_change_percentage_24h ?? 0;
             const isPositive = change > 0;
