@@ -57,10 +57,10 @@ export default function CurrencyDropdown() {
   };
 
   return (
-    <div className="relative inline-block" ref={dropdownContainerRef}>
+    <div className="relative inline-block " ref={dropdownContainerRef}>
       <button
         onClick={() => setOpen(!open)}
-        className="flex items-center bg-[var(--brand-purple-light)] text-[var(--brand-purple)] rounded-[15px] px-3 py-1.5 cursor-pointer"
+        className="flex items-center h-[48px] bg-[var(--brand-purple-light)] text-[var(--brand-purple-dark)] rounded-[15px] px-3 py-1.5 cursor-pointer"
       >
         {getIcon(defaultCurrency)}
         <span className="pl-1">{defaultCurrency}</span>
@@ -72,7 +72,7 @@ export default function CurrencyDropdown() {
           {currencies.map((currency) => (
             <li
               key={currency}
-              className="group px-3 py-1.5 text-sm hover:bg-[var(--brand-purple)] cursor-pointer flex items-center gap-2 uppercase text-[var(--brand-purple)]"
+              className="group px-3 py-1.5 text-sm hover:bg-[var(--brand-purple)] cursor-pointer flex items-center gap-2 uppercase text-[var(--brand-purple-dark)]"
               onClick={() => {
                 setOpen(false);
                 setDefaultCurrency(currency);
