@@ -68,8 +68,8 @@ export default function HomePage() {
                     <span
                       className={`flex items-center gap-1 ${
                         isPositive
-                          ? "text-[var(--brand-green)]"
-                          : "text-[var(--brand-red)]"
+                          ? "text-[var(--brand-green)] font-bold"
+                          : "text-[var(--brand-red)] font-bold"
                       }`}
                     >
                       {isPositive ? (

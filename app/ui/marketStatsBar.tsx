@@ -1,8 +1,9 @@
 "use client";
 import { useCurrency } from "@/context/currencyContext";
-import getMarketData from "@/utils/getMarketData";
 import { useEffect, useState } from "react";
 import MarketStatsBarItem from "./marketStatsBarItem";
+import getMarketData from "@/utils/getMarketData";
+import getColorbar from "@/utils/getColorbar";
 import { formatCurrencyCompact } from "@/utils/formatCurrency";
 import { MdArrowDropUp, MdOutlineArrowDropDown } from "react-icons/md";
 import { MarketData } from "@/types/market";
@@ -37,7 +38,7 @@ export default function MarketStatsBar() {
 
   return (
     <div className="w-full bg-[var(--brand-dark-purple)]">
-      <div className="max-w-[1440px] mx-auto flex justify-center items-center h-[56px] px-[72px] gap-8 bg-[var(--brand-dark-purple)] text-sm">
+      <div className="max-w-[1440px] mx-auto flex justify-center items-center h-[56px] px-[72px] gap-10 bg-[var(--brand-dark-purple)] text-sm">
         <MarketStatsBarItem
           label="Coins"
           value={marketData.data.active_cryptocurrencies}
@@ -73,11 +74,22 @@ export default function MarketStatsBar() {
 
         {/* Top Coins BTC & ETH */}
         {topCoins.map((coin) => (
-          <MarketStatsBarItem
-            key={coin.logo}
-            logo={coin.logo}
-            value={`${coin.value.toFixed(2)}%`}
-          />
+          <div key={coin.logo} className="flex items-center gap-2">
+            <MarketStatsBarItem
+              logo={coin.logo}
+              value={`${coin.value.toFixed(2)}%`}
+            />
+            <div className="w-[80px] h-[6px] bg-[var(--brand-medium-gray)] overflow-hidden rounded-full">
+              <div
+                className="h-full rounded-full transition-all duration-500"
+                style={{
+                  width: `${coin.value}%`,
+                  minWidth: "6px",
+                  backgroundColor: getColorbar(coin.value),
+                }}
+              />
+            </div>
+          </div>
         ))}
       </div>
     </div>
