@@ -1,13 +1,13 @@
 "use client";
 import { useCurrency } from "@/context/currencyContext";
-import getMarketData from "@/utils/getMarketData";
 import { useEffect, useState } from "react";
 import MarketStatsBarItem from "./marketStatsBarItem";
+import getMarketData from "@/utils/getMarketData";
+import getColorbar from "@/utils/getColorbar";
 import { formatCurrencyCompact } from "@/utils/formatCurrency";
 import { MdArrowDropUp, MdOutlineArrowDropDown } from "react-icons/md";
 import { MarketData } from "@/types/market";
 import MarketDataSkeleton from "./skeletons/marketDataSkeleton";
-import getColorbar from "@/utils/getColorbar";
 
 export default function MarketStatsBar() {
   const [marketData, setMarketData] = useState<MarketData | null>(null);
