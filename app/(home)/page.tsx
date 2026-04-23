@@ -6,10 +6,8 @@ import { Coin } from "@/types/coin";
 import { useCurrency } from "@/context/currencyContext";
 import { useEffect, useState } from "react";
 
-import HomePageSkeleton from "@/ui/skeletons/homeSkeleton";
-import PriceChart from "@/ui/priceChart";
-import VolumeChart from "@/ui/volumeChart";
-import TimeRange from "@/ui/timeRange";
+import HomePageSkeleton from "@/components/skeletons/homeSkeleton";
+import { PriceChart } from "@/components/charts/priceChart";
 
 export default function HomePage() {
   const { defaultCurrency, isCurrencyLoaded } = useCurrency();
@@ -29,7 +27,9 @@ export default function HomePage() {
       .then((data) => {
         setCoins(data);
         setSelectedCoin(data[0]); // default selection
+        console.log("Fetched coins:", data);
       })
+
       .catch((err) => {
         console.error("Fetch coins error:", err);
         setError("Failed to fetch coin data");
@@ -103,19 +103,17 @@ export default function HomePage() {
         </div>
 
         {selectedCoin && (
-          <div className="mt-8 flex flex-col gap-4">
-            <div className="flex gap-4 h-[330px]">
-              <div className="flex-1">
+          <div className="mt-8 flex flex-col gap-4 ">
+            <div className="flex gap-4 h-[200px] ">
+              <div className="flex-1 ">
                 <PriceChart coin={selectedCoin} />
               </div>
 
               <div className="flex-1">
-                <VolumeChart coin={selectedCoin} />
+                {/* <VolumeChart coin={selectedCoin} /> */}
               </div>
             </div>
-            <div className="flex justify-start">
-              <TimeRange />
-            </div>
+            <div className="flex justify-start">{/* <TimeRange /> */}</div>
           </div>
         )}
       </div>

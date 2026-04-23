@@ -1,13 +1,13 @@
 "use client";
 import Link from "next/link";
-import Logo from "@/ui/logo";
+import Logo from "@/components/ui/logo";
 import { usePathname } from "next/navigation";
 import { VscLayers } from "react-icons/vsc";
 import { IoLayersSharp } from "react-icons/io5";
 import { RiHome9Line, RiHome9Fill } from "react-icons/ri";
 import { GoSearch } from "react-icons/go";
 import { FiMoon } from "react-icons/fi";
-import CurrencyDropdown from "@/ui/currencyDropdown";
+import CurrencyDropdown from "@/components/ui/currencyDropdown";
 
 const links = [
   {

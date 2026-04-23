@@ -1,9 +1,12 @@
 import "./globals.css";
-import Navbar from "./ui/navbar";
-import MarketStatsBar from "./ui/marketStatsBar";
-import { Space_Grotesk } from "next/font/google";
+import Navbar from "./components/ui/navbar";
+import MarketStatsBar from "./components/ui/marketStatsBar";
+import { Space_Grotesk, Geist } from "next/font/google";
 import type { Metadata } from "next";
 import CurrencyProvider from "./context/currencyContext";
+import { cn } from "@/lib/utils";
+
+const geist = Geist({ subsets: ["latin"], variable: "--font-sans" });
 
 const spaceGrotesk = Space_Grotesk({
   weight: ["400", "500", "600"],
@@ -25,7 +28,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="en" className={cn("font-sans", geist.variable)}>
       <body
         className={`${spaceGrotesk.variable} font-[family-name:var(--font-space-grotesk)] antialiased`}
       >
