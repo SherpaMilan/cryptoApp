@@ -5,6 +5,7 @@ import { Space_Grotesk, Geist } from "next/font/google";
 import type { Metadata } from "next";
 import CurrencyProvider from "./context/currencyContext";
 import { cn } from "@/lib/utils";
+import Providers from "./provider/providers";
 
 const geist = Geist({ subsets: ["latin"], variable: "--font-sans" });
 
@@ -32,15 +33,17 @@ export default function RootLayout({
       <body
         className={`${spaceGrotesk.variable} font-[family-name:var(--font-space-grotesk)] antialiased`}
       >
-        <CurrencyProvider>
-          <div className="w-full ">
-            <Navbar />
-          </div>
-          <div className="w-full ">
-            <MarketStatsBar />
-          </div>
-          {children}
-        </CurrencyProvider>
+        <Providers>
+          <CurrencyProvider>
+            <div className="w-full ">
+              <Navbar />
+            </div>
+            <div className="w-full ">
+              <MarketStatsBar />
+            </div>
+            {children}
+          </CurrencyProvider>
+        </Providers>
       </body>
     </html>
   );

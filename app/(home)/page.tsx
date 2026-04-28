@@ -2,61 +2,53 @@
 
 import Image from "next/image";
 import { MdArrowDropUp, MdOutlineArrowDropDown } from "react-icons/md";
+import { useEffect, useState } from "react";
+
 import { Coin } from "@/types/coin";
 import { useCurrency } from "@/context/currencyContext";
-import { useEffect, useState } from "react";
 
 import HomePageSkeleton from "@/components/skeletons/homeSkeleton";
 import { PriceChart } from "@/components/charts/priceChart";
+import { VolumeChart } from "@/components/charts/volumeChart";
+
+import { useCoinsQuery } from "@/hooks/useCoinsQuery";
+import type { TimeRangeKey } from "@/constants/timeRanges";
+import TimeRangeComponent from "@/components/ui/timeRange";
 
 export default function HomePage() {
   const { defaultCurrency, isCurrencyLoaded } = useCurrency();
 
-  const [coins, setCoins] = useState<Coin[]>([]);
-  const [error, setError] = useState<string | null>(null);
-  const [loading, setLoading] = useState(true);
-
   const [selectedCoin, setSelectedCoin] = useState<Coin | null>(null);
+  const [timeRange, setTimeRange] = useState<TimeRangeKey>("1y");
 
-  // ---------------- FETCH COINS ----------------
-  useEffect(() => {
-    if (!isCurrencyLoaded) return;
+  // ---------------- COINS ----------------
+  const {
+    // Rename query data → coinsList
+    data: coinsList,
+    isLoading,
+    error,
+  } = useCoinsQuery(defaultCurrency, isCurrencyLoaded);
 
-    fetch(`/api/coins?currency=${defaultCurrency}&perPage=100&page=1`)
-      .then((res) => res.json())
-      .then((data) => {
-        setCoins(data);
-        setSelectedCoin(data[0]); // default selection
-        console.log("Fetched coins:", data);
-      })
-
-      .catch((err) => {
-        console.error("Fetch coins error:", err);
-        setError("Failed to fetch coin data");
-      })
-      .finally(() => setLoading(false));
-  }, [defaultCurrency, isCurrencyLoaded]);
-
-  // ---------------- LOADING STATE ----------------
-  if (loading || !isCurrencyLoaded) {
+  const activeCoin = selectedCoin ?? coinsList?.[0] ?? null;
+  if (isLoading || !isCurrencyLoaded) {
     return <HomePageSkeleton />;
   }
 
   if (error) {
-    return <div className="text-red-500">{error}</div>;
+    return <div className="text-red-500">Failed to load coins list</div>;
   }
 
   return (
-    <div className="w-full bg-[var(--brand-gray)] py-0">
+    <div className="w-full bg-[var(--brand-gray)]">
       <div className="max-w-[1440px] mx-auto px-[72px]">
         <div className="text-[var(--brand-purple-dark)]">
           Select the currency to view statistics
         </div>
 
         {/* COIN LIST */}
-        <div className="flex gap-4 mt-8 overflow-x-auto whitespace-nowrap [&::-webkit-scrollbar]:hidden">
-          {coins.map((coin) => {
-            const isActive = selectedCoin?.id === coin.id;
+        <div className="flex gap-4 mt-6 overflow-x-auto whitespace-nowrap [&::-webkit-scrollbar]:hidden">
+          {coinsList?.map((coin) => {
+            const isActive = activeCoin?.id === coin.id;
             const change = coin.price_change_percentage_24h ?? 0;
             const isPositive = change > 0;
 
@@ -64,7 +56,9 @@ export default function HomePage() {
               <button
                 key={coin.id}
                 onClick={() => setSelectedCoin(coin)}
-                className={`w-[252px] h-[78px] flex items-center p-2 rounded flex-shrink-0 text-left ${isActive ? "bg-[var(--brand-purple)] text-white" : "bg-white"}`}
+                className={`cursor-pointer w-[252px] h-[78px] flex items-center p-2 rounded flex-shrink-0 text-left ${
+                  isActive ? "bg-[var(--brand-purple)] text-white" : "bg-white"
+                }`}
               >
                 <Image
                   src={coin.image}
@@ -101,19 +95,27 @@ export default function HomePage() {
             );
           })}
         </div>
-
         {selectedCoin && (
-          <div className="mt-8 flex flex-col gap-4 ">
-            <div className="flex gap-4 h-[200px] ">
-              <div className="flex-1 ">
-                <PriceChart coin={selectedCoin} />
+          <div className="mt-6 flex flex-col gap-2 rounded-xl">
+            {/* CHART ROW */}
+            <div className="flex gap-6 h-[430px]">
+              <div className="flex-1 h-full min-h-0">
+                <PriceChart
+                  coin={activeCoin}
+                  timeRange={timeRange}
+                  onTimeRangeChange={setTimeRange}
+                />
               </div>
 
-              <div className="flex-1">
-                {/* <VolumeChart coin={selectedCoin} /> */}
+              <div className="flex-1 h-full min-h-0">
+                <VolumeChart coin={activeCoin} timeRange={timeRange} />
               </div>
             </div>
-            <div className="flex justify-start">{/* <TimeRange /> */}</div>
+
+            {/* TIME RANGE (LEFT ALIGNED UNDER CHARTS) */}
+            <div className="flex justify-start pl-1">
+              <TimeRangeComponent value={timeRange} onChange={setTimeRange} />
+            </div>
           </div>
         )}
       </div>
