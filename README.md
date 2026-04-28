@@ -1,19 +1,38 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
-## Getting Started
+# 🚀 Crypto Dashboard
 
-First, run the development server:
+A simple crypto tracking dashboard built with **Next.js** that shows real-time price and volume data for different cryptocurrencies.
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+---
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## 🛠 Tech Stack
 
-more details will be here at final stage about the project
+- Next.js (App Router)
+- React Query
+- TypeScript
+- Tailwind CSS
+- shadcn/ui (UI components)
+- Recharts (charts)
+- CoinGecko API (crypto data)
+- Axios
+
+---
+
+## 📊 Features
+
+- Live cryptocurrency price charts  
+- Volume charts for market activity  
+- Time range selection (1D, 7D, 1M, etc.)  
+- Coin selection with default fallback  
+- Responsive UI with loading skeletons  
+- Clean and minimal design  
+
+---
+
+## ⚙️ Notes
+
+- Uses CoinGecko API for real-time market data  
+- Data is fetched and cached using React Query  
+- Charts are built with reusable components  
+
+---
