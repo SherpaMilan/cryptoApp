@@ -21,11 +21,12 @@ export function useCoinChartQuery(
           days,
         },
       });
-      return {
-        prices: formatChartData(data),
-        volumes: formatVolumeChartData(data),
-      };
+      const prices = formatChartData(data);
+      const volumes = formatVolumeChartData(data);
+
+      return { prices, volumes };
     },
+
     staleTime: 60 * 1000 * 2, // 2 min cache
   });
 }

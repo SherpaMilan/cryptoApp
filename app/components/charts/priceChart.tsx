@@ -38,7 +38,6 @@ export function PriceChart({
 }: {
   coin: Coin | null;
   timeRange: TimeRangeKey;
-  onTimeRangeChange: (range: TimeRangeKey) => void;
 }) {
   const { defaultCurrency } = useCurrency();
 
@@ -57,7 +56,7 @@ export function PriceChart({
   if (error) return <div className="text-red-500">Error loading chart</div>;
 
   return (
-    <Card className="pt-0 rounded-xl overflow-hidden border-0 shadow-none">
+    <Card className="pt-0 rounded-xl overflow-hidden border border-white/30 shadow-[0_8px_30px_rgba(0,0,0,0.06)] backdrop-blur-md bg-white/0">
       <CardHeader className="flex items-center gap-2 py-5 sm:flex-row">
         <div className="grid flex-1 gap-1 px-2">
           <CardTitle>
@@ -66,11 +65,26 @@ export function PriceChart({
           <CardDescription>
             {formatCurrencyCompact(coin?.market_cap ?? 0, defaultCurrency)}
           </CardDescription>
+
+          <span>
+            Last updated:{" "}
+            {coin?.last_updated ? (
+              <time dateTime={coin.last_updated}>
+                {new Date(coin.last_updated).toLocaleDateString("en-US", {
+                  month: "long",
+                  day: "numeric",
+                  year: "numeric",
+                })}
+              </time>
+            ) : (
+              "N/A"
+            )}
+          </span>
         </div>
       </CardHeader>
 
-      <CardContent className="px-2 pt-4 sm:px-6 sm:pt-6">
-        <ChartContainer config={chartConfig} className="h-[200px] w-full">
+      <CardContent className="px-2 pt-2 sm:px-6 sm:pt-2">
+        <ChartContainer config={chartConfig} className="h-[190px] w-full ">
           <AreaChart data={sortedData}>
             <defs>
               <linearGradient id="fillPrice" x1="0" y1="0" x2="0" y2="1">
@@ -79,9 +93,35 @@ export function PriceChart({
               </linearGradient>
             </defs>
 
-            <XAxis dataKey="date" />
+            <XAxis
+              dataKey="date"
+              tickLine={false}
+              axisLine={false}
+              tickMargin={8}
+              minTickGap={32}
+              tickFormatter={(value) => {
+                const date = new Date(value);
+                return date.toLocaleDateString("en-US", {
+                  month: "short",
+                  day: "numeric",
+                });
+              }}
+            />
 
-            <ChartTooltip content={<ChartTooltipContent indicator="dot" />} />
+            <ChartTooltip
+              content={
+                <ChartTooltipContent
+                  className="w-[110px]"
+                  labelFormatter={(value) =>
+                    new Date(value).toLocaleDateString("en-US", {
+                      month: "short",
+                      day: "numeric",
+                      year: "numeric",
+                    })
+                  }
+                />
+              }
+            />
 
             <Area
               dataKey="price"
@@ -89,6 +129,11 @@ export function PriceChart({
               stroke={CHART_COLOR}
               fill="url(#fillPrice)"
               strokeWidth={2}
+              activeDot={{
+                r: 6,
+                fill: "#6366f1",
+                stroke: "none",
+              }}
             />
           </AreaChart>
         </ChartContainer>

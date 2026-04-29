@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import { MdArrowDropUp, MdOutlineArrowDropDown } from "react-icons/md";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 import { Coin } from "@/types/coin";
 import { useCurrency } from "@/context/currencyContext";
@@ -19,7 +19,7 @@ export default function HomePage() {
   const { defaultCurrency, isCurrencyLoaded } = useCurrency();
 
   const [selectedCoin, setSelectedCoin] = useState<Coin | null>(null);
-  const [timeRange, setTimeRange] = useState<TimeRangeKey>("1y");
+  const [timeRange, setTimeRange] = useState<TimeRangeKey>("6M");
 
   // ---------------- COINS ----------------
   const {
@@ -95,16 +95,11 @@ export default function HomePage() {
             );
           })}
         </div>
-        {selectedCoin && (
+        {activeCoin && (
           <div className="mt-6 flex flex-col gap-2 rounded-xl">
-            {/* CHART ROW */}
-            <div className="flex gap-6 h-[430px]">
+            <div className="flex gap-6 ">
               <div className="flex-1 h-full min-h-0">
-                <PriceChart
-                  coin={activeCoin}
-                  timeRange={timeRange}
-                  onTimeRangeChange={setTimeRange}
-                />
+                <PriceChart coin={activeCoin} timeRange={timeRange} />
               </div>
 
               <div className="flex-1 h-full min-h-0">
@@ -112,7 +107,6 @@ export default function HomePage() {
               </div>
             </div>
 
-            {/* TIME RANGE (LEFT ALIGNED UNDER CHARTS) */}
             <div className="flex justify-start pl-1">
               <TimeRangeComponent value={timeRange} onChange={setTimeRange} />
             </div>

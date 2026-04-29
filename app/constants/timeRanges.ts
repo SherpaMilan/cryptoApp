@@ -1,10 +1,10 @@
 export const TIME_RANGES = {
-  "1d": 1,
-  "7d": 7,
-  "14d": 14,
-  "1m": 30,
-  "6m": 30 * 6,
-  "1y": 365,
+  "1D": 1,
+  "7D": 7,
+  "14D": 14,
+  "1M": 30,
+  "6M": 30 * 6,
+  "1Y": 365,
 } as const;
 
 // Give me the list of all keys from this object

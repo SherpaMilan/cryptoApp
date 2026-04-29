@@ -10,7 +10,7 @@ export default function TimeRange({
   onChange: (val: TimeRangeKey) => void;
 }) {
   return (
-    <div className="bg-[var(--brand-purple-light)]  rounded-md flex gap-2 p-1 border border-[var(--brand-purple)]">
+    <div className="bg-[rgba(120,120,255,0.08)] backdrop-blur-md rounded-md flex gap-2 p-1 border border-white/10 shadow-md">
       {(Object.keys(TIME_RANGES) as TimeRangeKey[]).map((range) => {
         const isActive = value === range;
 
