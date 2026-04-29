@@ -20,13 +20,21 @@ export default function CurrencyProvider({
   const [defaultCurrency, setDefaultCurrency] = useState("USD");
   const [isCurrencyLoaded, setIsCurrencyLoaded] = useState(false);
 
+  // useEffect(() => {
+  //   const storedCurrency = localStorage.getItem("defaultCurrency");
+  //   if (storedCurrency) {
+  //     setDefaultCurrency(storedCurrency);
+  //   }
+  //   setIsCurrencyLoaded(true);
+  // }, []); // eslint-disable-next-line react-hooks/exhaustive-deps
+
   useEffect(() => {
     const storedCurrency = localStorage.getItem("defaultCurrency");
     if (storedCurrency) {
       setDefaultCurrency(storedCurrency);
     }
     setIsCurrencyLoaded(true);
-  }, []); // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   useEffect(() => {
     localStorage.setItem("defaultCurrency", defaultCurrency);
