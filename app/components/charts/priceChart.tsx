@@ -50,7 +50,7 @@ export function PriceChart({
 
   const sortedData = React.useMemo(() => {
     return [...prices].sort((a, b) => a.timestamp - b.timestamp);
-  }, [data]);
+  }, [prices]);
 
   if (isLoading) return <ChartSkeleton />;
   if (error) return <div className="text-red-500">Error loading chart</div>;
