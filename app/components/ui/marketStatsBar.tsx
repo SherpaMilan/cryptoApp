@@ -13,11 +13,17 @@ export default function MarketStatsBar() {
   const [marketData, setMarketData] = useState<MarketData | null>(null);
   const { defaultCurrency } = useCurrency();
 
+  const [error, setError] = useState<string | null>(null);
+
   useEffect(() => {
     getMarketData()
       .then(setMarketData)
-      .catch((err) => console.error("Error fetching market data:", err));
+      .catch((err) => setError(err.message));
   }, []);
+
+  if (error) {
+    return <div className="text-red-500">Failed to load market data</div>;
+  }
 
   if (!marketData) {
     return <MarketDataSkeleton />;

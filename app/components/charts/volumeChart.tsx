@@ -47,11 +47,10 @@ export function VolumeChart({
     TIME_RANGES[timeRange],
   );
 
-  const volumes = data?.volumes ?? [];
-
   const sortedData = React.useMemo(() => {
-    return [...volumes].sort((a, b) => a.timestamp - b.timestamp);
-  }, [volumes]);
+    const volumes = data?.volumes ?? [];
+    return volumes.slice().sort((a, b) => a.timestamp - b.timestamp);
+  }, [data?.volumes]);
 
   if (isLoading) return <ChartSkeleton />;
   if (error) return <div className="text-red-500">Error loading chart</div>;

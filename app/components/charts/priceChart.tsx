@@ -46,11 +46,11 @@ export function PriceChart({
     defaultCurrency,
     TIME_RANGES[timeRange],
   );
-  const prices = data?.prices ?? [];
-
   const sortedData = React.useMemo(() => {
-    return [...prices].sort((a, b) => a.timestamp - b.timestamp);
-  }, [prices]);
+    const prices = data?.prices ?? [];
+
+    return prices.slice().sort((a, b) => a.timestamp - b.timestamp);
+  }, [data?.prices]);
 
   if (isLoading) return <ChartSkeleton />;
   if (error) return <div className="text-red-500">Error loading chart</div>;
