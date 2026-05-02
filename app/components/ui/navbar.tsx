@@ -1,13 +1,13 @@
 "use client";
 import Link from "next/link";
-import Logo from "@/ui/logo";
+import Logo from "@/components/ui/logo";
 import { usePathname } from "next/navigation";
 import { VscLayers } from "react-icons/vsc";
 import { IoLayersSharp } from "react-icons/io5";
 import { RiHome9Line, RiHome9Fill } from "react-icons/ri";
 import { GoSearch } from "react-icons/go";
 import { FiMoon } from "react-icons/fi";
-import CurrencyDropdown from "@/ui/currencyDropdown";
+import CurrencyDropdown from "@/components/ui/currencyDropdown";
 
 const links = [
   {
@@ -28,7 +28,7 @@ export default function Navbar() {
   // usePathname provides current URL path of the page you’re on.
   const pathname = usePathname();
   return (
-    <div className="max-w-[1440px] mx-auto flex justify-between items-center h-[80px] px-[72px] box-border bg-[var(--brand-gray)]">
+    <div className="max-w-[1440px] mx-auto flex justify-between items-center h-[70px] px-[72px] box-border bg-[var(--brand-gray)]">
       <nav className="w-full flex items-center justify-between ">
         <div className="flex-1 flex items-center h-[48px]  ">
           <Logo />

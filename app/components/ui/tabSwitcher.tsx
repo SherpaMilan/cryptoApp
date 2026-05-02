@@ -12,7 +12,7 @@ export default function TabSwitcher() {
   const pathname = usePathname();
 
   return (
-    <div className="w-full bg-[var(--brand-gray)]  py-[30px] ">
+    <div className="w-full bg-[var(--brand-gray)] py-[25px] ">
       <div className="max-w-[1440px] mx-auto px-[72px] ">
         <nav className="flex w-[506px] h-[53px] bg-[var(--brand-white)] rounded-[6px] p-[4px]  ">
           {tabs.map((tab) => {

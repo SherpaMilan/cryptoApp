@@ -1,62 +1,74 @@
 "use client";
+
 import Image from "next/image";
 import { MdArrowDropUp, MdOutlineArrowDropDown } from "react-icons/md";
+import { useState } from "react";
+
 import { Coin } from "@/types/coin";
 import { useCurrency } from "@/context/currencyContext";
-import { useEffect, useState } from "react";
-import CurrencyStatisticsSkeleton from "@/ui/skeletons/currencyStatisticsSkeleton";
+
+import HomePageSkeleton from "@/components/skeletons/homeSkeleton";
+import { PriceChart } from "@/components/charts/priceChart";
+import { VolumeChart } from "@/components/charts/volumeChart";
+
+import { useCoinsQuery } from "@/hooks/useCoinsQuery";
+import type { TimeRangeKey } from "@/constants/timeRanges";
+import TimeRangeComponent from "@/components/ui/timeRange";
 
 export default function HomePage() {
   const { defaultCurrency, isCurrencyLoaded } = useCurrency();
-  const [coins, setCoins] = useState<Coin[]>([]);
-  const [error, setError] = useState<string | null>(null);
-  const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    if (!isCurrencyLoaded) return; // Wait until currency is loaded before fetching coins
-    fetch(`/api/coins?currency=${defaultCurrency}&perPage=100&page=1`)
-      .then((res) => res.json())
-      .then(setCoins)
-      .catch((err) => {
-        console.error("Error fetching coins:", err);
-        setError("Failed to fetch coin data");
-      })
-      .finally(() => setLoading(false));
-  }, [defaultCurrency, isCurrencyLoaded]);
+  const [selectedCoin, setSelectedCoin] = useState<Coin | null>(null);
+  const [timeRange, setTimeRange] = useState<TimeRangeKey>("6M");
 
-  if (loading) {
-    return <CurrencyStatisticsSkeleton />;
+  // ---------------- COINS ----------------
+  const {
+    // Rename query data → coinsList
+    data: coinsList,
+    isLoading,
+    error,
+  } = useCoinsQuery(defaultCurrency, isCurrencyLoaded);
+
+  const activeCoin = selectedCoin ?? coinsList?.[0] ?? null;
+  if (isLoading || !isCurrencyLoaded) {
+    return <HomePageSkeleton />;
   }
-  if (error) return <div className="text-[var(--brand-red)]">{error}</div>;
+
+  if (error) {
+    return <div className="text-red-500">Failed to load coins list</div>;
+  }
 
   return (
-    <div className="w-full bg-[var(--brand-gray)] py-[30px]">
+    <div className="w-full bg-[var(--brand-gray)]">
       <div className="max-w-[1440px] mx-auto px-[72px]">
-        <div className="text-[var(--brand-purple-dark)] mb-9">
+        <div className="text-[var(--brand-purple-dark)]">
           Select the currency to view statistics
         </div>
 
-        <div className="flex gap-4 mt-4 overflow-x-auto overflow-y-hidden whitespace-nowrap [&::-webkit-scrollbar]:hidden [scrollbar-width:none]">
-          {coins.map((coin) => {
-            // double check if null, if so set to 0
+        {/* COIN LIST */}
+        <div className="flex gap-4 mt-6 overflow-x-auto whitespace-nowrap [&::-webkit-scrollbar]:hidden">
+          {coinsList?.map((coin) => {
+            const isActive = activeCoin?.id === coin.id;
             const change = coin.price_change_percentage_24h ?? 0;
             const isPositive = change > 0;
+
             return (
-              <div
+              <button
                 key={coin.id}
-                className="w-[252px] h-[78px] flex flex-row items-center p-2 rounded bg-[var(--brand-white)] cursor-pointer flex-shrink-0"
+                onClick={() => setSelectedCoin(coin)}
+                className={`cursor-pointer w-[252px] h-[78px] flex items-center p-2 rounded flex-shrink-0 text-left ${
+                  isActive ? "bg-[var(--brand-purple)] text-white" : "bg-white"
+                }`}
               >
-                <div className="w-8 h-8 rounded-full bg-white flex items-center justify-center flex-shrink-0 overflow-hidden">
-                  <Image
-                    src={coin.image}
-                    alt={coin.name}
-                    width={32}
-                    height={32}
-                    className="object-cover"
-                  />
-                </div>
-                <div className="flex flex-col justify-between ml-4 gap-2 flex-1">
-                  <div className="font-bold font-sm">
+                <Image
+                  src={coin.image}
+                  alt={coin.name}
+                  width={32}
+                  height={32}
+                />
+
+                <div className="ml-4 flex flex-col flex-1">
+                  <div className="font-bold text-sm">
                     {coin.name} ({coin.symbol.toUpperCase()})
                   </div>
 
@@ -67,24 +79,39 @@ export default function HomePage() {
 
                     <span
                       className={`flex items-center gap-1 ${
-                        isPositive
-                          ? "text-[var(--brand-green)] font-bold"
-                          : "text-[var(--brand-red)] font-bold"
+                        isPositive ? "text-green-500" : "text-red-500"
                       }`}
                     >
                       {isPositive ? (
-                        <MdArrowDropUp className="h-5 w-5 flex-shrink-0" />
+                        <MdArrowDropUp />
                       ) : (
-                        <MdOutlineArrowDropDown className="h-5 w-5 flex-shrink-0" />
+                        <MdOutlineArrowDropDown />
                       )}
-                      <span className="leading-none">{change.toFixed(2)}%</span>
+                      {change.toFixed(2)}%
                     </span>
                   </div>
                 </div>
-              </div>
+              </button>
             );
           })}
         </div>
+        {activeCoin && (
+          <div className="mt-6 flex flex-col gap-2 rounded-xl">
+            <div className="flex gap-6 ">
+              <div className="flex-1 h-full min-h-0">
+                <PriceChart coin={activeCoin} timeRange={timeRange} />
+              </div>
+
+              <div className="flex-1 h-full min-h-0">
+                <VolumeChart coin={activeCoin} timeRange={timeRange} />
+              </div>
+            </div>
+
+            <div className="flex justify-start pl-1">
+              <TimeRangeComponent value={timeRange} onChange={setTimeRange} />
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );

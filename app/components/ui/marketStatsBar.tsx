@@ -1,13 +1,13 @@
 "use client";
 import { useCurrency } from "@/context/currencyContext";
 import { useEffect, useState } from "react";
-import MarketStatsBarItem from "./marketStatsBarItem";
+import MarketStatsBarItem from "@/components/ui/marketStatsBarItem";
 import getMarketData from "@/utils/getMarketData";
 import getColorbar from "@/utils/getColorbar";
 import { formatCurrencyCompact } from "@/utils/formatCurrency";
 import { MdArrowDropUp, MdOutlineArrowDropDown } from "react-icons/md";
 import { MarketData } from "@/types/market";
-import MarketDataSkeleton from "./skeletons/marketDataSkeleton";
+import MarketDataSkeleton from "../skeletons/marketDataSkeleton";
 
 export default function MarketStatsBar() {
   const [marketData, setMarketData] = useState<MarketData | null>(null);
@@ -50,6 +50,7 @@ export default function MarketStatsBar() {
           logo="/logos/exchange.svg"
         />
         <MarketStatsBarItem
+          label="Market Cap:"
           value={
             <div className="flex items-center gap-1">
               {marketCapChange >= 0 ? (
@@ -66,6 +67,7 @@ export default function MarketStatsBar() {
         />
 
         <MarketStatsBarItem
+          label="24h Vol:"
           value={formatCurrencyCompact(
             marketData.data.total_volume[currencyKey],
             defaultCurrency,
@@ -73,24 +75,30 @@ export default function MarketStatsBar() {
         />
 
         {/* Top Coins BTC & ETH */}
-        {topCoins.map((coin) => (
-          <div key={coin.logo} className="flex items-center gap-2">
-            <MarketStatsBarItem
-              logo={coin.logo}
-              value={`${coin.value.toFixed(2)}%`}
-            />
-            <div className="w-[80px] h-[6px] bg-[var(--brand-medium-gray)] overflow-hidden rounded-full">
-              <div
-                className="h-full rounded-full transition-all duration-500"
-                style={{
-                  width: `${coin.value}%`,
-                  minWidth: "6px",
-                  backgroundColor: getColorbar(coin.value),
-                }}
+
+        <div className="flex items-center gap-4 text-sm text-[var(--brand-medium-gray)]">
+          <span className="font-medium">Dominance:</span>
+
+          {topCoins.map((coin) => (
+            <div key={coin.logo} className="flex items-center gap-2">
+              <MarketStatsBarItem
+                logo={coin.logo}
+                value={`${coin.value.toFixed(2)}%`}
               />
+
+              <div className="w-[80px] h-[6px] bg-[var(--brand-medium-gray)] overflow-hidden rounded-full">
+                <div
+                  className="h-full rounded-full transition-all duration-500"
+                  style={{
+                    width: `${coin.value}%`,
+                    minWidth: "6px",
+                    backgroundColor: getColorbar(coin.value),
+                  }}
+                />
+              </div>
             </div>
-          </div>
-        ))}
+          ))}
+        </div>
       </div>
     </div>
   );
