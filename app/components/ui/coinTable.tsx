@@ -1,3 +1,4 @@
+import Image from "next/image";
 export default function CoinTable() {
   const tableheads = [
     { name: "#" },
@@ -44,7 +45,6 @@ export default function CoinTable() {
     },
   ];
 
-  // ✅ added column gap to fix "connected bars" issue
   const grid =
     "grid grid-cols-[50px_2fr_1fr_0.6fr_0.6fr_0.6fr_2fr_2fr_1.5fr] gap-x-4";
 
@@ -84,10 +84,12 @@ export default function CoinTable() {
 
             {/* name */}
             <div className="flex items-center gap-2 min-w-0">
-              <img
+              <Image
                 src={coin.image}
-                className="w-6 h-6 rounded-full object-cover shrink-0"
                 alt="coin-image"
+                width={24}
+                height={24}
+                className="rounded-full object-cover"
               />
 
               <div className="flex flex-col min-w-0">
