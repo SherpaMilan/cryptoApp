@@ -14,6 +14,7 @@ import { VolumeChart } from "@/components/charts/volumeChart";
 import { useCoinsQuery } from "@/hooks/useCoinsQuery";
 import type { TimeRangeKey } from "@/constants/timeRanges";
 import TimeRangeComponent from "@/components/ui/timeRange";
+import CoinTable from "@/components/ui/coinTable";
 
 export default function HomePage() {
   const { defaultCurrency, isCurrencyLoaded } = useCurrency();
@@ -41,7 +42,7 @@ export default function HomePage() {
   return (
     <div className="w-full bg-[var(--brand-gray)]">
       <div className="max-w-[1440px] mx-auto px-[72px]">
-        <div className="text-[var(--brand-purple-dark)]">
+        <div className="font-bold text-gray-500">
           Select the currency to view statistics
         </div>
 
@@ -113,6 +114,8 @@ export default function HomePage() {
           </div>
         )}
       </div>
+
+      <CoinTable />
     </div>
   );
 }
