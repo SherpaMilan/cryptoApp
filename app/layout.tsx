@@ -6,6 +6,7 @@ import type { Metadata } from "next";
 import CurrencyProvider from "./context/currencyContext";
 import { cn } from "@/lib/utils";
 import Providers from "./provider/providers";
+import { Analytics } from "@vercel/analytics/next";
 
 const geist = Geist({ subsets: ["latin"], variable: "--font-sans" });
 
@@ -44,6 +45,7 @@ export default function RootLayout({
             {children}
           </CurrencyProvider>
         </Providers>
+        <Analytics />
       </body>
     </html>
   );
