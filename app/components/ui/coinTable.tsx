@@ -87,6 +87,7 @@ export default function CoinTable() {
               <img
                 src={coin.image}
                 className="w-6 h-6 rounded-full object-cover shrink-0"
+                alt="coin-image"
               />
 
               <div className="flex flex-col min-w-0">
