@@ -14,7 +14,7 @@ import { VolumeChart } from "@/components/charts/volumeChart";
 import { useCoinsQuery } from "@/hooks/useCoinsQuery";
 import type { TimeRangeKey } from "@/constants/timeRanges";
 import TimeRangeComponent from "@/components/ui/timeRange";
-import CoinTable from "@/components/ui/coinTable";
+import CoinTable from "@/components/table/coinTable";
 
 export default function HomePage() {
   const { defaultCurrency, isCurrencyLoaded } = useCurrency();
