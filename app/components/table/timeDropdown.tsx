@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { TimeFrame, OPTIONS } from "@/constants/timeChanges";
 
 type Props = {
@@ -8,65 +8,75 @@ type Props = {
 
 export default function TimeDropdown({ timeFrame, setTimeFrame }: Props) {
   const [open, setOpen] = useState(false);
+  const ref = useRef<HTMLDivElement | null>(null);
+
+  const handleSelect = (value: TimeFrame) => {
+    setTimeFrame(value);
+    setOpen(false);
+  };
+
+  // CLOSE ON OUTSIDE CLICK
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (ref.current && !ref.current.contains(event.target as Node)) {
+        setOpen(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
 
   return (
-    <div className="relative inline-block">
-      {/* BUTTON */}
+    <div ref={ref} className="relative inline-block text-left">
+      {/* Trigger */}
       <button
-        onClick={() => setOpen(!open)}
-        className="flex items-center gap-1 px-2.5 py-1 text-xs font-medium text-gray-700 rounded-full bg-white/10 backdrop-blur-2xl border border-white/20 shadow-[0_8px_30px_rgba(0,0,0,0.08)] hover:bg-white/20 transition-all"
+        onClick={() => setOpen((prev) => !prev)}
+        className="flex items-center justify-between w-[72px] px-2 py-1 text-xs rounded-md bg-white border shadow-sm hover:bg-gray-50 transition"
       >
         <span>{timeFrame}</span>
 
         <svg
-          className={`w-3 h-3 transition-transform ${open ? "rotate-180" : ""}`}
-          viewBox="0 0 20 20"
-          fill="currentColor"
+          className={`w-3 h-3 transition-transform duration-200 ${
+            open ? "rotate-180" : "rotate-0"
+          }`}
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="2"
+          viewBox="0 0 24 24"
         >
-          <path
-            fillRule="evenodd"
-            d="M5.23 7.21a.75.75 0 011.06.02L10 11.168l3.71-3.94a.75.75 0 111.08 1.04l-4.24 4.5a.75.75 0 01-1.08 0l-4.24-4.5a.75.75 0 01.02-1.06z"
-            clipRule="evenodd"
-          />
+          <path d="M19 9l-7 7-7-7" />
         </svg>
       </button>
 
-      {/* BACKDROP */}
+      {/* Dropdown */}
       {open && (
-        <div className="fixed inset-0 z-40" onClick={() => setOpen(false)} />
-      )}
-
-      {/* DROPDOWN */}
-      {open && (
-        <div className="absolute left-0 mt-2 z-50 w-max min-w-[70px] rounded-2xl bg-white/15 backdrop-blur-3xl border border-white/25 shadow-[0_20px_60px_rgba(0,0,0,0.18)] overflow-hidden">
-          {OPTIONS.map((opt) => {
-            const active = timeFrame === opt;
+        <div className="absolute left-0 mt-1 w-[72px] bg-white border rounded-md shadow-lg z-50 overflow-hidden">
+          {OPTIONS.map((option) => {
+            const active = option === timeFrame;
 
             return (
-              <div
-                key={opt}
-                onClick={() => {
-                  setTimeFrame(opt as TimeFrame);
-                  setOpen(false);
-                }}
-                className={`flex items-center justify-between px-3 py-2 text-xs cursor-pointer whitespace-nowrap transition ${active ? "bg-white/30 text-gray-900 font-medium" : "text-gray-700 hover:bg-white/20"}`}
+              <button
+                key={option}
+                onClick={() => handleSelect(option as TimeFrame)}
+                className={`w-full flex items-center justify-between px-3 py-2 text-xs hover:bg-gray-100 transition ${
+                  active ? "text-black font-semibold" : "text-gray-600"
+                }`}
               >
-                <span>{opt}</span>
+                <span>{option}</span>
 
                 {active && (
                   <svg
-                    className="w-3 h-3 text-teal-600"
-                    viewBox="0 0 20 20"
-                    fill="currentColor"
+                    className="w-3 h-3 text-green-500"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="3"
+                    viewBox="0 0 24 24"
                   >
-                    <path
-                      fillRule="evenodd"
-                      d="M16.704 5.29a1 1 0 010 1.415l-7.07 7.07a1 1 0 01-1.415 0l-3.535-3.536a1 1 0 011.414-1.414l2.828 2.828 6.364-6.364a1 1 0 011.414 0z"
-                      clipRule="evenodd"
-                    />
+                    <path d="M5 13l4 4L19 7" />
                   </svg>
                 )}
-              </div>
+              </button>
             );
           })}
         </div>
