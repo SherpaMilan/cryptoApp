@@ -63,7 +63,9 @@ export default function TimeDropdown({ timeFrame, setTimeFrame }: Props) {
                   active ? "text-black font-semibold" : "text-gray-600"
                 }`}
               >
-                <span>{option}</span>
+                <span className="text-[var(--brand-purple-text)]">
+                  {option}
+                </span>
 
                 {active && (
                   <svg

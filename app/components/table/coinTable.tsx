@@ -5,55 +5,21 @@ import { TimeFrame } from "@/constants/timeChanges";
 import MetricBar from "./metricBar";
 import { formatCurrencyCompact } from "@/utils/formatCurrency";
 import { useCurrency } from "@/context/currencyContext";
+import { MdArrowDropUp, MdOutlineArrowDropDown } from "react-icons/md";
+import { Coin } from "@/types/coin";
+import { SparklineChart } from "../charts/sparklineChart";
+const tdClass = "px-4 py-4";
+const thClass = "px-4 py-2";
 
-const metricTheme = {
-  up: {
-    text: "text-[var(--brand-green)]",
-    fill: "bg-[var(--brand-green)]",
-    track: "bg-green-100",
-  },
-  down: {
-    text: "text-[var(--brand-red)]",
-    fill: "bg-[var(--brand-red)]",
-    track: "bg-red-100",
-  },
-  neutral: {
-    text: "text-gray-500",
-    fill: "bg-gray-400",
-    track: "bg-gray-100",
-  },
+type Props = {
+  coins: Coin[];
 };
 
-const getTrend = (value: number | undefined) => {
-  const v = value ?? 0;
-  if (v > 0) return "up";
-  if (v < 0) return "down";
-  return "neutral";
-};
-
-export default function CoinTable() {
+export default function CoinTable({ coins }: Props) {
   const [timeFrame, setTimeFrame] = useState<TimeFrame>("24h");
   const { defaultCurrency } = useCurrency();
 
-  const mockCoins = [
-    {
-      id: "bitcoin",
-      symbol: "btc",
-      name: "Bitcoin",
-      image:
-        "https://coin-images.coingecko.com/coins/images/1/large/bitcoin.png",
-      current_price: 81270,
-      market_cap: 1627580884252,
-      total_volume: 44262977139,
-      price_change_percentage_1h_in_currency: 0.35,
-      price_change_percentage_24h_in_currency: 2.94,
-      price_change_percentage_7d_in_currency: 6.67,
-      circulating_supply: 20023771,
-      total_supply: 21000000,
-    },
-  ];
-
-  const getChange = (coin: (typeof mockCoins)[number]) => {
+  const getChange = (coin: (typeof coins)[number]) => {
     switch (timeFrame) {
       case "1h":
         return coin.price_change_percentage_1h_in_currency;
@@ -66,27 +32,25 @@ export default function CoinTable() {
     }
   };
 
-  const sortedCoins = [...mockCoins].sort(
-    (a, b) => b.market_cap - a.market_cap,
-  );
-
   return (
-    <div className="w-full bg-[var(--brand-gray)] px-[72px] max-w-[1440px] mx-auto">
-      <h2 className="mt-6 text-sm font-bold text-gray-500">Market Overview</h2>
+    <div className="w-full max-w-[1440px] mx-auto bg-[var(--brand-gray)] px-[72px] ">
+      <h2 className="mt-6 text-sm font-bold text-[var(--brand-purple-text)]">
+        Market Overview
+      </h2>
 
       <div className="mt-6 overflow-x-auto">
         <table className="w-full table-fixed border-separate border-spacing-y-2">
-          {/* HEADER */}
           <thead>
-            <tr className="text-left text-gray-500 text-sm">
-              <th className="w-[60px] px-4 py-2">#</th>
+            <tr className="text-left text-sm text-[var(--brand-purple-text)]">
+              <th className={`w-[40px] ${thClass}`}>#</th>
 
-              <th className="w-[220px] px-4 py-2">Coins</th>
+              <th className={`w-[220px] ${thClass}`}>Coins</th>
 
-              <th className="w-[120px] px-4 py-2">Price</th>
-              <th className="w-[160px] px-4 py-2 align-middle">
+              <th className={`w-[120px] ${thClass}`}>Price</th>
+
+              <th className={`w-[160px] align-middle ${thClass}`}>
                 <div className="flex items-center gap-2 whitespace-nowrap">
-                  <span className="text-gray-500 text-sm">Change</span>
+                  <span className="text-sm">Change</span>
 
                   <div className="shrink-0">
                     <TimeDropdown
@@ -97,54 +61,79 @@ export default function CoinTable() {
                 </div>
               </th>
 
-              <th className="w-[260px] px-4 py-2">Volume / Market Cap</th>
+              <th className={`w-[260px] ${thClass}`}>
+                24h Volume / Market Cap
+              </th>
 
-              <th className="w-[260px] px-4 py-2">Supply / Total</th>
+              <th className={`w-[260px] ${thClass}`}>Supply / Total</th>
 
-              <th className="w-[120px] px-4 py-2">7D</th>
+              <th className={`w-[120px] ${thClass}`}>7D Trend</th>
             </tr>
           </thead>
 
-          {/* BODY */}
           <tbody>
-            {sortedCoins.map((coin, index) => {
+            {coins.map((coin, index) => {
               const priceChange = getChange(coin);
-              const trend = getTrend(priceChange);
-              const theme = metricTheme[trend];
+
+              const change = priceChange ?? 0;
+              const isPositive = change >= 0;
+              const absChange = Math.abs(change);
+
+              const textColor = isPositive
+                ? "text-[var(--brand-green)]"
+                : "text-[var(--brand-red)]";
 
               return (
-                <tr key={coin.id} className="bg-white shadow-sm rounded-xl">
-                  {/* Rank */}
-                  <td className="px-4 py-4">{index + 1}</td>
+                <tr
+                  key={coin.id}
+                  className="rounded-xl bg-white shadow-sm transition-all duration-200 ease-out hover:scale-[1.01] hover:shadow-lg hover:bg-gray-50 cursor-pointer"
+                >
+                  <td className={tdClass}>{index + 1}</td>
 
-                  {/* Coin */}
-                  <td className="px-4 py-4">
+                  <td className={tdClass}>
                     <div className="flex items-center gap-2">
-                      <Image
-                        src={coin.image}
-                        alt={coin.name}
-                        width={24}
-                        height={24}
-                      />
-                      <div className="min-w-0">
-                        <div className="font-medium truncate">{coin.name}</div>
-                        <div className="text-xs text-gray-400">
-                          {coin.symbol}
-                        </div>
+                      <div className="w-7 h-7 rounded-full overflow-hidden bg-white flex items-center justify-center">
+                        <Image
+                          src={coin.image}
+                          alt={coin.name}
+                          width={28}
+                          height={28}
+                          className="object-cover"
+                        />
+                      </div>
+
+                      <div className="flex min-w-0 flex-wrap items-center gap-1">
+                        <span className="font-medium break-words">
+                          {coin.name}
+                        </span>
+
+                        <span className="shrink-0 text-xs uppercase">
+                          ({coin.symbol})
+                        </span>
                       </div>
                     </div>
                   </td>
 
-                  {/* Price */}
-                  <td className="px-4 py-4">${coin.current_price}</td>
-
-                  {/* Change */}
-                  <td className={`px-4 py-4 ${theme.text}`}>
-                    {priceChange?.toFixed(2)}%
+                  <td className={`${tdClass} text-[15px]`}>
+                    ${coin.current_price.toFixed(2)}
                   </td>
 
-                  {/* Volume */}
-                  <td className="px-4 py-4">
+                  <td className={`${tdClass} text-[14px] ${textColor}`}>
+                    <div className="flex items-center">
+                      {isPositive ? (
+                        <MdArrowDropUp className="h-5 w-5 flex-shrink-0" />
+                      ) : (
+                        <MdOutlineArrowDropDown className="h-5 w-5 flex-shrink-0" />
+                      )}
+
+                      <span>
+                        {isPositive ? "+" : "-"}
+                        {absChange.toFixed(2)}%
+                      </span>
+                    </div>
+                  </td>
+
+                  <td className={tdClass}>
                     <MetricBar
                       current={coin.total_volume}
                       max={coin.market_cap}
@@ -156,12 +145,11 @@ export default function CoinTable() {
                         coin.market_cap,
                         defaultCurrency,
                       )}
-                      theme={theme}
+                      isPositive={isPositive}
                     />
                   </td>
 
-                  {/* Supply */}
-                  <td className="px-4 py-4">
+                  <td className={tdClass}>
                     <MetricBar
                       current={coin.circulating_supply}
                       max={coin.total_supply}
@@ -173,13 +161,19 @@ export default function CoinTable() {
                         coin.total_supply,
                         defaultCurrency,
                       )}
-                      theme={theme}
+                      isPositive={isPositive}
                     />
                   </td>
 
-                  {/* Chart */}
-                  <td className="px-4 py-4">
-                    <div className="h-10 w-full bg-gradient-to-r from-teal-200 to-teal-400 rounded-md" />
+                  <td className={tdClass}>
+                    <div className="flex items-center justify-end">
+                      <div className="w-[120px] h-[40px] overflow-hidden">
+                        <SparklineChart
+                          data={coin.sparkline_in_7d.price}
+                          isPositive={change >= 0}
+                        />
+                      </div>
+                    </div>
                   </td>
                 </tr>
               );

@@ -43,7 +43,7 @@ export function ChartCard({
 
           {description && <CardDescription>{description}</CardDescription>}
 
-          <span>
+          <span className="text-[var(--brand-purple-text)]">
             Last updated:{" "}
             {lastUpdated ? (
               <time dateTime={lastUpdated}>

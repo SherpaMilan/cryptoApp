@@ -22,8 +22,14 @@ body {
   --brand-dark-gray: #e9edf3;
   --brand-dark-purple: #353570;
   --brand-medium-gray: #e7e1e1;
+  --brand-purple-text: #424286;
   --brand-green: #0c8c30;
   --background: oklch(1 0 0);
+  --metric-positive: #16a34a;
+  --metric-positive-light: #a5f1c1;
+  --metric-negative: #dc2626;
+  --metric-negative-light: #fee2e2;
+  --metric-max-label: #232336;
   --foreground: oklch(0.141 0.005 285.823);
   --card: oklch(1 0 0);
   --card-foreground: oklch(0.141 0.005 285.823);

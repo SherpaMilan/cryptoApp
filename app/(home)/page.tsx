@@ -42,10 +42,9 @@ export default function HomePage() {
   return (
     <div className="w-full bg-[var(--brand-gray)]">
       <div className="max-w-[1440px] mx-auto px-[72px]">
-        <div className="font-bold text-gray-500">
+        <div className="font-bold text-[var(--brand-purple-text)]">
           Select the currency to view statistics
         </div>
-
         {/* COIN LIST */}
         <div className="flex gap-4 mt-6 overflow-x-auto whitespace-nowrap [&::-webkit-scrollbar]:hidden">
           {coinsList?.map((coin) => {
@@ -114,8 +113,7 @@ export default function HomePage() {
           </div>
         )}
       </div>
-
-      <CoinTable />
+      <CoinTable coins={coinsList ?? []} />
     </div>
   );
 }

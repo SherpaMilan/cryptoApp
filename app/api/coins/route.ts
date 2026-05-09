@@ -5,7 +5,7 @@ export async function GET(request: Request) {
   const url = new URL(request.url);
   const searchParams = url.searchParams;
   const currency = searchParams.get("currency") || "usd";
-  const perPage = searchParams.get("perPage") || "100";
+  const perPage = searchParams.get("perPage") || "20";
   const page = searchParams.get("page") || "1";
   if (!currency) {
     return NextResponse.json(
@@ -23,6 +23,9 @@ export async function GET(request: Request) {
           x_cg_demo_api_key: process.env.CRYPTO_API_KEY,
           per_page: perPage,
           page: page,
+          order: "market_cap_desc",
+          price_change_percentage: "1h,24h,7d",
+          sparkline: true,
         },
       },
     );
