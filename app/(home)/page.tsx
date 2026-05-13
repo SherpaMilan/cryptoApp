@@ -11,10 +11,11 @@ import HomePageSkeleton from "@/components/skeletons/homeSkeleton";
 import { PriceChart } from "@/components/charts/priceChart";
 import { VolumeChart } from "@/components/charts/volumeChart";
 
-import { useCoinsQuery } from "@/hooks/useCoinsQuery";
 import type { TimeRangeKey } from "@/constants/timeRanges";
 import TimeRangeComponent from "@/components/ui/timeRange";
-import CoinTable from "@/components/table/coinTable";
+
+import CoinTableContainer from "@/components/table/coinTableContainer";
+import { useCoinsPreviewQuery } from "@/hooks/useCoinsPreviewQuery";
 
 export default function HomePage() {
   const { defaultCurrency, isCurrencyLoaded } = useCurrency();
@@ -28,7 +29,7 @@ export default function HomePage() {
     data: coinsList,
     isLoading,
     error,
-  } = useCoinsQuery(defaultCurrency, isCurrencyLoaded);
+  } = useCoinsPreviewQuery(defaultCurrency, isCurrencyLoaded);
 
   const activeCoin = selectedCoin ?? coinsList?.[0] ?? null;
   if (isLoading || !isCurrencyLoaded) {
@@ -113,7 +114,7 @@ export default function HomePage() {
           </div>
         )}
       </div>
-      <CoinTable coins={coinsList ?? []} />
+      <CoinTableContainer />
     </div>
   );
 }
