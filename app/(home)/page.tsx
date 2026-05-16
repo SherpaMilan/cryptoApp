@@ -11,9 +11,11 @@ import HomePageSkeleton from "@/components/skeletons/homeSkeleton";
 import { PriceChart } from "@/components/charts/priceChart";
 import { VolumeChart } from "@/components/charts/volumeChart";
 
-import { useCoinsQuery } from "@/hooks/useCoinsQuery";
 import type { TimeRangeKey } from "@/constants/timeRanges";
 import TimeRangeComponent from "@/components/ui/timeRange";
+
+import CoinTableContainer from "@/components/table/coinTableContainer";
+import { useCoinsPreviewQuery } from "@/hooks/useCoinsPreviewQuery";
 
 export default function HomePage() {
   const { defaultCurrency, isCurrencyLoaded } = useCurrency();
@@ -27,7 +29,7 @@ export default function HomePage() {
     data: coinsList,
     isLoading,
     error,
-  } = useCoinsQuery(defaultCurrency, isCurrencyLoaded);
+  } = useCoinsPreviewQuery(defaultCurrency, isCurrencyLoaded);
 
   const activeCoin = selectedCoin ?? coinsList?.[0] ?? null;
   if (isLoading || !isCurrencyLoaded) {
@@ -41,10 +43,9 @@ export default function HomePage() {
   return (
     <div className="w-full bg-[var(--brand-gray)]">
       <div className="max-w-[1440px] mx-auto px-[72px]">
-        <div className="text-[var(--brand-purple-dark)]">
+        <div className="font-bold text-[var(--brand-purple-text)]">
           Select the currency to view statistics
         </div>
-
         {/* COIN LIST */}
         <div className="flex gap-4 mt-6 overflow-x-auto whitespace-nowrap [&::-webkit-scrollbar]:hidden">
           {coinsList?.map((coin) => {
@@ -113,6 +114,7 @@ export default function HomePage() {
           </div>
         )}
       </div>
+      <CoinTableContainer />
     </div>
   );
 }
