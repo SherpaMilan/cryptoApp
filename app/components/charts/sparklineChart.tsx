@@ -8,17 +8,18 @@ type Props = {
 };
 
 export function SparklineChart({ data, isPositive }: Props) {
-  if (!data?.length) return null;
+  //  safety check
+  if (!Array.isArray(data) || data.length < 2) return null;
 
-  // Find range of values (used for scaling)
-  const min = Math.min(...data);
-  const max = Math.max(...data);
+  // remove invalid values
+  const clean = data.filter((n) => typeof n === "number" && !isNaN(n));
+  if (clean.length < 2) return null;
 
-  const formatted = data.map((price, index) => ({
+  const min = Math.min(...clean);
+  const max = Math.max(...clean);
+
+  const formatted = clean.map((price, index) => ({
     index,
-
-    // Normalize values to 0–100 range so the chart
-    // always fits nicely in fixed height (sparkline effect)
     price: max === min ? 50 : ((price - min) / (max - min)) * 100,
   }));
 

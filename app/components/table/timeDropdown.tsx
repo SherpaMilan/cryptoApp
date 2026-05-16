@@ -1,3 +1,5 @@
+"use client";
+
 import { useEffect, useRef, useState } from "react";
 import { TimeFrame, OPTIONS } from "@/constants/timeChanges";
 
@@ -8,6 +10,8 @@ type Props = {
 
 export default function TimeDropdown({ timeFrame, setTimeFrame }: Props) {
   const [open, setOpen] = useState(false);
+  const [highlighted, setHighlighted] = useState(0);
+
   const ref = useRef<HTMLDivElement | null>(null);
 
   const handleSelect = (value: TimeFrame) => {
@@ -15,7 +19,7 @@ export default function TimeDropdown({ timeFrame, setTimeFrame }: Props) {
     setOpen(false);
   };
 
-  // CLOSE ON OUTSIDE CLICK
+  // close on outside click
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (ref.current && !ref.current.contains(event.target as Node)) {
@@ -27,12 +31,51 @@ export default function TimeDropdown({ timeFrame, setTimeFrame }: Props) {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
+  // keyboard navigation
+  useEffect(() => {
+    if (!open) return;
+
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape") {
+        setOpen(false);
+        return;
+      }
+
+      if (e.key === "ArrowDown") {
+        e.preventDefault();
+        setHighlighted((prev) => (prev < OPTIONS.length - 1 ? prev + 1 : 0));
+      }
+
+      if (e.key === "ArrowUp") {
+        e.preventDefault();
+        setHighlighted((prev) => (prev > 0 ? prev - 1 : OPTIONS.length - 1));
+      }
+
+      if (e.key === "Enter") {
+        e.preventDefault();
+        handleSelect(OPTIONS[highlighted] as TimeFrame);
+      }
+    };
+
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [open, highlighted]);
+
   return (
     <div ref={ref} className="relative inline-block text-left">
       {/* Trigger */}
       <button
-        onClick={() => setOpen((prev) => !prev)}
-        className="flex items-center justify-between w-[72px] px-2 py-1 text-xs rounded-md bg-white border shadow-sm hover:bg-gray-50 transition"
+        onClick={() => {
+          setOpen((prev) => {
+            const next = !prev;
+
+            // ✅ reset highlight ONLY when opening
+            if (next) setHighlighted(0);
+
+            return next;
+          });
+        }}
+        className="flex items-center justify-between w-[72px] px-2 py-1 text-xs rounded-md bg-white border shadow-sm hover:bg-gray-50 transition cursor-pointer"
       >
         <span>{timeFrame}</span>
 
@@ -52,16 +95,18 @@ export default function TimeDropdown({ timeFrame, setTimeFrame }: Props) {
       {/* Dropdown */}
       {open && (
         <div className="absolute left-0 mt-1 w-[72px] bg-white border rounded-md shadow-lg z-50 overflow-hidden">
-          {OPTIONS.map((option) => {
+          {OPTIONS.map((option, index) => {
             const active = option === timeFrame;
+            const isHighlighted = index === highlighted;
 
             return (
               <button
                 key={option}
                 onClick={() => handleSelect(option as TimeFrame)}
-                className={`w-full flex items-center justify-between px-3 py-2 text-xs hover:bg-gray-100 transition ${
-                  active ? "text-black font-semibold" : "text-gray-600"
-                }`}
+                onMouseEnter={() => setHighlighted(index)}
+                className={`w-full flex items-center justify-between px-3 py-2 text-xs cursor-pointer transition ${
+                  isHighlighted ? "bg-gray-100" : ""
+                } ${active ? "text-black font-semibold" : "text-gray-600"}`}
               >
                 <span className="text-[var(--brand-purple-text)]">
                   {option}
