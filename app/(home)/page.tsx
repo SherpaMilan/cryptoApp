@@ -15,6 +15,7 @@ import type { TimeRangeKey } from "@/constants/timeRanges";
 import TimeRangeComponent from "@/components/ui/timeRange";
 
 import CoinTableContainer from "@/components/table/coinTableContainer";
+import Footer from "@/components/ui/footer";
 import { useCoinsPreviewQuery } from "@/hooks/useCoinsPreviewQuery";
 
 export default function HomePage() {
@@ -46,7 +47,6 @@ export default function HomePage() {
         <div className="font-bold text-[var(--brand-purple-text)]">
           Select the currency to view statistics
         </div>
-        {/* COIN LIST */}
         <div className="flex gap-4 mt-6 overflow-x-auto whitespace-nowrap [&::-webkit-scrollbar]:hidden">
           {coinsList?.map((coin) => {
             const isActive = activeCoin?.id === coin.id;
@@ -115,6 +115,7 @@ export default function HomePage() {
         )}
       </div>
       <CoinTableContainer />
+      <Footer />
     </div>
   );
 }
