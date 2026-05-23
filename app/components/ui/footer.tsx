@@ -7,45 +7,49 @@ export default function Footer() {
       aria-label="Site footer"
     >
       <div className="max-w-[1440px] mx-auto px-[72px] py-6">
-        <div className="flex items-center justify-between">
-          <p className="text-xs text-gray-400">
-            Built, designed & maintained end-to-end by{" "}
-            <span className="text-[var(--brand-purple-text)] font-medium">
-              SherpaMilan
-            </span>{" "}
-            © 2026
-          </p>
-          <nav
-            className="hidden md:flex items-center gap-6 text-xs text-gray-500"
-            aria-label="Footer navigation"
-          >
-            <span className="hover:text-gray-300 transition">
-              Crypto Dashboard
-            </span>
-            <span className="hover:text-gray-300 transition">Market Data</span>
-            <span className="hover:text-gray-300 transition">v1.0</span>
-          </nav>
+        <div className="grid grid-cols-3 items-center">
+          {/* LEFT — TECH STACK */}
+          <div className="hidden md:flex flex-wrap gap-4 text-xs text-gray-500">
+            <span>Next.js 15</span>
+            <span>TypeScript</span>
+            <span>CoinGecko API</span>
+            <span>shadcn/ui</span>
+          </div>
 
-          <div className="flex items-center gap-4">
-            <a
-              href="https://github.com/SherpaMilan"
-              target="_blank"
-              rel="noopener noreferrer"
-              aria-label="GitHub profile"
-              className="flex items-center justify-center w-10 h-10 rounded-full border border-white/10 hover:border-[#0A66C2]/40  transition"
-            >
-              <FaGithub size={18} />
-            </a>
+          {/* CENTER — BRAND */}
+          <div className="flex justify-center">
+            <p className="text-xs text-gray-400 text-center">
+              Crafted from scratch by{" "}
+              <span className="text-[var(--brand-purple-text)] font-medium">
+                SherpaMilan
+              </span>{" "}
+              © 2026
+            </p>
+          </div>
 
-            <a
-              href="https://www.linkedin.com/in/milansherpa/"
-              target="_blank"
-              rel="noopener noreferrer"
-              aria-label="LinkedIn profile"
-              className="flex items-center justify-center w-10 h-10 rounded-full border border-white/10 hover:text-[#0A66C2] hover:border-[#0A66C2]/40 transition"
-            >
-              <FaLinkedin size={18} />
-            </a>
+          {/* RIGHT — STATS + SOCIAL */}
+          <div className="flex items-center justify-end gap-6">
+            <div className="hidden md:flex gap-4 text-xs text-gray-500">
+              <span>1000+ Coins</span>
+              <span>Live Prices</span>
+              <span>Optimized</span>
+            </div>
+
+            <div className="flex gap-3">
+              <a
+                href="https://github.com/SherpaMilan"
+                className="w-9 h-9 flex items-center justify-center rounded-full border hover:border-[#0A66C2]/40 transition"
+              >
+                <FaGithub />
+              </a>
+
+              <a
+                href="https://www.linkedin.com/in/milansherpa/"
+                className="w-9 h-9 flex items-center justify-center rounded-full border hover:border-[#0A66C2]/40 transition"
+              >
+                <FaLinkedin />
+              </a>
+            </div>
           </div>
         </div>
       </div>
