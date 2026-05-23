@@ -1,6 +1,7 @@
 "use client";
 
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 import { MdArrowDropUp, MdOutlineArrowDropDown } from "react-icons/md";
 
 import { Coin } from "@/types/coin";
@@ -25,6 +26,7 @@ export default function CoinTableRow({
   currency,
   tdClass,
 }: Props) {
+  const router = useRouter();
   const absChange = Math.abs(change);
 
   const textColor = isPositive
@@ -32,7 +34,11 @@ export default function CoinTableRow({
     : "text-[var(--brand-red)]";
 
   return (
-    <tr className="rounded-xl bg-white shadow-sm transition-all duration-200 hover:scale-[1.01] hover:shadow-lg hover:bg-gray-50 cursor-pointer">
+    <tr
+      onClick={() => router.push(`/coin/${coin.id}`)}
+      className="bg-white shadow-sm transition-all duration-200 cursor-pointer
+                 hover:bg-gray-50 hover:shadow-md hover:scale-[1.01]"
+    >
       <td className={tdClass}>{index + 1}</td>
 
       <td className={tdClass}>
@@ -41,9 +47,13 @@ export default function CoinTableRow({
             <Image src={coin.image} alt={coin.name} width={28} height={28} />
           </div>
 
-          <div className="flex min-w-0 flex-wrap items-center gap-1">
-            <span className="font-medium">{coin.name}</span>
-            <span className="text-xs uppercase">({coin.symbol})</span>
+          <div className="flex items-center gap-1 min-w-0">
+            <span className="font-medium text-[var(--brand-black)]">
+              {coin.name}
+            </span>
+            <span className="text-xs uppercase text-gray-500">
+              ({coin.symbol})
+            </span>
           </div>
         </div>
       </td>

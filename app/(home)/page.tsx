@@ -15,7 +15,6 @@ import type { TimeRangeKey } from "@/constants/timeRanges";
 import TimeRangeComponent from "@/components/ui/timeRange";
 
 import CoinTableContainer from "@/components/table/coinTableContainer";
-import Footer from "@/components/ui/footer";
 import { useCoinsPreviewQuery } from "@/hooks/useCoinsPreviewQuery";
 
 export default function HomePage() {
@@ -115,7 +114,6 @@ export default function HomePage() {
         )}
       </div>
       <CoinTableContainer />
-      <Footer />
     </div>
   );
 }
