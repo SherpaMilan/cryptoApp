@@ -30,8 +30,8 @@ export default function MarketStatsBar() {
   ];
 
   return (
-    <div className="w-full bg-[var(--brand-dark-purple)]">
-      <div className="max-w-[1440px] mx-auto flex justify-center items-center h-[56px] px-[72px] gap-10 bg-[var(--brand-dark-purple)] text-sm">
+    <div className="w-full">
+      <div className="max-w-[1440px] mx-auto flex justify-center items-center h-[56px] px-[72px] gap-10 bg-[var(--brand-dark-purple)] text-sm ">
         <MarketStatsBarItem
           label="Coins"
           value={marketData.data.active_cryptocurrencies}

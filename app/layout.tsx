@@ -36,15 +36,12 @@ export default function RootLayout({
       >
         <Providers>
           <CurrencyProvider>
-            <div className="w-full">
+            <div className="sticky top-0 z-100">
               <Navbar />
-            </div>
-
-            <div className="w-full">
               <MarketStatsBar />
             </div>
 
-            <main className="w-full min-h-screen">{children}</main>
+            <main className="w-full min-h-screen pt-[22px]">{children}</main>
 
             <Footer />
           </CurrencyProvider>

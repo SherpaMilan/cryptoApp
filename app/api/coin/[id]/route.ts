@@ -17,7 +17,7 @@ export async function GET(
           market_data: true,
           community_data: true,
           developer_data: false,
-          sparkline: false,
+          sparkline: true,
         },
       },
     );
