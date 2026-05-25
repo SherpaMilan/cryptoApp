@@ -27,15 +27,14 @@ export function PriceChart({
   coin: Coin | null;
   timeRange: TimeRangeKey;
 }) {
-  const { defaultCurrency } = useCurrency();
+  const { currencyKey, currencySymbol } = useCurrency();
 
   const { data, isLoading, error } = useCoinChartQuery(
     coin?.id,
-    defaultCurrency,
+    currencyKey,
     TIME_RANGES[timeRange],
   );
 
-  // useMemo = "remember this result unless prices change- Only sort when the API data changes"
   const sortedData = React.useMemo(() => {
     return (data?.prices ?? [])
       .slice()
@@ -47,7 +46,8 @@ export function PriceChart({
       title={`${coin?.name} (${coin?.symbol?.toUpperCase()})`}
       description={formatCurrencyCompact(
         coin?.market_cap ?? 0,
-        defaultCurrency,
+        currencyKey,
+        currencySymbol,
       )}
       lastUpdated={coin?.last_updated}
       config={chartConfig}
@@ -56,6 +56,7 @@ export function PriceChart({
     >
       <AreaChart data={sortedData}>
         <ChartDefaultToolTip />
+
         <defs>
           <linearGradient id="fillPrice" x1="0" y1="0" x2="0" y2="1">
             <stop

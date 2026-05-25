@@ -8,13 +8,13 @@ import { Coin } from "@/types/coin";
 import MetricBar from "./metricBar";
 import { SparklineChart } from "../charts/sparklineChart";
 import { formatCurrencyCompact } from "@/utils/formatCurrency";
+import { useCurrency } from "@/context/currencyContext";
 
 type Props = {
   coin: Coin;
   index: number;
   change: number;
   isPositive: boolean;
-  currency: string;
   tdClass: string;
 };
 
@@ -23,10 +23,11 @@ export default function CoinTableRow({
   index,
   change,
   isPositive,
-  currency,
   tdClass,
 }: Props) {
+  const { currencySymbol, currencyKey } = useCurrency();
   const router = useRouter();
+
   const absChange = Math.abs(change);
 
   const textColor = isPositive
@@ -40,7 +41,6 @@ export default function CoinTableRow({
                  hover:bg-gray-50 hover:shadow-md hover:scale-[1.01]"
     >
       <td className={tdClass}>{index + 1}</td>
-
       <td className={tdClass}>
         <div className="flex items-center gap-2">
           <div className="w-7 h-7 rounded-full overflow-hidden bg-white flex items-center justify-center">
@@ -59,7 +59,8 @@ export default function CoinTableRow({
       </td>
 
       <td className={`${tdClass} text-[15px]`}>
-        ${coin.current_price?.toFixed(2) ?? "0.00"}
+        {currencySymbol}&nbsp;
+        {coin.current_price?.toFixed(2) ?? "0.00"}
       </td>
 
       <td className={`${tdClass} text-[14px] ${textColor}`}>
@@ -81,8 +82,16 @@ export default function CoinTableRow({
         <MetricBar
           current={coin.total_volume}
           max={coin.market_cap}
-          currentLabel={formatCurrencyCompact(coin.total_volume, currency)}
-          maxLabel={formatCurrencyCompact(coin.market_cap, currency)}
+          currentLabel={formatCurrencyCompact(
+            coin.total_volume,
+            currencyKey,
+            currencySymbol,
+          )}
+          maxLabel={formatCurrencyCompact(
+            coin.market_cap,
+            currencyKey,
+            currencySymbol,
+          )}
           isPositive={isPositive}
         />
       </td>
@@ -93,9 +102,14 @@ export default function CoinTableRow({
           max={coin.total_supply}
           currentLabel={formatCurrencyCompact(
             coin.circulating_supply,
-            currency,
+            currencyKey,
+            currencySymbol,
           )}
-          maxLabel={formatCurrencyCompact(coin.total_supply, currency)}
+          maxLabel={formatCurrencyCompact(
+            coin.total_supply,
+            currencyKey,
+            currencySymbol,
+          )}
           isPositive={isPositive}
         />
       </td>

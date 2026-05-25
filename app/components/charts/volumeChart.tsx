@@ -27,11 +27,11 @@ export function VolumeChart({
   coin: Coin | null;
   timeRange: TimeRangeKey;
 }) {
-  const { defaultCurrency } = useCurrency();
+  const { currencyKey, currencySymbol } = useCurrency();
 
   const { data, isLoading, error } = useCoinChartQuery(
     coin?.id,
-    defaultCurrency,
+    currencyKey,
     TIME_RANGES[timeRange],
   );
 
@@ -45,7 +45,8 @@ export function VolumeChart({
       title={"Volume 24h"}
       description={formatCurrencyCompact(
         coin?.total_volume ?? 0,
-        defaultCurrency,
+        currencyKey,
+        currencySymbol,
       )}
       lastUpdated={coin?.last_updated}
       config={chartConfig}
@@ -54,6 +55,7 @@ export function VolumeChart({
     >
       <BarChart data={sortedData} margin={{ left: 12, right: 12 }}>
         <ChartDefaultToolTip />
+
         <XAxis
           dataKey="date"
           tickLine={false}
