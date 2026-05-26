@@ -7,10 +7,7 @@ type Props = {
   collapsedHeight?: number;
 };
 
-export default function ExpandableDescription({
-  text,
-  collapsedHeight = 120,
-}: Props) {
+export default function ReadMore({ text, collapsedHeight = 120 }: Props) {
   const [isExpanded, setIsExpanded] = useState(false);
   const [isOverflowing, setIsOverflowing] = useState(false);
 
@@ -18,8 +15,7 @@ export default function ExpandableDescription({
 
   useEffect(() => {
     if (!ref.current) return;
-    const el = ref.current;
-    setIsOverflowing(el.scrollHeight > collapsedHeight);
+    setIsOverflowing(ref.current.scrollHeight > collapsedHeight);
   }, [text, collapsedHeight]);
 
   if (!text) {
@@ -31,13 +27,12 @@ export default function ExpandableDescription({
   }
 
   return (
-    <div className="relative text-xs text-gray-600 leading-6 tracking-normal text-justify">
-      {/* TEXT BOX */}
+    <div className="relative text-xs text-gray-600 leading-6 text-justify">
       <div
         ref={ref}
         className="transition-all duration-500 ease-in-out pr-2"
         style={{
-          maxHeight: isExpanded ? 320 : collapsedHeight,
+          maxHeight: isExpanded ? 260 : collapsedHeight,
           overflowY: isExpanded ? "auto" : "hidden",
         }}
       >
@@ -45,13 +40,13 @@ export default function ExpandableDescription({
       </div>
 
       {!isExpanded && isOverflowing && (
-        <div className="pointer-events-none absolute bottom-6 left-0 right-0 h-10 bg-gradient-to-t from-[var(--brand-gray)] to-transparent" />
+        <div className="absolute bottom-8 left-0 right-0 h-10 bg-gradient-to-t from-[var(--brand-gray)] to-transparent pointer-events-none" />
       )}
 
       {isOverflowing && (
         <button
           onClick={() => setIsExpanded((p) => !p)}
-          className="mt-2 inline text-[11px] font-medium text-[var(--brand-black)] hover:opacity-70 transition cursor-pointer"
+          className="mt-2 text-[11px] font-medium text-[var(--brand-black)] hover:opacity-70 cursor-pointer"
         >
           {isExpanded ? "Show less" : "Read more"}
         </button>

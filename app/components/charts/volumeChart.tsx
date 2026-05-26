@@ -8,10 +8,10 @@ import { useCurrency } from "@/context/currencyContext";
 import { useCoinChartQuery } from "@/hooks/useCoinChartQuery";
 import { TIME_RANGES, TimeRangeKey } from "@/constants/timeRanges";
 import { formatCurrencyCompact } from "@/utils/formatCurrency";
-import { ChartCard } from "./chartCard";
-import { ChartDefaultToolTip } from "./chartToolTip";
+import { ChartCard } from "./ChartCard";
+import { ChartDefaultToolTip } from "./ChartToolTip";
 import { CHART_COLORS } from "@/constants/chartColors";
-import { ChartConfig } from "../ui/chart";
+import { ChartConfig } from "../Ui/Chart";
 
 const chartConfig = {
   volume: {

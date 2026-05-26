@@ -9,7 +9,7 @@ import {
 } from "react-icons/hi2";
 import { MdKeyboardArrowDown } from "react-icons/md";
 import { TbCoinBitcoinFilled } from "react-icons/tb";
-import CurrencyDropdownSkeleton from "@/components/skeletons/currencyDropdownSkeleton";
+import CurrencyDropdownSkeleton from "../Skeletons/CurrencyDropdownSkeleton";
 
 export default function CurrencyDropdown() {
   const { defaultCurrency, setDefaultCurrency, isCurrencyLoaded } =

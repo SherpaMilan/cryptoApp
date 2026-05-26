@@ -1,10 +1,10 @@
 "use client";
 
 import { useState } from "react";
-import TimeDropdown from "./timeDropdown";
+import TimeDropdown from "./TimeDropdown";
 import { TimeFrame } from "@/constants/timeChanges";
 import { Coin } from "@/types/coin";
-import CoinTableRow from "./coinTableRow";
+import CoinTableRow from "./CoinTableRow";
 
 const tdClass = "px-4 py-4";
 const thClass = "px-4 py-2 sticky top-0 z-20 bg-[var(--brand-gray)]";

@@ -9,8 +9,8 @@ import { useCoinChartQuery } from "@/hooks/useCoinChartQuery";
 import { formatCurrencyCompact } from "@/utils/formatCurrency";
 
 import { TIME_RANGES, TimeRangeKey } from "@/constants/timeRanges";
-import { ChartCard } from "./chartCard";
-import { ChartDefaultToolTip } from "./chartToolTip";
+import { ChartCard } from "./ChartCard";
+import { ChartDefaultToolTip } from "./ChartToolTip";
 import { CHART_COLORS } from "@/constants/chartColors";
 
 const chartConfig = {
