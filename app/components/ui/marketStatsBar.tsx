@@ -1,10 +1,10 @@
 "use client";
 import { useCurrency } from "@/context/currencyContext";
-import MarketStatsBarItem from "@/components/Ui/MarketStatsBarItem";
+import MarketStatsBarItem from "@/components/ui/MarketStatsBarItem";
 import getColorbar from "@/utils/getColorbar";
 import { formatCurrencyCompact } from "@/utils/formatCurrency";
 import { MdArrowDropUp, MdOutlineArrowDropDown } from "react-icons/md";
-import MarketDataSkeleton from "../Skeletons/MarketDataSkeleton";
+import MarketDataSkeleton from "../skeletons/MarketDataSkeleton";
 import { useMarketDataQuery } from "@/hooks/useMarketDataQuery";
 
 export default function MarketStatsBar() {

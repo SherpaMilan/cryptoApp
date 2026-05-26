@@ -1,4 +1,4 @@
-import { ChartTooltip, ChartTooltipContent } from "../Ui/Chart";
+import { ChartTooltip, ChartTooltipContent } from "../ui/Chart";
 
 export function ChartDefaultToolTip() {
   return (

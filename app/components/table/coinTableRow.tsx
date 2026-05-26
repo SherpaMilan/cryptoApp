@@ -9,7 +9,7 @@ import MetricBar from "./MetricBar";
 
 import { formatCurrencyCompact } from "@/utils/formatCurrency";
 import { useCurrency } from "@/context/currencyContext";
-import { SparklineChart } from "../Charts/SparklineChart";
+import { SparklineChart } from "../charts/SparklineChart";
 type Props = {
   coin: Coin;
   index: number;

@@ -4,7 +4,7 @@ import { useCoinDetailQuery } from "@/hooks/useCoinDetailQuery";
 import { useCurrency } from "@/context/currencyContext";
 import { useState } from "react";
 import { TIME_RANGES, TimeRangeKey } from "@/constants/timeRanges";
-import CoinPageSkeleton from "../Skeletons/CoinPageSkeleton";
+import CoinPageSkeleton from "../skeletons/CoinPageSkeleton";
 
 import CoinHeader from "./CoinHeader";
 import PriceBlock from "./PriceBlock";

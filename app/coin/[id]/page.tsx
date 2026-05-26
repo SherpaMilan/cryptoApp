@@ -1,4 +1,4 @@
-import CoinPage from "@/components/CoinPage/CoinPage";
+import CoinPage from "@/components/coinPage/CoinPage";
 
 export default async function Page({
   params,

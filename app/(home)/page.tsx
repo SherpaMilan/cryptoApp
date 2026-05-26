@@ -8,12 +8,12 @@ import { Coin } from "@/types/coin";
 import { useCurrency } from "@/context/currencyContext";
 
 import type { TimeRangeKey } from "@/constants/timeRanges";
-import TimeRangeComponent from "@/components/Ui/TimeRange";
-import CoinTableContainer from "@/components/Table/CoinTableContainer";
+import TimeRangeComponent from "@/components/ui/TimeRange";
+import CoinTableContainer from "@/components/table/CoinTableContainer";
 import { useCoinsPreviewQuery } from "@/hooks/useCoinsPreviewQuery";
-import { PriceChart } from "@/components/Charts/PriceChart";
-import { VolumeChart } from "@/components/Charts/VolumeChart";
-import HomePageSkeleton from "@/components/Skeletons/HomeSkeleton";
+import { PriceChart } from "@/components/charts/PriceChart";
+import { VolumeChart } from "@/components/charts/VolumeChart";
+import HomePageSkeleton from "@/components/skeletons/HomeSkeleton";
 
 export default function HomePage() {
   const { defaultCurrency, isCurrencyLoaded } = useCurrency();

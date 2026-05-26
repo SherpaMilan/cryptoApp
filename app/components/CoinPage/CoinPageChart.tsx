@@ -14,7 +14,7 @@ import {
 import { useCoinChartQuery } from "@/hooks/useCoinChartQuery";
 import { useCurrency } from "@/context/currencyContext";
 import { TimeRangeKey, TIME_RANGES } from "@/constants/timeRanges";
-import CoinPageChartSkeleton from "../Skeletons/CoinPageChartSkeleton";
+import CoinPageChartSkeleton from "../skeletons/CoinPageChartSkeleton";
 
 type Props = {
   coinId: string | undefined;

@@ -11,7 +11,7 @@ import { formatCurrencyCompact } from "@/utils/formatCurrency";
 import { ChartCard } from "./ChartCard";
 import { ChartDefaultToolTip } from "./ChartToolTip";
 import { CHART_COLORS } from "@/constants/chartColors";
-import { ChartConfig } from "../Ui/Chart";
+import { ChartConfig } from "../ui/Chart";
 
 const chartConfig = {
   volume: {
