@@ -8,7 +8,8 @@ import { Coin } from "@/types/coin";
 import { useCurrency } from "@/context/currencyContext";
 
 import type { TimeRangeKey } from "@/constants/timeRanges";
-import TimeRangeComponent from "@/components/ui/TimeRange";
+
+import TimeRange from "@/components/ui/TimeRange";
 import CoinTableContainer from "@/components/table/CoinTableContainer";
 import { useCoinsPreviewQuery } from "@/hooks/useCoinsPreviewQuery";
 import { PriceChart } from "@/components/charts/PriceChart";
@@ -106,7 +107,7 @@ export default function HomePage() {
             </div>
 
             <div className="flex justify-start pl-1">
-              <TimeRangeComponent value={timeRange} onChange={setTimeRange} />
+              <TimeRange value={timeRange} onChange={setTimeRange} />
             </div>
           </div>
         )}
