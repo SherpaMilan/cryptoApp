@@ -1,4 +1,4 @@
-import TabSwitcher from "../components/ui/tabSwitcher";
+import TabSwitcher from "../components/ui/TabSwitcher";
 export default function RootLayout({
   children,
 }: Readonly<{

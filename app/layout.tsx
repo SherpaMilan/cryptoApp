@@ -1,13 +1,13 @@
 import "./globals.css";
-import Navbar from "./components/ui/navbar";
-import MarketStatsBar from "./components/ui/marketStatsBar";
+import Navbar from "./components/ui/Navbar";
+import MarketStatsBar from "./components/ui/MarketStatsBar";
 import { Space_Grotesk, Geist } from "next/font/google";
 import type { Metadata } from "next";
 import CurrencyProvider from "./context/currencyContext";
 import { cn } from "@/lib/utils";
 import Providers from "./provider/providers";
 import { Analytics } from "@vercel/analytics/next";
-
+import Footer from "@/components/ui/Footer";
 const geist = Geist({ subsets: ["latin"], variable: "--font-sans" });
 
 const spaceGrotesk = Space_Grotesk({
@@ -36,13 +36,14 @@ export default function RootLayout({
       >
         <Providers>
           <CurrencyProvider>
-            <div className="w-full ">
+            <div className="sticky top-0 z-100">
               <Navbar />
-            </div>
-            <div className="w-full ">
               <MarketStatsBar />
             </div>
-            {children}
+
+            <main className="w-full min-h-screen pt-[22px]">{children}</main>
+
+            <Footer />
           </CurrencyProvider>
         </Providers>
         <Analytics />

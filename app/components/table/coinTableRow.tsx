@@ -1,19 +1,20 @@
 "use client";
 
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 import { MdArrowDropUp, MdOutlineArrowDropDown } from "react-icons/md";
 
 import { Coin } from "@/types/coin";
-import MetricBar from "./metricBar";
-import { SparklineChart } from "../charts/sparklineChart";
-import { formatCurrencyCompact } from "@/utils/formatCurrency";
+import MetricBar from "./MetricBar";
 
+import { formatCurrencyCompact } from "@/utils/formatCurrency";
+import { useCurrency } from "@/context/currencyContext";
+import { SparklineChart } from "../charts/SparklineChart";
 type Props = {
   coin: Coin;
   index: number;
   change: number;
   isPositive: boolean;
-  currency: string;
   tdClass: string;
 };
 
@@ -22,9 +23,11 @@ export default function CoinTableRow({
   index,
   change,
   isPositive,
-  currency,
   tdClass,
 }: Props) {
+  const { currencySymbol, currencyKey } = useCurrency();
+  const router = useRouter();
+
   const absChange = Math.abs(change);
 
   const textColor = isPositive
@@ -32,24 +35,32 @@ export default function CoinTableRow({
     : "text-[var(--brand-red)]";
 
   return (
-    <tr className="rounded-xl bg-white shadow-sm transition-all duration-200 hover:scale-[1.01] hover:shadow-lg hover:bg-gray-50 cursor-pointer">
+    <tr
+      onClick={() => router.push(`/coin/${coin.id}`)}
+      className="bg-white shadow-sm transition-all duration-200 cursor-pointer
+                 hover:bg-gray-50 hover:shadow-md hover:scale-[1.01]"
+    >
       <td className={tdClass}>{index + 1}</td>
-
       <td className={tdClass}>
         <div className="flex items-center gap-2">
           <div className="w-7 h-7 rounded-full overflow-hidden bg-white flex items-center justify-center">
             <Image src={coin.image} alt={coin.name} width={28} height={28} />
           </div>
 
-          <div className="flex min-w-0 flex-wrap items-center gap-1">
-            <span className="font-medium">{coin.name}</span>
-            <span className="text-xs uppercase">({coin.symbol})</span>
+          <div className="flex items-center gap-1 min-w-0">
+            <span className="font-medium text-[var(--brand-black)]">
+              {coin.name}
+            </span>
+            <span className="text-xs uppercase text-gray-500">
+              ({coin.symbol})
+            </span>
           </div>
         </div>
       </td>
 
       <td className={`${tdClass} text-[15px]`}>
-        ${coin.current_price?.toFixed(2) ?? "0.00"}
+        {currencySymbol}&nbsp;
+        {coin.current_price?.toFixed(2) ?? "0.00"}
       </td>
 
       <td className={`${tdClass} text-[14px] ${textColor}`}>
@@ -71,8 +82,16 @@ export default function CoinTableRow({
         <MetricBar
           current={coin.total_volume}
           max={coin.market_cap}
-          currentLabel={formatCurrencyCompact(coin.total_volume, currency)}
-          maxLabel={formatCurrencyCompact(coin.market_cap, currency)}
+          currentLabel={formatCurrencyCompact(
+            coin.total_volume,
+            currencyKey,
+            currencySymbol,
+          )}
+          maxLabel={formatCurrencyCompact(
+            coin.market_cap,
+            currencyKey,
+            currencySymbol,
+          )}
           isPositive={isPositive}
         />
       </td>
@@ -83,9 +102,14 @@ export default function CoinTableRow({
           max={coin.total_supply}
           currentLabel={formatCurrencyCompact(
             coin.circulating_supply,
-            currency,
+            currencyKey,
+            currencySymbol,
           )}
-          maxLabel={formatCurrencyCompact(coin.total_supply, currency)}
+          maxLabel={formatCurrencyCompact(
+            coin.total_supply,
+            currencyKey,
+            currencySymbol,
+          )}
           isPositive={isPositive}
         />
       </td>

@@ -7,16 +7,13 @@ import { useState } from "react";
 import { Coin } from "@/types/coin";
 import { useCurrency } from "@/context/currencyContext";
 
-import HomePageSkeleton from "@/components/skeletons/homeSkeleton";
-import { PriceChart } from "@/components/charts/priceChart";
-import { VolumeChart } from "@/components/charts/volumeChart";
-
 import type { TimeRangeKey } from "@/constants/timeRanges";
-import TimeRangeComponent from "@/components/ui/timeRange";
-
-import CoinTableContainer from "@/components/table/coinTableContainer";
-import Footer from "@/components/ui/footer";
+import TimeRangeComponent from "@/components/ui/TimeRange";
+import CoinTableContainer from "@/components/table/CoinTableContainer";
 import { useCoinsPreviewQuery } from "@/hooks/useCoinsPreviewQuery";
+import { PriceChart } from "@/components/charts/PriceChart";
+import { VolumeChart } from "@/components/charts/VolumeChart";
+import HomePageSkeleton from "@/components/skeletons/HomeSkeleton";
 
 export default function HomePage() {
   const { defaultCurrency, isCurrencyLoaded } = useCurrency();
@@ -115,7 +112,6 @@ export default function HomePage() {
         )}
       </div>
       <CoinTableContainer />
-      <Footer />
     </div>
   );
 }

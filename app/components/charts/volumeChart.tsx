@@ -8,10 +8,10 @@ import { useCurrency } from "@/context/currencyContext";
 import { useCoinChartQuery } from "@/hooks/useCoinChartQuery";
 import { TIME_RANGES, TimeRangeKey } from "@/constants/timeRanges";
 import { formatCurrencyCompact } from "@/utils/formatCurrency";
-import { ChartCard } from "./chartCard";
-import { ChartDefaultToolTip } from "./chartToolTip";
+import { ChartCard } from "./ChartCard";
+import { ChartDefaultToolTip } from "./ChartToolTip";
 import { CHART_COLORS } from "@/constants/chartColors";
-import { ChartConfig } from "../ui/chart";
+import { ChartConfig } from "../ui/Chart";
 
 const chartConfig = {
   volume: {
@@ -27,11 +27,11 @@ export function VolumeChart({
   coin: Coin | null;
   timeRange: TimeRangeKey;
 }) {
-  const { defaultCurrency } = useCurrency();
+  const { currencyKey, currencySymbol } = useCurrency();
 
   const { data, isLoading, error } = useCoinChartQuery(
     coin?.id,
-    defaultCurrency,
+    currencyKey,
     TIME_RANGES[timeRange],
   );
 
@@ -45,7 +45,8 @@ export function VolumeChart({
       title={"Volume 24h"}
       description={formatCurrencyCompact(
         coin?.total_volume ?? 0,
-        defaultCurrency,
+        currencyKey,
+        currencySymbol,
       )}
       lastUpdated={coin?.last_updated}
       config={chartConfig}
@@ -54,6 +55,7 @@ export function VolumeChart({
     >
       <BarChart data={sortedData} margin={{ left: 12, right: 12 }}>
         <ChartDefaultToolTip />
+
         <XAxis
           dataKey="date"
           tickLine={false}
