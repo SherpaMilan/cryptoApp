@@ -111,6 +111,7 @@ export default function HomePage() {
             </div>
           </div>
         )}
+        cat app/components/charts/ChartCard.tsx
       </div>
       <CoinTableContainer />
     </div>
