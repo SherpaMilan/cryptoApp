@@ -5,14 +5,13 @@ import { useCurrency } from "@/context/currencyContext";
 import { useState } from "react";
 import { TIME_RANGES, TimeRangeKey } from "@/constants/timeRanges";
 import CoinPageSkeleton from "../skeletons/CoinPageSkeleton";
-
 import CoinHeader from "./CoinHeader";
 import PriceBlock from "./PriceBlock";
 import TimeRangeSelector from "./TimeRangeSelector";
+import { CoinPageChart } from "./CoinPageChart";
+import ReadMore from "./ReadMore";
 import StatsPanel from "./StatsPanel";
 import LinksSection from "./Links";
-import ReadMore from "./ReadMore";
-import { CoinPageChart } from "./CoinPageChart";
 
 export default function CoinPage({ coinId }: { coinId: string }) {
   const { currencyKey, currencySymbol } = useCurrency();

@@ -10,7 +10,7 @@ import {
 } from "@/components/ui/Card";
 
 import { ChartContainer, type ChartConfig } from "@/components/ui/Chart";
-import ChartSkeleton from "../skeletons/ChartSkeleton";
+import ChartSkeleton from "@/components/skeletons/ChartSkeleton";
 
 type ChartCardProps = {
   title: React.ReactNode;
