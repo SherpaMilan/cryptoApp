@@ -5,11 +5,11 @@ import { useRouter } from "next/navigation";
 import { MdArrowDropUp, MdOutlineArrowDropDown } from "react-icons/md";
 
 import { Coin } from "@/types/coin";
-import MetricBar from "./MetricBar";
 
+import MetricBar from "@/components/table/MetricBar";
 import { formatCurrencyCompact } from "@/utils/formatCurrency";
 import { useCurrency } from "@/context/currencyContext";
-import { SparklineChart } from "../charts/SparklineChart";
+import { SparklineChart } from "@/components/charts/SparklineChart";
 type Props = {
   coin: Coin;
   index: number;

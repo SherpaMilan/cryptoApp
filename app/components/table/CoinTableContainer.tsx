@@ -1,7 +1,7 @@
 "use client";
 
 import InfiniteScroll from "react-infinite-scroll-component";
-import CoinTable from "./CoinTable";
+import CoinTable from "@/components/table/CoinTable";
 import { useCoinsInfiniteQuery } from "@/hooks/useCoinsInfiniteQuery";
 import { useCurrency } from "@/context/currencyContext";
 

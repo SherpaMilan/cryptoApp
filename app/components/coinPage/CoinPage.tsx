@@ -1,17 +1,20 @@
 "use client";
 
+import { useState } from "react";
+
 import { useCoinDetailQuery } from "@/hooks/useCoinDetailQuery";
 import { useCurrency } from "@/context/currencyContext";
-import { useState } from "react";
 import { TIME_RANGES, TimeRangeKey } from "@/constants/timeRanges";
-import CoinPageSkeleton from "../skeletons/CoinPageSkeleton";
-import CoinHeader from "./CoinHeader";
-import PriceBlock from "./PriceBlock";
-import TimeRangeSelector from "./TimeRangeSelector";
-import { CoinPageChart } from "./CoinPageChart";
-import ReadMore from "./ReadMore";
-import StatsPanel from "./StatsPanel";
-import LinksSection from "./Links";
+
+import CoinPageSkeleton from "@/components/skeletons/CoinPageSkeleton";
+
+import CoinHeader from "@/components/coinPage/CoinHeader";
+import PriceBlock from "@/components/coinPage/PriceBlock";
+import TimeRangeSelector from "@/components/coinPage/TimeRangeSelector";
+import { CoinPageChart } from "@/components/coinPage/CoinPageChart";
+import ReadMore from "@/components/coinPage/ReadMore";
+import StatsPanel from "@/components/coinPage/StatsPanel";
+import LinksSection from "@/components/coinPage/Links";
 
 export default function CoinPage({ coinId }: { coinId: string }) {
   const { currencyKey, currencySymbol } = useCurrency();
