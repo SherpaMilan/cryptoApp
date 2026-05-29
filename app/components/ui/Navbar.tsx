@@ -4,18 +4,11 @@ import Logo from "@/components/ui/Logo";
 import { usePathname } from "next/navigation";
 import { VscLayers } from "react-icons/vsc";
 import { IoLayersSharp } from "react-icons/io5";
-import { RiHome9Line, RiHome9Fill } from "react-icons/ri";
 import { GoSearch } from "react-icons/go";
 import { FiMoon } from "react-icons/fi";
 import CurrencyDropdown from "@/components/ui/CurrencyDropdown";
 
 const links = [
-  {
-    name: "Home",
-    href: "/",
-    defaultIcon: RiHome9Line,
-    boldIcon: RiHome9Fill,
-  },
   {
     name: "Portfolio",
     href: "/portfolio",
@@ -54,10 +47,10 @@ export default function Navbar() {
         </div>
 
         <div className="flex flex-1  justify-end items-center h-[48px]  space-x-4 ">
-          <form className="relative w-[356px] h-[48px] bg-[var(--brand-purple-light)]  rounded-[15px] flex items-center">
+          <form className="relative w-[280px] h-[48px] bg-[var(--brand-purple-light)]  rounded-[15px] flex items-center">
             <input
               type="text"
-              placeholder="Search..."
+              placeholder="Search coins..."
               aria-label="Search cryptocurrencies"
               className="peer w-full pl-10 pr-3 h-full rounded-[15px] placeholder:text-[var(--brand-dark)] bg-transparent focus:outline-none focus:ring-1 focus:ring-[var(--brand-purple)]"
             />
@@ -66,7 +59,6 @@ export default function Navbar() {
 
           <CurrencyDropdown />
 
-          {/* TODO: implement dark mode toggle later in the project*/}
           <button
             aria-label="Toggle dark mode"
             className="rounded-[15px] bg-[var(--brand-purple-light)] p-2 w-[48px] h-[48px] flex justify-center items-center cursor-pointer "
