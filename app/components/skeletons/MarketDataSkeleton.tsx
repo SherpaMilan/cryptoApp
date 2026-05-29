@@ -1,6 +1,6 @@
 export default function MarketStatsBarSkeleton() {
   return (
-    <div className="w-full bg-[var(--brand-dark-purple)]">
+    <div className="w-full">
       <div className="max-w-[1440px] mx-auto flex justify-center  items-center h-[56px] px-[72px] gap-8">
         <div className="flex items-center gap-1.5 animate-pulse">
           <div className="w-4 h-4 rounded-sm bg-gray-300" />
