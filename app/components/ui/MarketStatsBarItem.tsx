@@ -1,22 +1,25 @@
 "use client";
-
-import Image from "next/image";
 import React from "react";
 
 interface TopbarItemProps {
   label?: string;
   value: string | number | React.ReactNode;
-  logo?: string;
+  logo?: React.ReactNode;
 }
 
 export default function TopbarItem({ label, value, logo }: TopbarItemProps) {
   return (
     <div className="flex items-center gap-1.5 ]">
-      {logo && <Image src={logo} width={20} height={20}  alt={label || "Logo"} />}
+      {logo && <div className="flex items-center justify-center">{logo}</div>}
+
       {label && (
-        <span className="text-sm text-[var(--brand-medium-gray)] mr-1">{label}</span>
+        <span className="text-[12px] text-[var(--brand-black)] mr-1">
+          {label.toUpperCase()}
+        </span>
       )}
-      <span className="font-bold text-sm text-[var(--brand-white)]">{value}</span>
+      <span className="font-bold text-sm text-[var(--brand-black)]">
+        {value}
+      </span>
     </div>
   );
 }

@@ -37,8 +37,8 @@ export default function RootLayout({
         <Providers>
           <CurrencyProvider>
             <div className="sticky top-0 z-100">
-              <Navbar />
               <MarketStatsBar />
+              <Navbar />
             </div>
 
             <main className="w-full min-h-screen pt-[22px]">{children}</main>
