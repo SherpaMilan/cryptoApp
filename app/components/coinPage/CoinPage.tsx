@@ -18,14 +18,22 @@ import LinksSection from "@/components/coinPage/Links";
 
 export default function CoinPage({ coinId }: { coinId: string }) {
   const { currencyKey, currencySymbol } = useCurrency();
-  const { data: coin, isLoading } = useCoinDetailQuery(coinId);
+
+  const { data: coin, isLoading, isError } = useCoinDetailQuery(coinId);
   const [timeRange, setTimeRange] = useState<TimeRangeKey>("1Y");
 
   if (isLoading) return <CoinPageSkeleton />;
-  if (!coin) return <div>Error</div>;
 
+  if (isError) {
+    return (
+      <div className="text-center text-gray-500 py-10">
+        Coin detail not found — try searching another one
+      </div>
+    );
+  }
+
+  if (!coin) return <CoinPageSkeleton />;
   const m = coin.market_data;
-
   const price = m?.current_price?.[currencyKey] ?? 0;
   const marketCap = m?.market_cap?.[currencyKey] ?? 0;
   const volume = m?.total_volume?.[currencyKey] ?? 0;

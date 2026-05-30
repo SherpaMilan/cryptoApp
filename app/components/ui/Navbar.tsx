@@ -4,9 +4,9 @@ import Logo from "@/components/ui/Logo";
 import { usePathname } from "next/navigation";
 import { VscLayers } from "react-icons/vsc";
 import { IoLayersSharp } from "react-icons/io5";
-import { GoSearch } from "react-icons/go";
 import { FiMoon } from "react-icons/fi";
 import CurrencyDropdown from "@/components/ui/CurrencyDropdown";
+import Search from "./Search";
 
 const links = [
   {
@@ -47,16 +47,7 @@ export default function Navbar() {
         </div>
 
         <div className="flex flex-1  justify-end items-center h-[48px]  space-x-4 ">
-          <form className="relative w-[280px] h-[48px] bg-[var(--brand-purple-light)]  rounded-[15px] flex items-center">
-            <input
-              type="text"
-              placeholder="Search coins..."
-              aria-label="Search cryptocurrencies"
-              className="peer w-full pl-10 pr-3 h-full rounded-[15px] placeholder:text-[var(--brand-dark)] bg-transparent focus:outline-none focus:ring-1 focus:ring-[var(--brand-purple)]"
-            />
-            <GoSearch className="absolute left-3 top-1/2 -translate-y-1/2 border-[var(--brand-purple)] peer-focus:text-[var(--brand-purple)] pointer-events-none" />
-          </form>
-
+          <Search />
           <CurrencyDropdown />
 
           <button

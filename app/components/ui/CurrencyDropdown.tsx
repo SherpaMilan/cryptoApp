@@ -19,18 +19,18 @@ export default function CurrencyDropdown() {
     useCurrency();
 
   const [open, setOpen] = useState(false);
-  const dropdownContainerRef = useRef<HTMLDivElement>(null);
+  const dropdownRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    const handleDropdown = (event: MouseEvent) => {
-      const el = dropdownContainerRef.current;
+    const handleClickOutside = (event: MouseEvent) => {
+      const el = dropdownRef.current;
       if (el && !el.contains(event.target as Node)) {
         setOpen(false);
       }
     };
 
-    document.addEventListener("mousedown", handleDropdown);
-    return () => document.removeEventListener("mousedown", handleDropdown);
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
   if (!isCurrencyLoaded) {
@@ -47,18 +47,13 @@ export default function CurrencyDropdown() {
         return <HiMiniCurrencyPound className={baseClass} />;
       case "BTC":
         return <TbCoinBitcoinFilled className={baseClass} />;
-      case "USD":
-      case "AUD":
       default:
         return <HiMiniCurrencyDollar className={baseClass} />;
     }
   };
 
   return (
-    <div
-      ref={dropdownContainerRef}
-      className="relative inline-block cursor-pointer"
-    >
+    <div ref={dropdownRef} className="relative inline-block cursor-pointer">
       <button
         onClick={() => setOpen((p) => !p)}
         className="flex items-center h-[48px] bg-[var(--brand-purple-light)] text-[var(--brand-purple-dark)] rounded-[15px] px-3 py-1.5"
@@ -69,21 +64,30 @@ export default function CurrencyDropdown() {
       </button>
 
       {open && (
-        <ul className="absolute top-full left-0 mt-1 w-full bg-[var(--brand-purple-light)] shadow-md rounded-md z-10">
-          {CURRENCIES.map((currency) => (
-            <li
-              key={currency}
-              onClick={() => {
-                setOpen(false);
-                setDefaultCurrency(currency);
-              }}
-              className="group px-3 py-1.5 text-sm hover:bg-[var(--brand-purple)] flex items-center gap-2 uppercase text-[var(--brand-purple-dark)]"
-            >
-              <span className="group-hover:text-white">
+        <ul className="absolute top-full left-0 mt-2 w-full bg-white rounded-lg shadow-md z-50 py-1">
+          {CURRENCIES.map((currency, index) => (
+            <div key={currency}>
+              <li
+                onClick={() => {
+                  setDefaultCurrency(currency);
+                  setOpen(false);
+                }}
+                className="
+                  flex items-center gap-2
+                  px-3 py-2
+                  text-sm text-gray-700
+                  hover:bg-gray-100
+                  cursor-pointer
+                "
+              >
                 {getIcon(currency)}
-              </span>
-              <span className="group-hover:text-white">{currency}</span>
-            </li>
+                <span className="uppercase">{currency}</span>
+              </li>
+
+              {index !== CURRENCIES.length - 1 && (
+                <div className="mx-3 h-px bg-gradient-to-r from-transparent via-gray-200 to-transparent" />
+              )}
+            </div>
           ))}
         </ul>
       )}
