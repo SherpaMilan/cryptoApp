@@ -23,8 +23,12 @@ export async function GET(req: NextRequest) {
 
     return NextResponse.json(data);
   } catch (error: unknown) {
+    const message = error instanceof Error ? error.message : "Unknown error";
+
     return NextResponse.json(
-      { error: "Failed to fetch search results" },
+      {
+        error: message,
+      },
       { status: 500 },
     );
   }

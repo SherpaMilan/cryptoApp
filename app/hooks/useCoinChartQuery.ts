@@ -10,7 +10,9 @@ export function useCoinChartQuery(
 ) {
   return useQuery({
     queryKey: ["chart", coinId, currency, days],
-    enabled: !!coinId,
+
+    enabled: !!coinId && !!currency && !!days,
+
     queryFn: async () => {
       try {
         const { data } = await axios.get("/api/market-chart", {
@@ -20,12 +22,14 @@ export function useCoinChartQuery(
             days,
           },
         });
+
         const prices = formatChartData(data);
         const volumes = formatVolumeChartData(data);
 
         return { prices, volumes };
       } catch (error: unknown) {
         const err = error as AxiosError<{ message?: string }>;
+
         if (err.response?.status === 429) {
           throw new Error("Too many requests. Please try again later.");
         }
@@ -38,6 +42,9 @@ export function useCoinChartQuery(
       }
     },
 
-    staleTime: 60 * 1000 * 2, // 2 min cache
+    staleTime: 1000 * 60 * 2,
+    gcTime: 1000 * 60 * 10,
+    retry: false,
+    refetchOnWindowFocus: false,
   });
 }

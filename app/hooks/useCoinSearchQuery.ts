@@ -7,14 +7,15 @@ export const useCoinSearchQuery = (query: string) => {
 
     queryFn: async () => {
       const { data } = await axios.get("/api/search", {
-        params: {
-          query,
-        },
+        params: { query },
       });
 
       return data.coins;
     },
 
-    enabled: query.trim().length > 0,
+    enabled: query.trim().length > 2, // IMPORTANT
+    staleTime: 1000 * 60 * 10,
+    retry: 1,
+    refetchOnWindowFocus: false,
   });
 };

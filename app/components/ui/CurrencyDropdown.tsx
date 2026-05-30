@@ -64,7 +64,10 @@ export default function CurrencyDropdown() {
       </button>
 
       {open && (
-        <ul className="absolute top-full left-0 mt-2 w-full bg-white rounded-lg shadow-md z-50 py-1">
+        <ul
+          onMouseLeave={() => setOpen(false)}
+          className="absolute top-full left-0 mt-2 w-full bg-white rounded-lg shadow-md z-50 py-1"
+        >
           {CURRENCIES.map((currency, index) => (
             <div key={currency}>
               <li

@@ -6,6 +6,7 @@ import { GoSearch } from "react-icons/go";
 import { useCoinSearchQuery } from "@/hooks/useCoinSearchQuery";
 import useDebounce from "@/hooks/useDebounce";
 import { Coin } from "@/types/coin";
+import Image from "next/image";
 
 const MAX_RESULTS = 10;
 
@@ -57,7 +58,7 @@ export default function Search() {
 
       {open && visibleCoins.length > 0 && (
         <ul
-          className="absolute top-full left-0 mt-2 w-full bg-white rounded-lg shadow-md z-50 max-h-[220px] overflow-y-auto py-1"
+          className="absolute top-full left-0 mt-2 w-full bg-white rounded-lg shadow-md z-50 max-h-[220px]  overflow-y-auto py-1"
           onMouseLeave={() => setOpen(false)}
         >
           {visibleCoins.map((coin: Coin) => (
@@ -68,10 +69,12 @@ export default function Search() {
                   setSearchQuery("");
                   setOpen(false);
                 }}
-                className="w-full flex items-center justify-between px-3 py-2 text-left hover:bg-gray-100"
+                className="w-full flex items-center justify-between px-3 py-2 text-left hover:bg-gray-100 cursor-pointer "
               >
                 <div className="flex items-center gap-3 min-w-0">
-                  <img
+                  <Image
+                    width={20}
+                    height={20}
                     src={coin.thumb}
                     alt={coin.name}
                     className="w-4 h-4 rounded-full"
