@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, useCallback } from "react";
 import { TimeFrame, OPTIONS } from "@/constants/timeChanges";
 
 type Props = {
@@ -14,10 +14,13 @@ export default function TimeDropdown({ timeFrame, setTimeFrame }: Props) {
 
   const ref = useRef<HTMLDivElement | null>(null);
 
-  const handleSelect = (value: TimeFrame) => {
-    setTimeFrame(value);
-    setOpen(false);
-  };
+  const handleSelect = useCallback(
+    (value: TimeFrame) => {
+      setTimeFrame(value);
+      setOpen(false);
+    },
+    [setTimeFrame],
+  );
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -57,7 +60,7 @@ export default function TimeDropdown({ timeFrame, setTimeFrame }: Props) {
 
     window.addEventListener("keydown", handleKeyDown);
     return () => window.removeEventListener("keydown", handleKeyDown);
-  }, [open, highlighted]);
+  }, [open, highlighted, handleSelect]);
 
   return (
     <div ref={ref} className="relative inline-block text-left">
@@ -69,18 +72,7 @@ export default function TimeDropdown({ timeFrame, setTimeFrame }: Props) {
             return next;
           });
         }}
-        className="
-          flex items-center justify-between
-          w-[72px] px-2 py-1
-          text-xs
-          rounded-md
-          bg-card
-          text-foreground
-          border border-border
-          hover:bg-card-hover
-          transition
-          cursor-pointer
-        "
+        className="flex items-center justify-between w-[72px] px-2 py-1 text-xs rounded-md bg-card text-foreground border border-border hover:bg-card-hover transition cursor-pointer"
       >
         <span>{timeFrame}</span>
 
@@ -98,18 +90,7 @@ export default function TimeDropdown({ timeFrame, setTimeFrame }: Props) {
       </button>
 
       {open && (
-        <div
-          className="
-            absolute left-0 mt-1
-            w-[72px]
-            bg-card/95 backdrop-blur-md
-            border border-border
-            rounded-md
-            shadow-lg
-            z-50
-            overflow-hidden
-          "
-        >
+        <div className="absolute left-0 mt-1 w-[72px] bg-card/95 backdrop-blur-md border border-border rounded-md shadow-lg z-50 overflow-hidden">
           {OPTIONS.map((option, index) => {
             const active = option === timeFrame;
             const isHighlighted = index === highlighted;
@@ -119,14 +100,9 @@ export default function TimeDropdown({ timeFrame, setTimeFrame }: Props) {
                 key={option}
                 onClick={() => handleSelect(option as TimeFrame)}
                 onMouseEnter={() => setHighlighted(index)}
-                className={`
-                  w-full flex items-center justify-between
-                  px-3 py-2 text-xs
-                  transition
-                  cursor-pointer
-                  ${isHighlighted ? "bg-card-hover" : "hover:bg-card-hover"}
-                  ${active ? "text-foreground font-semibold" : "text-foreground/70"}
-                `}
+                className={`w-full flex items-center justify-between px-3 py-2 text-xs transition cursor-pointer ${
+                  isHighlighted ? "bg-card-hover" : "hover:bg-card-hover"
+                } ${active ? "text-foreground font-semibold" : "text-foreground/70"}`}
               >
                 <span>{option}</span>
 
