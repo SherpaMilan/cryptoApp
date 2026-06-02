@@ -19,7 +19,6 @@ export default function TimeDropdown({ timeFrame, setTimeFrame }: Props) {
     setOpen(false);
   };
 
-  // close on outside click
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (ref.current && !ref.current.contains(event.target as Node)) {
@@ -31,7 +30,6 @@ export default function TimeDropdown({ timeFrame, setTimeFrame }: Props) {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
-  // keyboard navigation
   useEffect(() => {
     if (!open) return;
 
@@ -43,12 +41,12 @@ export default function TimeDropdown({ timeFrame, setTimeFrame }: Props) {
 
       if (e.key === "ArrowDown") {
         e.preventDefault();
-        setHighlighted((prev) => (prev < OPTIONS.length - 1 ? prev + 1 : 0));
+        setHighlighted((p) => (p < OPTIONS.length - 1 ? p + 1 : 0));
       }
 
       if (e.key === "ArrowUp") {
         e.preventDefault();
-        setHighlighted((prev) => (prev > 0 ? prev - 1 : OPTIONS.length - 1));
+        setHighlighted((p) => (p > 0 ? p - 1 : OPTIONS.length - 1));
       }
 
       if (e.key === "Enter") {
@@ -63,19 +61,26 @@ export default function TimeDropdown({ timeFrame, setTimeFrame }: Props) {
 
   return (
     <div ref={ref} className="relative inline-block text-left">
-      {/* Trigger */}
       <button
         onClick={() => {
           setOpen((prev) => {
             const next = !prev;
-
-            // ✅ reset highlight ONLY when opening
             if (next) setHighlighted(0);
-
             return next;
           });
         }}
-        className="flex items-center justify-between w-[72px] px-2 py-1 text-xs rounded-md bg-white border shadow-sm hover:bg-gray-50 transition cursor-pointer"
+        className="
+          flex items-center justify-between
+          w-[72px] px-2 py-1
+          text-xs
+          rounded-md
+          bg-card
+          text-foreground
+          border border-border
+          hover:bg-card-hover
+          transition
+          cursor-pointer
+        "
       >
         <span>{timeFrame}</span>
 
@@ -92,9 +97,19 @@ export default function TimeDropdown({ timeFrame, setTimeFrame }: Props) {
         </svg>
       </button>
 
-      {/* Dropdown */}
       {open && (
-        <div className="absolute left-0 mt-1 w-[72px] bg-white border rounded-md shadow-lg z-50 overflow-hidden">
+        <div
+          className="
+            absolute left-0 mt-1
+            w-[72px]
+            bg-card/95 backdrop-blur-md
+            border border-border
+            rounded-md
+            shadow-lg
+            z-50
+            overflow-hidden
+          "
+        >
           {OPTIONS.map((option, index) => {
             const active = option === timeFrame;
             const isHighlighted = index === highlighted;
@@ -104,17 +119,20 @@ export default function TimeDropdown({ timeFrame, setTimeFrame }: Props) {
                 key={option}
                 onClick={() => handleSelect(option as TimeFrame)}
                 onMouseEnter={() => setHighlighted(index)}
-                className={`w-full flex items-center justify-between px-3 py-2 text-xs cursor-pointer transition ${
-                  isHighlighted ? "bg-gray-100" : ""
-                } ${active ? "text-black font-semibold" : "text-gray-600"}`}
+                className={`
+                  w-full flex items-center justify-between
+                  px-3 py-2 text-xs
+                  transition
+                  cursor-pointer
+                  ${isHighlighted ? "bg-card-hover" : "hover:bg-card-hover"}
+                  ${active ? "text-foreground font-semibold" : "text-foreground/70"}
+                `}
               >
-                <span className="text-[var(--brand-purple-text)]">
-                  {option}
-                </span>
+                <span>{option}</span>
 
                 {active && (
                   <svg
-                    className="w-3 h-3 text-green-500"
+                    className="w-3 h-3 text-green-400"
                     fill="none"
                     stroke="currentColor"
                     strokeWidth="3"

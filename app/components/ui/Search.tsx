@@ -30,12 +30,12 @@ export default function Search() {
       <div
         className={`
           relative h-[48px] rounded-[15px] flex items-center
-          bg-[var(--brand-purple-light)]
-          border transition
-          ${noResults ? "border-red-400" : "border-transparent"}
+          bg-card
+          transition
+          ${noResults ? "border-red-400" : ""}
         `}
       >
-        <GoSearch className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-600" />
+        <GoSearch className="absolute left-3 top-1/2 -translate-y-1/2 text-foreground/60" />
 
         <input
           type="text"
@@ -46,54 +46,69 @@ export default function Search() {
             setOpen(true);
           }}
           onFocus={() => setOpen(true)}
-          className="w-full h-full pl-10 pr-3 bg-transparent rounded-[15px] focus:outline-none text-sm"
+          className="w-full h-full pl-10 pr-3 bg-transparent rounded-[15px] focus:outline-none text-sm text-foreground"
         />
       </div>
 
       {noResults && (
         <p className="text-xs text-red-500 mt-1 ml-1">
-          No coins found. Try another search !
+          No coins found. Try another search!
         </p>
       )}
 
       {open && visibleCoins.length > 0 && (
         <ul
-          className="absolute top-full left-0 mt-2 w-full bg-white rounded-lg shadow-md z-50 max-h-[220px]  overflow-y-auto py-1"
-          onMouseLeave={() => setOpen(false)}
+          className="
+            absolute top-full left-0 mt-2 w-full
+            bg-card/95 backdrop-blur-sm
+            rounded-lg shadow-md
+            z-50
+            overflow-hidden
+          "
         >
-          {visibleCoins.map((coin: Coin) => (
-            <li key={coin.id}>
-              <button
-                onClick={() => {
-                  router.push(`/coin/${coin.id}`);
-                  setSearchQuery("");
-                  setOpen(false);
-                }}
-                className="w-full flex items-center justify-between px-3 py-2 text-left hover:bg-gray-100 cursor-pointer "
-              >
-                <div className="flex items-center gap-3 min-w-0">
-                  <Image
-                    width={20}
-                    height={20}
-                    src={coin.thumb}
-                    alt={coin.name}
-                    className="w-4 h-4 rounded-full"
-                  />
+          <div className="max-h-[220px] overflow-y-auto py-1">
+            {visibleCoins.map((coin: Coin) => (
+              <li key={coin.id} className="relative">
+                <button
+                  onClick={() => {
+                    router.push(`/coin/${coin.id}`);
+                    setSearchQuery("");
+                    setOpen(false);
+                  }}
+                  className="
+                    relative w-full flex items-center justify-between
+                    px-3 py-2 text-left cursor-pointer transition
+                    hover:bg-card-hover
+                  "
+                >
+                  <div className="flex items-center gap-3 min-w-0">
+                    <Image
+                      width={20}
+                      height={20}
+                      src={coin.thumb}
+                      alt={coin.name}
+                      className="w-4 h-4 rounded-full"
+                    />
 
-                  <div className="flex flex-col min-w-0">
-                    <span className="text-sm font-medium text-gray-800 truncate">
-                      {coin.name}
-                    </span>
-                    <span className="text-[10px] text-gray-500 uppercase">
-                      {coin.symbol}
-                    </span>
+                    <div className="flex flex-col min-w-0">
+                      <span className="text-sm font-medium text-foreground truncate">
+                        {coin.name}
+                      </span>
+                      <span className="text-[10px] text-muted-foreground uppercase">
+                        {coin.symbol}
+                      </span>
+                    </div>
                   </div>
-                </div>
 
-                <span className="text-gray-600 text-sm font-semibold">›</span>
-              </button>
-            </li>
-          ))}
+                  <span className="text-muted-foreground text-sm font-semibold">
+                    ›
+                  </span>
+
+                  <div className="absolute bottom-0 left-6 right-6 h-px bg-border/40" />
+                </button>
+              </li>
+            ))}
+          </div>
         </ul>
       )}
     </div>

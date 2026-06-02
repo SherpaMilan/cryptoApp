@@ -56,41 +56,60 @@ export default function CurrencyDropdown() {
     <div ref={dropdownRef} className="relative inline-block cursor-pointer">
       <button
         onClick={() => setOpen((p) => !p)}
-        className="flex items-center h-[48px] bg-[var(--brand-purple-light)] text-[var(--brand-purple-dark)] rounded-[15px] px-3 py-1.5"
+        className="
+          flex items-center gap-1
+          h-[48px]
+          px-3
+          rounded-[15px]
+          bg-card
+          text-foreground
+          transition
+        "
       >
         {getIcon(defaultCurrency)}
-        <span className="pl-1">{defaultCurrency}</span>
-        <MdKeyboardArrowDown className="ml-1" />
+        <span className="pl-1 text-sm font-medium uppercase">
+          {defaultCurrency}
+        </span>
+        <MdKeyboardArrowDown className="ml-1 text-foreground/60" />
       </button>
 
       {open && (
         <ul
           onMouseLeave={() => setOpen(false)}
-          className="absolute top-full left-0 mt-2 w-full bg-white rounded-lg shadow-md z-50 py-1"
+          className="
+            absolute top-full left-0 mt-2 w-full
+            bg-card/95 backdrop-blur-sm 
+            rounded-lg
+            shadow-md
+            z-50
+            py-1
+            overflow-hidden
+          "
         >
           {CURRENCIES.map((currency, index) => (
-            <div key={currency}>
-              <li
+            <li key={currency} className="relative">
+              <button
                 onClick={() => {
                   setDefaultCurrency(currency);
                   setOpen(false);
                 }}
                 className="
-                  flex items-center gap-2
+                  w-full flex items-center gap-2
                   px-3 py-2
-                  text-sm text-gray-700
-                  hover:bg-gray-100
+                  text-sm text-foreground
+                  hover:bg-card-hover
+                  transition
                   cursor-pointer
                 "
               >
                 {getIcon(currency)}
                 <span className="uppercase">{currency}</span>
-              </li>
+              </button>
 
               {index !== CURRENCIES.length - 1 && (
-                <div className="mx-3 h-px bg-gradient-to-r from-transparent via-gray-200 to-transparent" />
+                <div className="absolute bottom-0 left-6 right-6 h-px bg-border/30" />
               )}
-            </div>
+            </li>
           ))}
         </ul>
       )}

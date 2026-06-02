@@ -8,6 +8,7 @@ import { cn } from "@/lib/utils";
 import Providers from "./provider/providers";
 import { Analytics } from "@vercel/analytics/next";
 import Footer from "@/components/ui/Footer";
+import ThemeProvider from "./context/themeContext";
 const geist = Geist({ subsets: ["latin"], variable: "--font-sans" });
 
 const spaceGrotesk = Space_Grotesk({
@@ -32,19 +33,21 @@ export default function RootLayout({
   return (
     <html lang="en" className={cn("font-sans", geist.variable)}>
       <body
-        className={`${spaceGrotesk.variable} font-[family-name:var(--font-space-grotesk)] antialiased`}
+        className={`${spaceGrotesk.variable} font-[family-name:var(--font-space-grotesk)] antialiased bg-background text-foreground`}
       >
         <Providers>
-          <CurrencyProvider>
-            <div className="sticky top-0 z-100">
-              <MarketStatsBar />
-              <Navbar />
-            </div>
+          <ThemeProvider>
+            <CurrencyProvider>
+              <div className="sticky top-0 z-100">
+                <MarketStatsBar />
+                <Navbar />
+              </div>
 
-            <main className="w-full min-h-screen pt-[22px]">{children}</main>
+              <main className="w-full min-h-screen pt-[22px]">{children}</main>
 
-            <Footer />
-          </CurrencyProvider>
+              <Footer />
+            </CurrencyProvider>
+          </ThemeProvider>
         </Providers>
         <Analytics />
       </body>

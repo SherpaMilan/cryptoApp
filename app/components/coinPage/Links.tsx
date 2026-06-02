@@ -22,7 +22,7 @@ export default function LinksSection({ links }: Props) {
 
   return (
     <nav>
-      <p className="text-xs mb-2 text-[var(--brand-black)] uppercase">Links</p>
+      <p className="text-xs mb-2 text-foreground/70 uppercase">Links</p>
 
       <div className="flex flex-col text-sm">
         {homepage && (

@@ -9,17 +9,16 @@ interface TopbarItemProps {
 
 export default function TopbarItem({ label, value, logo }: TopbarItemProps) {
   return (
-    <div className="flex items-center gap-1.5 ]">
+    <div className="flex items-center gap-1.5">
       {logo && <div className="flex items-center justify-center">{logo}</div>}
 
       {label && (
-        <span className="text-[12px] text-[var(--brand-black)] mr-1">
+        <span className="text-[12px] text-foreground/70 mr-1">
           {label.toUpperCase()}
         </span>
       )}
-      <span className="font-bold text-sm text-[var(--brand-black)]">
-        {value}
-      </span>
+
+      <span className="font-bold text-sm text-foreground">{value}</span>
     </div>
   );
 }

@@ -12,7 +12,11 @@ import { TIME_RANGES, TimeRangeKey } from "@/constants/timeRanges";
 import { ChartCard } from "@/components/charts/ChartCard";
 import { ChartDefaultToolTip } from "@/components/charts/ChartToolTip";
 import { CHART_COLORS } from "@/constants/chartColors";
+const isDark =
+  typeof window !== "undefined" &&
+  document.documentElement.classList.contains("dark");
 
+const colors = isDark ? CHART_COLORS.dark : CHART_COLORS.light;
 const chartConfig = {
   price: {
     label: "Price",
@@ -59,16 +63,8 @@ export function PriceChart({
 
         <defs>
           <linearGradient id="fillPrice" x1="0" y1="0" x2="0" y2="1">
-            <stop
-              offset="5%"
-              stopColor={CHART_COLORS.primary}
-              stopOpacity={0.8}
-            />
-            <stop
-              offset="95%"
-              stopColor={CHART_COLORS.primary}
-              stopOpacity={0.1}
-            />
+            <stop offset="5%" stopColor={colors.primary} stopOpacity={0.8} />
+            <stop offset="95%" stopColor={colors.primary} stopOpacity={0.1} />
           </linearGradient>
         </defs>
 
@@ -84,12 +80,13 @@ export function PriceChart({
               day: "numeric",
             })
           }
+          tick={{ fill: "var(--foreground)", fontSize: 12 }}
         />
 
         <Area
           dataKey="price"
           type="natural"
-          stroke={CHART_COLORS.primary}
+          stroke={colors.primary}
           fill="url(#fillPrice)"
           strokeWidth={2}
         />

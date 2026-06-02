@@ -5,11 +5,11 @@ import { useRouter } from "next/navigation";
 import { MdArrowDropUp, MdOutlineArrowDropDown } from "react-icons/md";
 
 import { Coin } from "@/types/coin";
-
 import MetricBar from "@/components/table/MetricBar";
 import { formatCurrencyCompact } from "@/utils/formatCurrency";
 import { useCurrency } from "@/context/currencyContext";
 import { SparklineChart } from "@/components/charts/SparklineChart";
+
 type Props = {
   coin: Coin;
   index: number;
@@ -37,21 +37,29 @@ export default function CoinTableRow({
   return (
     <tr
       onClick={() => router.push(`/coin/${coin.id}`)}
-      className="bg-white shadow-sm transition-all duration-200 cursor-pointer
-                 hover:bg-gray-50 hover:shadow-md hover:scale-[1.01]"
+      className="
+        cursor-pointer
+        transition-all duration-200
+        bg-[var(--table-row)]
+        backdrop-blur-md
+        border-b border-[var(--table-border)]
+        hover:bg-[var(--table-hover)]
+        hover:backdrop-blur-xl
+        hover:shadow-[0_8px_30px_rgba(0,0,0,0.08)]
+        hover:-translate-y-[1px]
+      "
     >
       <td className={tdClass}>{index + 1}</td>
+
       <td className={tdClass}>
         <div className="flex items-center gap-2">
-          <div className="w-7 h-7 rounded-full overflow-hidden bg-white flex items-center justify-center">
+          <div className="w-7 h-7 rounded-full overflow-hidden bg-background flex items-center justify-center border border-border">
             <Image src={coin.image} alt={coin.name} width={28} height={28} />
           </div>
 
           <div className="flex items-center gap-1 min-w-0">
-            <span className="font-medium text-[var(--brand-black)]">
-              {coin.name}
-            </span>
-            <span className="text-xs uppercase text-gray-500">
+            <span className="font-medium text-foreground">{coin.name}</span>
+            <span className="text-xs uppercase text-foreground/60">
               ({coin.symbol})
             </span>
           </div>

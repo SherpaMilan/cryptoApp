@@ -77,7 +77,7 @@ export default function MarketStatsBar() {
           )}
         />
 
-        <div className="flex items-center gap-4 text-sm text-[var(--brand-black)]">
+        <div className="flex items-center gap-4 text-sm text-foreground">
           <span className="text-[12px] uppercase">Dominance:</span>
 
           {topCoins.map((coin, idx) => (

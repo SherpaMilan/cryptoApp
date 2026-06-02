@@ -19,18 +19,16 @@ export default function MetricBar({
     ? "var(--metric-positive)"
     : "var(--metric-negative)";
 
-  const trackColor = isPositive
-    ? "var(--metric-positive-light)"
-    : "var(--metric-negative-light)";
-
+  const trackColor = "var(--metric-track)";
   const maxLabelColor = "var(--metric-max-label)";
+
   return (
     <div className="w-full space-y-1">
       {(currentLabel || maxLabel) && (
-        <div className="flex justify-between text-[12px]">
+        <div className="flex justify-between text-[12px] text-[var(--metric-label)]">
           <div className="flex items-center gap-1" style={{ color: fillColor }}>
             <span
-              className="w-[6px] h-[6px] rounded-full bg-current inline-block"
+              className="w-[6px] h-[6px] rounded-full inline-block"
               style={{ backgroundColor: fillColor }}
             />
             <span>{currentLabel}</span>
@@ -41,7 +39,7 @@ export default function MetricBar({
             style={{ color: maxLabelColor }}
           >
             <span
-              className="w-[6px] h-[6px] rounded-full bg-current inline-block"
+              className="w-[6px] h-[6px] rounded-full inline-block"
               style={{ backgroundColor: trackColor }}
             />
             <span>{maxLabel}</span>

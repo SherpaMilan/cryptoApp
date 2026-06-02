@@ -1,5 +1,5 @@
 export const STATS_BAR_ICON_PROPS = {
   size: 20,
-  color: "#0a3a99",
+  className: "text-foreground",
   weight: "duotone",
 } as const;

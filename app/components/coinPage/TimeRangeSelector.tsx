@@ -15,19 +15,23 @@ export default function TimeRangeSelector({
 }: Props) {
   return (
     <div className="flex gap-2 mb-4">
-      {ranges.map((range) => (
-        <button
-          key={range}
-          onClick={() => onChange(range as TimeRangeKey)}
-          className={`px-3 py-1 rounded text-xs cursor-pointer ${
-            selected === range
-              ? "bg-black text-white"
-              : "bg-black/5 text-gray-600 hover:bg-black/10"
-          }`}
-        >
-          {range}
-        </button>
-      ))}
+      {ranges.map((range) => {
+        const isActive = selected === range;
+
+        return (
+          <button
+            key={range}
+            onClick={() => onChange(range as TimeRangeKey)}
+            className={`px-3 py-1 rounded text-xs cursor-pointer transition ${
+              isActive
+                ? "bg-foreground text-background shadow-sm"
+                : "bg-card/40 text-foreground hover:bg-card/70"
+            }`}
+          >
+            {range}
+          </button>
+        );
+      })}
     </div>
   );
 }

@@ -2,27 +2,25 @@ import { FaGithub, FaLinkedin } from "react-icons/fa";
 
 export default function Footer() {
   return (
-    <footer className="w-full mt-6 bg-[var(--brand-gray)]/80 backdrop-blur-md border-t border-white/10">
+    <footer className="w-full mt-6 bg-background backdrop-blur-md border-t border-white/10">
       <div className="max-w-[1440px] mx-auto px-[72px] py-6">
         <div className="grid grid-cols-3 items-center">
-          <div className="hidden md:flex flex-wrap gap-4 text-xs text-gray-500">
+          <div className="hidden md:flex flex-wrap gap-4 text-xs text-foreground">
             <span>Next.js 15</span>
             <span>TypeScript</span>
             <span>CoinGecko API</span>
           </div>
 
           <div className="flex justify-center">
-            <p className="text-xs text-gray-400 text-center">
+            <p className="text-xs text-foreground text-center">
               Crafted from scratch by{" "}
-              <span className="text-[var(--brand-purple-text)] font-medium">
-                SherpaMilan
-              </span>{" "}
-              © 2026
+              <span className="text-foreground font-medium">SherpaMilan</span> ©
+              2026
             </p>
           </div>
 
           <div className="flex items-center justify-end gap-6">
-            <div className="hidden md:flex gap-4 text-xs text-gray-500">
+            <div className="hidden md:flex gap-4 text-xs text-foreground">
               <span>1000+ Coins</span>
               <span>Live Prices</span>
               <span>Optimized</span>

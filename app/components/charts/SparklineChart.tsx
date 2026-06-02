@@ -27,17 +27,22 @@ export function SparklineChart({ data, isPositive }: Props) {
     ? "var(--metric-positive)"
     : "var(--metric-negative)";
 
-  const fillColor = isPositive
-    ? "var(--metric-positive-light)"
-    : "var(--metric-negative-light)";
+  const gradientId = isPositive ? "sparkline-positive" : "sparkline-negative";
 
   return (
     <AreaChart width={120} height={40} data={formatted}>
+      <defs>
+        <linearGradient id={gradientId} x1="0" y1="0" x2="0" y2="1">
+          <stop offset="5%" stopColor={strokeColor} stopOpacity={0.35} />
+          <stop offset="95%" stopColor={strokeColor} stopOpacity={0.05} />
+        </linearGradient>
+      </defs>
+
       <Area
         type="monotone"
         dataKey="price"
         stroke={strokeColor}
-        fill={fillColor}
+        fill={`url(#${gradientId})`}
         strokeWidth={2}
       />
     </AreaChart>

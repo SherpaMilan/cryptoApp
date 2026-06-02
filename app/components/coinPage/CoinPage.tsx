@@ -53,7 +53,7 @@ export default function CoinPage({ coinId }: { coinId: string }) {
   const atlDate = m.atl_date?.[currencyKey] ?? "—";
 
   return (
-    <main className="w-full max-w-[1440px] mx-auto bg-[var(--brand-gray)] px-[72px]">
+    <main className="w-full max-w-[1440px] mx-auto  px-[72px]">
       <CoinHeader
         name={coin.name}
         symbol={coin.symbol}
