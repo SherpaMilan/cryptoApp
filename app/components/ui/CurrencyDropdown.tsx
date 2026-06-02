@@ -33,9 +33,7 @@ export default function CurrencyDropdown() {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
-  if (!isCurrencyLoaded) {
-    return <CurrencyDropdownSkeleton />;
-  }
+  if (!isCurrencyLoaded) return <CurrencyDropdownSkeleton />;
 
   const getIcon = (currency: Currency) => {
     const baseClass = "w-5 h-5";
@@ -58,12 +56,9 @@ export default function CurrencyDropdown() {
         onClick={() => setOpen((p) => !p)}
         className="
           flex items-center gap-1
-          h-[48px]
-          px-3
+          h-[48px] px-3
           rounded-[15px]
-          bg-card
-          text-foreground
-          transition
+          bg-card text-foreground
         "
       >
         {getIcon(defaultCurrency)}
@@ -78,16 +73,14 @@ export default function CurrencyDropdown() {
           onMouseLeave={() => setOpen(false)}
           className="
             absolute top-full left-0 mt-2 w-full
-            bg-card/95 backdrop-blur-sm 
-            rounded-lg
-            shadow-md
-            z-50
-            py-1
+            bg-card/95 backdrop-blur-sm
+            rounded-lg shadow-md
+            z-50 py-1
             overflow-hidden
           "
         >
           {CURRENCIES.map((currency, index) => (
-            <li key={currency} className="relative">
+            <li key={currency}>
               <button
                 onClick={() => {
                   setDefaultCurrency(currency);
@@ -95,11 +88,10 @@ export default function CurrencyDropdown() {
                 }}
                 className="
                   w-full flex items-center gap-2
-                  px-3 py-2
-                  text-sm text-foreground
+                  px-3 py-2 text-sm
+                  text-foreground
                   hover:bg-card-hover
                   transition
-                  cursor-pointer
                 "
               >
                 {getIcon(currency)}
@@ -107,7 +99,7 @@ export default function CurrencyDropdown() {
               </button>
 
               {index !== CURRENCIES.length - 1 && (
-                <div className="absolute bottom-0 left-6 right-6 h-px bg-border/30" />
+                <li aria-hidden="true" className="h-px bg-border/30 mx-3" />
               )}
             </li>
           ))}

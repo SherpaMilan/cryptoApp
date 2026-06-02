@@ -5,8 +5,9 @@ import { useRouter } from "next/navigation";
 import { GoSearch } from "react-icons/go";
 import { useCoinSearchQuery } from "@/hooks/useCoinSearchQuery";
 import useDebounce from "@/hooks/useDebounce";
-import { Coin } from "@/types/coin";
 import Image from "next/image";
+import { MIN_SEARCH_LENGTH } from "@/constants/search";
+import { SearchCoin } from "@/types/searchCoin";
 
 const MAX_RESULTS = 10;
 
@@ -15,15 +16,19 @@ export default function Search() {
   const [open, setOpen] = useState(false);
 
   const router = useRouter();
+
   const debouncedSearchQuery = useDebounce(searchQuery, 300);
 
-  const { data: searchResults } = useCoinSearchQuery(debouncedSearchQuery);
-  const coinsList = searchResults ?? [];
+  const shouldFetch = debouncedSearchQuery.length >= MIN_SEARCH_LENGTH;
 
+  const { data: searchResults } = useCoinSearchQuery(
+    shouldFetch ? debouncedSearchQuery : "",
+  );
+
+  const coinsList = searchResults ?? [];
   const visibleCoins = coinsList.slice(0, MAX_RESULTS);
 
-  const hasSearched = debouncedSearchQuery.length > 0;
-  const noResults = hasSearched && visibleCoins.length === 0;
+  const noResults = shouldFetch && visibleCoins.length === 0;
 
   return (
     <div className="relative w-[280px]">
@@ -42,17 +47,27 @@ export default function Search() {
           placeholder="Search coins..."
           value={searchQuery}
           onChange={(e) => {
-            setSearchQuery(e.target.value);
-            setOpen(true);
+            const value = e.target.value;
+            setSearchQuery(value);
+
+            if (value.length >= MIN_SEARCH_LENGTH) {
+              setOpen(true);
+            } else {
+              setOpen(false);
+            }
           }}
-          onFocus={() => setOpen(true)}
+          onFocus={() => {
+            if (searchQuery.length >= MIN_SEARCH_LENGTH) {
+              setOpen(true);
+            }
+          }}
           className="w-full h-full pl-10 pr-3 bg-transparent rounded-[15px] focus:outline-none text-sm text-foreground"
         />
       </div>
 
       {noResults && (
         <p className="text-xs text-red-500 mt-1 ml-1">
-          No coins found. Try another search!
+          We searched. We tried. We found nothing.
         </p>
       )}
 
@@ -67,7 +82,7 @@ export default function Search() {
           "
         >
           <div className="max-h-[220px] overflow-y-auto py-1">
-            {visibleCoins.map((coin: Coin) => (
+            {visibleCoins.map((coin: SearchCoin) => (
               <li key={coin.id} className="relative">
                 <button
                   onClick={() => {

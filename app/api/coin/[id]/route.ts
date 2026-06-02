@@ -3,8 +3,6 @@ import axios from "axios";
 import { Coin } from "@/types/coin";
 
 type CoinDetail = Coin;
-const cache = new Map<string, { data: CoinDetail; time: number }>();
-const CACHE_TTL = 1000 * 60; // 1 minute
 
 export async function GET(
   req: Request,
@@ -12,15 +10,8 @@ export async function GET(
 ) {
   const { id } = await params;
 
-  const now = Date.now();
-  const cached = cache.get(id);
-
-  if (cached && now - cached.time < CACHE_TTL) {
-    return NextResponse.json(cached.data);
-  }
-
   try {
-    const { data } = await axios.get(
+    const { data } = await axios.get<CoinDetail>(
       `https://api.coingecko.com/api/v3/coins/${id}`,
       {
         params: {
@@ -32,12 +23,10 @@ export async function GET(
           sparkline: false,
         },
         headers: {
-          "x-cg-demo-api-key": process.env.CRYPTO_API_KEY,
+          "x-cg-demo-api-key": process.env.COINGECKO_API_KEY,
         },
       },
     );
-
-    cache.set(id, { data, time: now });
 
     return NextResponse.json(data, {
       headers: {
@@ -53,7 +42,9 @@ export async function GET(
       {
         error: status === 404 ? "NOT_FOUND" : "COINGECKO_ERROR",
       },
-      { status: status || 500 },
+      {
+        status: status || 500,
+      },
     );
   }
 }

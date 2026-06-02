@@ -20,7 +20,7 @@ export async function GET(request: Request) {
       {
         params: {
           vs_currency: currency,
-          x_cg_demo_api_key: process.env.CRYPTO_API_KEY,
+          x_cg_demo_api_key: process.env.COINGECKO_API_KEY,
           per_page: perPage,
           page: page,
           order: "market_cap_desc",

@@ -24,77 +24,76 @@ export default function CoinPage({ coinId }: { coinId: string }) {
 
   if (isLoading) return <CoinPageSkeleton />;
 
-  if (isError) {
-    return (
-      <>
-        <CoinPageSkeleton />
-        <div className="text-center text-gray-500 py-4">
-          Coin detail not found — try another search
-        </div>
-      </>
-    );
-  }
+  const hasMarketData = !!coin?.market_data;
 
-  if (!coin?.market_data) return <CoinPageSkeleton />;
+  const m = coin?.market_data;
 
-  const m = coin.market_data;
+  const price = m?.current_price?.[currencyKey] ?? 0;
+  const marketCap = m?.market_cap?.[currencyKey] ?? 0;
+  const volume = m?.total_volume?.[currencyKey] ?? 0;
+  const supply = m?.circulating_supply ?? 0;
 
-  const price = m.current_price?.[currencyKey] ?? 0;
-  const marketCap = m.market_cap?.[currencyKey] ?? 0;
-  const volume = m.total_volume?.[currencyKey] ?? 0;
-  const supply = m.circulating_supply ?? 0;
+  const change24h = m?.price_change_percentage_24h ?? 0;
 
-  const change24h = m.price_change_percentage_24h ?? 0;
+  const ath = m?.ath?.[currencyKey] ?? 0;
+  const atl = m?.atl?.[currencyKey] ?? 0;
 
-  const ath = m.ath?.[currencyKey] ?? 0;
-  const atl = m.atl?.[currencyKey] ?? 0;
-
-  const athDate = m.ath_date?.[currencyKey] ?? "—";
-  const atlDate = m.atl_date?.[currencyKey] ?? "—";
+  const athDate = m?.ath_date?.[currencyKey] ?? "—";
+  const atlDate = m?.atl_date?.[currencyKey] ?? "—";
 
   return (
-    <main className="w-full max-w-[1440px] mx-auto  px-[72px]">
+    <main className="w-full max-w-[1440px] mx-auto px-[72px]">
       <CoinHeader
-        name={coin.name}
-        symbol={coin.symbol}
-        image={coin.image?.small}
-        rank={coin.market_cap_rank}
+        name={coin?.name ?? "Unknown"}
+        symbol={coin?.symbol ?? ""}
+        image={coin?.image?.small ?? ""}
+        rank={coin?.market_cap_rank ?? null}
       />
 
-      <div className="grid grid-cols-[1fr_340px] gap-6 py-6">
-        <section className="space-y-6">
-          <PriceBlock
-            price={price}
-            change24h={change24h}
-            currencySymbol={currencySymbol}
-            marketCap={marketCap}
-          />
+      {isError ? (
+        <div className="py-10 text-center text-foreground/60">
+          Coin detail not found — try another search
+        </div>
+      ) : !hasMarketData ? (
+        <div className="py-10 text-center text-foreground/60">
+          No market data available for this coin
+        </div>
+      ) : (
+        <div className="grid grid-cols-[1fr_340px] gap-6 py-6">
+          <section className="space-y-6">
+            <PriceBlock
+              price={price}
+              change24h={change24h}
+              currencySymbol={currencySymbol}
+              marketCap={marketCap}
+            />
 
-          <TimeRangeSelector
-            ranges={Object.keys(TIME_RANGES)}
-            selected={timeRange}
-            onChange={setTimeRange}
-          />
+            <TimeRangeSelector
+              ranges={Object.keys(TIME_RANGES)}
+              selected={timeRange}
+              onChange={setTimeRange}
+            />
 
-          <CoinPageChart coinId={coin.id} timeRange={timeRange} />
+            <CoinPageChart coinId={coin!.id} timeRange={timeRange} />
 
-          <ReadMore text={coin.description?.en} />
-        </section>
+            <ReadMore text={coin?.description?.en} />
+          </section>
 
-        <aside className="space-y-8">
-          <StatsPanel
-            volume={volume}
-            supply={supply}
-            currencySymbol={currencySymbol}
-            ath={ath}
-            atl={atl}
-            athDate={athDate}
-            atlDate={atlDate}
-          />
+          <aside className="space-y-8">
+            <StatsPanel
+              volume={volume}
+              supply={supply}
+              currencySymbol={currencySymbol}
+              ath={ath}
+              atl={atl}
+              athDate={athDate}
+              atlDate={atlDate}
+            />
 
-          <LinksSection links={coin.links} />
-        </aside>
-      </div>
+            <LinksSection links={coin?.links} />
+          </aside>
+        </div>
+      )}
     </main>
   );
 }
