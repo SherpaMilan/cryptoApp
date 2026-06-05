@@ -40,9 +40,9 @@ export default function HomePage() {
   }
 
   return (
-    <div className="w-full bg-[var(--brand-gray)]">
+    <div className="w-full ">
       <div className="max-w-[1440px] mx-auto px-[72px]">
-        <div className="font-bold text-[var(--brand-purple-text)]">
+        <div className="font-bold text-foreground">
           Select the currency to view statistics
         </div>
         <div className="flex gap-4 mt-6 overflow-x-auto whitespace-nowrap [&::-webkit-scrollbar]:hidden">
@@ -56,7 +56,9 @@ export default function HomePage() {
                 key={coin.id}
                 onClick={() => setSelectedCoin(coin)}
                 className={`cursor-pointer w-[252px] h-[78px] flex items-center p-2 rounded flex-shrink-0 text-left ${
-                  isActive ? "bg-[var(--brand-purple)] text-white" : "bg-white"
+                  isActive
+                    ? "bg-[var(--tab-active-bg)] text-white"
+                    : "bg-[var(--tab-bg)] text-[var(--tab-inactive)] hover:bg-[var(--tab-hover)]"
                 }`}
               >
                 <Image

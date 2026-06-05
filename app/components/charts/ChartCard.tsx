@@ -36,14 +36,23 @@ export function ChartCard({
   if (error) return <div className="text-red-500">Error loading chart</div>;
 
   return (
-    <Card className="pt-0 rounded-xl overflow-hidden border border-white/30 shadow-[0_8px_30px_rgba(0,0,0,0.06)] backdrop-blur-md bg-white/0">
+    <Card
+      className="
+  pt-0 rounded-xl overflow-hidden
+  border-0
+  shadow-[0_20px_60px_rgba(0,0,0,0.35)]
+  backdrop-blur-md
+  bg-[var(--chart-bg)]
+  w-full
+"
+    >
       <CardHeader className="flex items-center gap-2 py-5 sm:flex-row">
         <div className="grid flex-1 gap-1 px-2">
           <CardTitle>{title}</CardTitle>
 
           {description && <CardDescription>{description}</CardDescription>}
 
-          <span className="text-[var(--brand-purple-text)]">
+          <span className="text-foreground">
             Last updated:{" "}
             {lastUpdated ? (
               <time dateTime={lastUpdated}>

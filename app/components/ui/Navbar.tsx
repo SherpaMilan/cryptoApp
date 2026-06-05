@@ -4,9 +4,9 @@ import Logo from "@/components/ui/Logo";
 import { usePathname } from "next/navigation";
 import { VscLayers } from "react-icons/vsc";
 import { IoLayersSharp } from "react-icons/io5";
-import { GoSearch } from "react-icons/go";
-import { FiMoon } from "react-icons/fi";
 import CurrencyDropdown from "@/components/ui/CurrencyDropdown";
+import Search from "./Search";
+import Theme from "./Theme";
 
 const links = [
   {
@@ -21,7 +21,7 @@ export default function Navbar() {
   // usePathname provides current URL path of the page you’re on.
   const pathname = usePathname();
   return (
-    <div className="max-w-[1440px] mx-auto flex justify-between items-center h-[70px] px-[72px] box-border bg-[var(--brand-gray)]">
+    <div className="max-w-[1440px] mx-auto flex justify-between items-center h-[70px] px-[72px] box-border bg-background text-foreground">
       <nav className="w-full flex items-center justify-between ">
         <div className="flex-1 flex items-center h-[48px]  ">
           <Logo />
@@ -47,24 +47,9 @@ export default function Navbar() {
         </div>
 
         <div className="flex flex-1  justify-end items-center h-[48px]  space-x-4 ">
-          <form className="relative w-[280px] h-[48px] bg-[var(--brand-purple-light)]  rounded-[15px] flex items-center">
-            <input
-              type="text"
-              placeholder="Search coins..."
-              aria-label="Search cryptocurrencies"
-              className="peer w-full pl-10 pr-3 h-full rounded-[15px] placeholder:text-[var(--brand-dark)] bg-transparent focus:outline-none focus:ring-1 focus:ring-[var(--brand-purple)]"
-            />
-            <GoSearch className="absolute left-3 top-1/2 -translate-y-1/2 border-[var(--brand-purple)] peer-focus:text-[var(--brand-purple)] pointer-events-none" />
-          </form>
-
+          <Search />
           <CurrencyDropdown />
-
-          <button
-            aria-label="Toggle dark mode"
-            className="rounded-[15px] bg-[var(--brand-purple-light)] p-2 w-[48px] h-[48px] flex justify-center items-center cursor-pointer "
-          >
-            <FiMoon className="w-6 h-6 border-[var(--brand-purple)] fill-none" />
-          </button>
+          <Theme />
         </div>
       </nav>
     </div>

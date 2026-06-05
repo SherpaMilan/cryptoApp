@@ -21,7 +21,7 @@ export default function CoinTableContainer() {
   const canFetchMore = hasNextPage && !reachedLimit;
 
   return (
-    <div className="max-h-[720px] overflow-y-auto relative">
+    <div className="relative">
       <InfiniteScroll
         dataLength={coins.length}
         next={fetchNextPage}
@@ -40,7 +40,7 @@ export default function CoinTableContainer() {
         {reachedLimit && (
           <div className="flex justify-center py-5">
             <div className="flex flex-col items-center gap-2 text-center">
-              <div className="text-xs px-3 py-1 rounded-full text-purple-700 border border-purple-500/30 shadow-sm">
+              <div className="text-xs px-3 py-1 rounded-full text-foreground border border-purple-500/30 shadow-sm">
                 ⚡ You’ve reached the current display limit
               </div>
 

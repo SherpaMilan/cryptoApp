@@ -12,7 +12,8 @@ type Props = {
 
 export default function CoinHeader({ name, symbol, image, rank }: Props) {
   return (
-    <header className="flex items-center justify-between py-5 border-b border-black/10">
+    <header className="relative flex items-center justify-between py-5">
+      <div className="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-border/30 to-transparent" />
       <button
         onClick={() => window.history.back()}
         className="cursor-pointer hover:opacity-60"

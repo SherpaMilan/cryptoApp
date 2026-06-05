@@ -12,6 +12,11 @@ import { ChartCard } from "@/components/charts/ChartCard";
 import { ChartDefaultToolTip } from "@/components/charts/ChartToolTip";
 import { CHART_COLORS } from "@/constants/chartColors";
 import { ChartConfig } from "@/components/ui/Chart";
+const isDark =
+  typeof window !== "undefined" &&
+  document.documentElement.classList.contains("dark");
+
+const colors = isDark ? CHART_COLORS.dark : CHART_COLORS.light;
 
 const chartConfig = {
   volume: {
@@ -69,15 +74,16 @@ export function VolumeChart({
               day: "numeric",
             });
           }}
+          tick={{ fill: "var(--foreground)", fontSize: 12 }}
         />
 
         <Bar
           dataKey="volume"
-          fill={CHART_COLORS.primary}
+          fill={colors.primary}
           radius={[4, 4, 0, 0]}
           activeBar={{
-            fill: CHART_COLORS.primary,
-            stroke: CHART_COLORS.primary,
+            fill: colors.primary,
+            stroke: colors.primary,
             strokeWidth: 1,
             opacity: 0.9,
           }}

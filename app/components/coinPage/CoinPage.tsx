@@ -18,13 +18,15 @@ import LinksSection from "@/components/coinPage/Links";
 
 export default function CoinPage({ coinId }: { coinId: string }) {
   const { currencyKey, currencySymbol } = useCurrency();
-  const { data: coin, isLoading } = useCoinDetailQuery(coinId);
   const [timeRange, setTimeRange] = useState<TimeRangeKey>("1Y");
 
-  if (isLoading) return <CoinPageSkeleton />;
-  if (!coin) return <div>Error</div>;
+  const { data: coin, isLoading, isError } = useCoinDetailQuery(coinId);
 
-  const m = coin.market_data;
+  if (isLoading) return <CoinPageSkeleton />;
+
+  const hasMarketData = !!coin?.market_data;
+
+  const m = coin?.market_data;
 
   const price = m?.current_price?.[currencyKey] ?? 0;
   const marketCap = m?.market_cap?.[currencyKey] ?? 0;
@@ -39,57 +41,59 @@ export default function CoinPage({ coinId }: { coinId: string }) {
   const athDate = m?.ath_date?.[currencyKey] ?? "—";
   const atlDate = m?.atl_date?.[currencyKey] ?? "—";
 
-  const links = coin.links;
-  const description = coin.description?.en;
-
   return (
-    <main className="w-full max-w-[1440px] mx-auto bg-[var(--brand-gray)] px-[72px]">
+    <main className="w-full max-w-[1440px] mx-auto px-[72px]">
       <CoinHeader
-        name={coin.name}
-        symbol={coin.symbol}
-        image={coin.image?.small}
-        rank={coin.market_cap_rank}
+        name={coin?.name ?? "Unknown"}
+        symbol={coin?.symbol ?? ""}
+        image={coin?.image?.small ?? ""}
+        rank={coin?.market_cap_rank ?? null}
       />
 
-      <div className="grid grid-cols-[1fr_340px] gap-6 py-6">
-        <section className="space-y-6">
-          <PriceBlock
-            price={price}
-            change24h={change24h}
-            currencySymbol={currencySymbol}
-            marketCap={marketCap}
-          />
+      {isError ? (
+        <div className="py-10 text-center text-foreground/60">
+          Coin detail not found — try another search
+        </div>
+      ) : !hasMarketData ? (
+        <div className="py-10 text-center text-foreground/60">
+          No market data available for this coin
+        </div>
+      ) : (
+        <div className="grid grid-cols-[1fr_340px] gap-6 py-6">
+          <section className="space-y-6">
+            <PriceBlock
+              price={price}
+              change24h={change24h}
+              currencySymbol={currencySymbol}
+              marketCap={marketCap}
+            />
 
-          <TimeRangeSelector
-            ranges={Object.keys(TIME_RANGES)}
-            selected={timeRange}
-            onChange={setTimeRange}
-          />
+            <TimeRangeSelector
+              ranges={Object.keys(TIME_RANGES)}
+              selected={timeRange}
+              onChange={setTimeRange}
+            />
 
-          <CoinPageChart coinId={coin.id} timeRange={timeRange} />
+            <CoinPageChart coinId={coin!.id} timeRange={timeRange} />
 
-          <div className="pt-2">
-            <p className="text-xs mb-2 text-[var(--brand-black)] uppercase">
-              About
-            </p>
-            <ReadMore text={description} />
-          </div>
-        </section>
+            <ReadMore text={coin?.description?.en} />
+          </section>
 
-        <aside className="space-y-8">
-          <StatsPanel
-            volume={volume}
-            supply={supply}
-            currencySymbol={currencySymbol}
-            ath={ath}
-            atl={atl}
-            athDate={athDate}
-            atlDate={atlDate}
-          />
+          <aside className="space-y-8">
+            <StatsPanel
+              volume={volume}
+              supply={supply}
+              currencySymbol={currencySymbol}
+              ath={ath}
+              atl={atl}
+              athDate={athDate}
+              atlDate={atlDate}
+            />
 
-          <LinksSection links={links} />
-        </aside>
-      </div>
+            <LinksSection links={coin?.links} />
+          </aside>
+        </div>
+      )}
     </main>
   );
 }
