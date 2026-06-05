@@ -1,39 +1,95 @@
+<div align="center">
 
-# 🚀 Crypto Dashboard
+# Crypto Dashboard
 
-A simple crypto tracking dashboard built with **Next.js** that shows real-time price and volume data for different cryptocurrencies.
-<img width="1800" height="760" alt="68747470733a2f2f692e6962622e636f2f6d425a335356582f63727970746f2d6170702e706e67" src="https://github.com/user-attachments/assets/e819f01e-fdb1-4e88-b65b-91a125ab3012" />
+### “You can either walk away… or commit until it works.”
 
----
+A real-time crypto intelligence platform built with discipline, patience, and obsession over detail.
 
-## 🛠 Tech Stack
+<br/>
 
-- Next.js (App Router)
-- React Query
-- TypeScript
-- Tailwind CSS
-- shadcn/ui (UI components)
-- Recharts (charts)
-- CoinGecko API (crypto data)
-- Axios
+<p>
+  <img src="https://img.shields.io/badge/Next.js-000000?style=flat-square&logo=next.js&logoColor=white" />
+  <img src="https://img.shields.io/badge/TypeScript-3178C6?style=flat-square&logo=typescript&logoColor=white" />
+  <img src="https://img.shields.io/badge/TanStack_Query-FF4154?style=flat-square&logo=reactquery&logoColor=white" />
+  <img src="https://img.shields.io/badge/Tailwind_CSS-38B2AC?style=flat-square&logo=tailwindcss&logoColor=white" />
+  <img src="https://img.shields.io/badge/shadcn/ui-111111?style=flat-square&logo=shadcnui&logoColor=white" />
+</p>
 
----
+<br/>
 
-## 📊 Features
+### 🚀 <a href="https://crypto-app-ashy.vercel.app/" target="_blank" rel="noopener noreferrer">Live Demo</a>
 
-- Live cryptocurrency price charts  
-- Volume charts for market activity  
-- Time range selection (1D, 7D, 1M, etc.)  
-- Coin selection with default fallback  
-- Responsive UI with loading skeletons  
-- Clean and minimal design  
+</div>
 
 ---
 
-## ⚙️ Notes
+<br/>
 
-- Uses CoinGecko API for real-time market data  
-- Data is fetched and cached using React Query  
-- Charts are built with reusable components  
+## 📸 Preview
+
+<p align="center">
+  <img width="96%" style="border-radius:14px;"
+  src="https://github.com/user-attachments/assets/e819f01e-fdb1-4e88-b65b-91a125ab3012" />
+</p>
+
+<p align="center">
+  Desktop • Mobile • Tablet responsive experience
+</p>
 
 ---
+
+<br/>
+
+## 🖤 Opening Note
+
+They said it was “just another dashboard.”
+
+But nothing about it was just.
+
+It was built in silence — between long nights, broken builds, and rewrites that nobody saw.
+
+No shortcuts. No rush. No noise.
+
+Just one rule:
+
+> “If it’s not clean, it’s not done.”
+
+And so it kept going — line by line, commit by commit, until it became what it is now.
+
+---
+
+<br/>
+
+## 🧠 Rules I didn’t write down, but followed anyway
+
+> Discipline is doing it when you don’t feel like it.
+
+- No rushed components  
+- No messy API calls  
+- No shortcuts in architecture  
+- No “good enough” UI  
+- Only clarity, or nothing  
+
+---
+
+<br/>
+
+## ⚙️ System Architecture
+
+Built like a clean chain — nothing unnecessary.
+
+```text
+CoinGecko API
+     ↓
+Axios Client Layer
+     ↓
+TanStack Query (Caching + Sync Engine)
+     ↓
+Next.js App Router
+     ↓
+UI System (Tailwind + shadcn/ui)
+     ↓
+shadcn charts (data visualization layer)
+     ↓
+Final Experience (fast, minimal, intentional UI)
