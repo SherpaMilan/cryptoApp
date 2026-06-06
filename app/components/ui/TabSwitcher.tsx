@@ -33,7 +33,7 @@ export default function TabSwitcher() {
                   transition-all duration-200
                   ${
                     isActive
-                      ? "bg-[var(--tab-active-bg)] text-[var(--tab-active-text)] shadow-sm"
+                      ? "bg-[var(--tab-active-bg)] text-[var(--tab-active-text)] font-bold "
                       : "text-[var(--tab-inactive)] hover:bg-[var(--tab-hover)] hover:text-[var(--foreground)]"
                   }
                 `}

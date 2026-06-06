@@ -57,7 +57,7 @@ export default function HomePage() {
                 onClick={() => setSelectedCoin(coin)}
                 className={`cursor-pointer w-[252px] h-[78px] flex items-center p-2 rounded flex-shrink-0 text-left ${
                   isActive
-                    ? "bg-[var(--tab-active-bg)] text-white"
+                    ? "bg-[var(--tab-active-bg)] text-white font-medium font-bold "
                     : "bg-[var(--tab-bg)] text-[var(--tab-inactive)] hover:bg-[var(--tab-hover)]"
                 }`}
               >
