@@ -1,20 +1,31 @@
 import { TIME_RANGES, TimeRangeKey } from "@/constants/timeRanges";
 import TimeRangeSelector from "@/components/coinPage/TimeRangeSelector";
 import RatioIcon from "./ratioIcon";
+import { Coin } from "@/types/coin";
+
+type Props = {
+  timeRange: TimeRangeKey;
+  setTimeRange: (v: TimeRangeKey) => void;
+  fromCoin: Coin | null;
+  toCoin: Coin | null;
+};
 
 export default function ChartPanel({
   timeRange,
   setTimeRange,
-}: {
-  timeRange: TimeRangeKey;
-  setTimeRange: (v: TimeRangeKey) => void;
-}) {
+  fromCoin,
+  toCoin,
+}: Props) {
   return (
     <div className="flex-1 rounded-2xl p-6 min-h-[420px] flex flex-col gap-4">
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-2">
           <RatioIcon />
-          <h2 className="text-sm font-medium">BTC/ETH</h2>
+
+          <h2 className="text-sm font-medium">
+            {fromCoin?.symbol.toUpperCase() || "—"}/
+            {toCoin?.symbol.toUpperCase() || "—"}
+          </h2>
         </div>
 
         <div className="flex flex-col">

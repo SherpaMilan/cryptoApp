@@ -64,7 +64,12 @@ export default function Converter() {
             />
           </div>
 
-          <ChartPanel timeRange={timeRange} setTimeRange={setTimeRange} />
+          <ChartPanel
+            timeRange={timeRange}
+            setTimeRange={setTimeRange}
+            fromCoin={fromCoin}
+            toCoin={toCoin}
+          />
         </div>
       </div>
 
