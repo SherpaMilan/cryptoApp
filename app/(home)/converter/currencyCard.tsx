@@ -11,6 +11,7 @@ type Props = {
   isLoading?: boolean;
   readOnly?: boolean;
   showSwap?: boolean;
+  setActiveCoinSlot: (value: "from" | "to") => void;
 };
 
 export default function CurrencyCard({
@@ -19,6 +20,7 @@ export default function CurrencyCard({
   selectedCoin,
   isLoading = false,
   readOnly = false,
+  setActiveCoinSlot,
 }: Props) {
   return (
     <div
@@ -38,7 +40,10 @@ export default function CurrencyCard({
 
         <button
           type="button"
-          onClick={openModal}
+          onClick={() => {
+            setActiveCoinSlot(label.toLowerCase() as "from" | "to");
+            openModal();
+          }}
           className="
             flex items-center justify-between
             px-3 py-2

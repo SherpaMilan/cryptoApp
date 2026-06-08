@@ -8,10 +8,12 @@ import { useCoinsPreviewQuery } from "@/hooks/useCoinsPreviewQuery";
 import { useCurrency } from "@/context/currencyContext";
 import CurrencyCard from "./currencyCard";
 import SwapIcon from "./swapIcon";
+import { Coin } from "@/types/coin";
 
 export default function Converter() {
   const [open, setOpen] = useState(false);
   const [timeRange, setTimeRange] = useState<TimeRangeKey>("7D");
+
   const { defaultCurrency, isCurrencyLoaded } = useCurrency();
 
   const { data: coins = [], isLoading } = useCoinsPreviewQuery(
@@ -19,61 +21,85 @@ export default function Converter() {
     isCurrencyLoaded,
   );
 
-  const fromCoin = coins.find((c) => c.symbol === "BTC") || coins[0] || null;
-  const toCoin = coins.find((c) => c.symbol === "ETH") || coins[1] || null;
+  const [fromCoin, setFromCoin] = useState<Coin | null>(null);
+  const [toCoin, setToCoin] = useState<Coin | null>(null);
 
-  useEffect(() => {
-    document.body.style.overflow = open ? "hidden" : "auto";
-    return () => {
-      document.body.style.overflow = "auto";
-    };
-  }, [open]);
+  const [activeCoinSlot, setActiveCoinSlot] = useState<"from" | "to" | null>(
+    null,
+  );
 
+  // 🧠 derive safe defaults (NO state syncing needed)
+  const defaultFrom = coins[0] ?? null;
+  const defaultTo = coins[1] ?? coins[0] ?? null;
+
+  // ESC close modal
   useEffect(() => {
     const onKeyDown = (e: KeyboardEvent) => {
       if (e.key === "Escape") setOpen(false);
     };
+
     window.addEventListener("keydown", onKeyDown);
     return () => window.removeEventListener("keydown", onKeyDown);
   }, []);
+
+  // coin selection handler
+  const handleCoinSelect = (coin: Coin) => {
+    if (activeCoinSlot === "from") {
+      setFromCoin(coin);
+    }
+
+    if (activeCoinSlot === "to") {
+      setToCoin(coin);
+    }
+
+    setOpen(false);
+    setActiveCoinSlot(null);
+  };
 
   return (
     <div className="w-full bg-background text-foreground">
       <div className="max-w-[1440px] mx-auto px-6 lg:px-[72px] py-6">
         <div className="flex lg:flex-row items-start gap-6">
+          {/* LEFT: Converter Cards */}
           <div className="relative flex flex-col gap-4">
-            {/* FROM */}
             <CurrencyCard
               label="From"
               openModal={() => setOpen(true)}
-              selectedCoin={fromCoin}
+              selectedCoin={fromCoin ?? defaultFrom}
               isLoading={isLoading}
+              setActiveCoinSlot={setActiveCoinSlot}
             />
 
-            {/* SWAP */}
             <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 z-20">
               <SwapIcon />
             </div>
 
-            {/* TO */}
             <CurrencyCard
               label="To"
               openModal={() => setOpen(true)}
-              selectedCoin={toCoin}
+              selectedCoin={toCoin ?? defaultTo}
               isLoading={isLoading}
+              setActiveCoinSlot={setActiveCoinSlot}
             />
           </div>
 
+          {/* RIGHT: Chart */}
           <ChartPanel
             timeRange={timeRange}
             setTimeRange={setTimeRange}
-            fromCoin={fromCoin}
-            toCoin={toCoin}
+            fromCoin={fromCoin ?? defaultFrom}
+            toCoin={toCoin ?? defaultTo}
           />
         </div>
       </div>
 
-      <CoinModal open={open} setOpen={setOpen} coins={coins} />
+      {/* MODAL */}
+      <CoinModal
+        open={open}
+        setOpen={setOpen}
+        coins={coins}
+        onSelectCoin={handleCoinSelect}
+      />
     </div>
   );
 }
