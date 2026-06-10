@@ -2,12 +2,12 @@
 
 import { useEffect, useState } from "react";
 import { TimeRangeKey } from "@/constants/timeRanges";
-import ChartPanel from "./chartPanel";
-import CoinModal from "./coinModal";
+import ChartPanel from "./components/chartPanel";
+import CoinModal from "./components/coinModal";
 import { useCoinsPreviewQuery } from "@/hooks/useCoinsPreviewQuery";
 import { useCurrency } from "@/context/currencyContext";
-import CurrencyCard from "./currencyCard";
-import SwapIcon from "./swapIcon";
+import CurrencyCard from "./components/currencyCard";
+import SwapIcon from "./components/swapIcon";
 import { Coin } from "@/types/coin";
 
 export default function Converter() {
@@ -28,7 +28,6 @@ export default function Converter() {
     null,
   );
 
-  // 🧠 derive safe defaults (NO state syncing needed)
   const defaultFrom = coins[0] ?? null;
   const defaultTo = coins[1] ?? coins[0] ?? null;
 
@@ -60,7 +59,6 @@ export default function Converter() {
     <div className="w-full bg-background text-foreground">
       <div className="max-w-[1440px] mx-auto px-6 lg:px-[72px] py-6">
         <div className="flex lg:flex-row items-start gap-6">
-          {/* LEFT: Converter Cards */}
           <div className="relative flex flex-col gap-4">
             <CurrencyCard
               label="From"
@@ -83,7 +81,6 @@ export default function Converter() {
             />
           </div>
 
-          {/* RIGHT: Chart */}
           <ChartPanel
             timeRange={timeRange}
             setTimeRange={setTimeRange}
@@ -93,7 +90,6 @@ export default function Converter() {
         </div>
       </div>
 
-      {/* MODAL */}
       <CoinModal
         open={open}
         setOpen={setOpen}

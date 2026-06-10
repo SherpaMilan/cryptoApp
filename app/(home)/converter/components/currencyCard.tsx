@@ -7,19 +7,19 @@ import { Coin } from "@/types/coin";
 type Props = {
   label: "From" | "To";
   openModal: () => void;
-  selectedCoin: Coin | null;
   isLoading?: boolean;
   readOnly?: boolean;
   showSwap?: boolean;
+  selectedCoin: Coin | null;
   setActiveCoinSlot: (value: "from" | "to") => void;
 };
 
 export default function CurrencyCard({
   label,
   openModal,
-  selectedCoin,
   isLoading = false,
   readOnly = false,
+  selectedCoin,
   setActiveCoinSlot,
 }: Props) {
   return (
@@ -37,7 +37,7 @@ export default function CurrencyCard({
           readOnly={readOnly}
           className="bg-transparent outline-none text-4xl font-medium placeholder:text-muted-foreground/50 w-full"
         />
-
+        {/* which side user is currently choosing coin for */}
         <button
           type="button"
           onClick={() => {
@@ -58,6 +58,7 @@ export default function CurrencyCard({
             shrink-0
             min-w-[100px]
             gap-3
+            cursor-pointer
           "
         >
           {isLoading || !selectedCoin ? (
