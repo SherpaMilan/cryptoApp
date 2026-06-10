@@ -2,9 +2,12 @@
 
 import { useEffect, useMemo, useState } from "react";
 import { Coin } from "@/types/coin";
-import Image from "next/image";
 import { StarIcon } from "@phosphor-icons/react";
 import CoinFilterTabs from "./coinFilterTabs";
+import { useCoinSearchQuery } from "@/hooks/useCoinSearchQuery";
+import { normalizeSearchCoin } from "@/(home)/converter/utils/coinMapper";
+import { ConverterCoin } from "@/types/converterCoin";
+import CoinImageFallback from "../utils/coinImageFallback";
 
 export default function CoinModal({
   open,
@@ -15,12 +18,14 @@ export default function CoinModal({
   open: boolean;
   setOpen: (v: boolean) => void;
   coins: Coin[];
-  onSelectCoin: (coin: Coin) => void;
+  onSelectCoin: (coin: ConverterCoin) => void;
 }) {
   const [searchCoin, setSearchCoin] = useState("");
   const [viewMode, setViewMode] = useState<"all" | "watchlist">("all");
 
-  const [watchlist, setWatchlist] = useState<Coin[]>(() => {
+  const { data: apiSearchedCoins } = useCoinSearchQuery(searchCoin);
+
+  const [watchlist, setWatchlist] = useState<ConverterCoin[]>(() => {
     if (typeof window === "undefined") return [];
 
     const stored = localStorage.getItem("watchlist");
@@ -32,23 +37,36 @@ export default function CoinModal({
   }, [watchlist]);
 
   const displayedCoins = useMemo(() => {
-    const searched = searchCoin.toLowerCase();
+    const searchText = searchCoin.toLowerCase();
 
-    let filtered = coins.filter(
-      (coin) =>
-        coin.name.toLowerCase().includes(searched) ||
-        coin.symbol.toLowerCase().includes(searched),
-    );
+    // 1. API search coins (convert FIRST)
+    const apiCoins: ConverterCoin[] =
+      apiSearchedCoins?.map(normalizeSearchCoin) ?? [];
 
-    // if watchlist tab → show only saved coins
+    // 2. fallback local coins
+    const localCoins: ConverterCoin[] = coins
+      .filter(
+        (coin) =>
+          coin.name.toLowerCase().includes(searchText) ||
+          coin.symbol.toLowerCase().includes(searchText),
+      )
+      .map((coin) => ({
+        id: coin.id,
+        name: coin.name,
+        symbol: coin.symbol,
+        image: coin.image,
+      }));
+
+    // 3. priority: API > local
+    const result = apiCoins.length > 0 ? apiCoins : localCoins;
+
+    // 4. watchlist filter
     if (viewMode === "watchlist") {
-      filtered = filtered.filter((coin) =>
-        watchlist.some((w) => w.id === coin.id),
-      );
+      return watchlist;
     }
 
-    return filtered;
-  }, [coins, searchCoin, viewMode, watchlist]);
+    return result;
+  }, [coins, searchCoin, apiSearchedCoins, viewMode, watchlist]);
 
   if (!open) return null;
 
@@ -91,17 +109,11 @@ export default function CoinModal({
                   onClick={() => {
                     onSelectCoin(coin);
                     setOpen(false);
+                    setSearchCoin("");
                   }}
                   className="flex items-center gap-3 flex-1 text-left cursor-pointer"
                 >
-                  <Image
-                    src={coin.image}
-                    alt={coin.name}
-                    width={24}
-                    height={24}
-                    className="rounded-full"
-                  />
-
+                  <CoinImageFallback src={coin.image} alt={coin.name} />
                   <span className="text-sm">
                     {coin.name}{" "}
                     <span className="text-[var(--brand-purple)] font-medium">
@@ -121,13 +133,13 @@ export default function CoinModal({
                         const exists = prev.find(
                           (watchlistCoin) => watchlistCoin.id === coin.id,
                         );
-                        // if already in watchlist → remove it when click again
+
                         if (exists) {
                           return prev.filter(
                             (watchlistCoin) => watchlistCoin.id !== coin.id,
                           );
                         }
-                        // else add
+
                         return [...prev, coin];
                       });
                     }}

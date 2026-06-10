@@ -1,8 +1,8 @@
 "use client";
 
-import Image from "next/image";
 import { CaretDownIcon } from "@phosphor-icons/react";
 import { Coin } from "@/types/coin";
+import CoinImageFallback from "../utils/coinImageFallback";
 
 type Props = {
   label: "From" | "To";
@@ -24,7 +24,7 @@ export default function CurrencyCard({
 }: Props) {
   return (
     <div
-      className="relative bg-[var(--brand-white)] rounded-2xl p-5 h-[150px] flex flex-col"
+      className="relative bg-[var(--brand-white)] dark:bg-background rounded-2xl p-5 h-[150px] flex flex-col dark:border dark:border-border"
       aria-label={`${label} currency section`}
     >
       <p className="text-sm text-muted-foreground">{label}</p>
@@ -37,44 +37,26 @@ export default function CurrencyCard({
           readOnly={readOnly}
           className="bg-transparent outline-none text-4xl font-medium placeholder:text-muted-foreground/50 w-full"
         />
-        {/* which side user is currently choosing coin for */}
+
         <button
           type="button"
           onClick={() => {
             setActiveCoinSlot(label.toLowerCase() as "from" | "to");
             openModal();
           }}
-          className="
-            flex items-center justify-between
-            px-3 py-2
-            rounded-xl
-            bg-white/60
-            border border-black/10
-            shadow-sm
-            backdrop-blur-md
-            hover:bg-white/80
-            hover:border-black/20
-            transition-all duration-200
-            shrink-0
-            min-w-[100px]
-            gap-3
-            cursor-pointer
-          "
+          className="flex items-center justify-between px-3 py-2 rounded-xl bg-white/60 dark:bg-muted/30 border border-black/10 dark:border-border shadow-sm backdrop-blur-md hover:bg-white/80 dark:hover:bg-muted/50 hover:border-black/20 dark:hover:border-muted-foreground/30 transition-all duration-200 shrink-0 min-w-[100px] gap-3 cursor-pointer"
         >
           {isLoading || !selectedCoin ? (
             <div className="flex items-center gap-2 animate-pulse">
-              <div className="w-5 h-5 rounded-full bg-gray-300" />
-              <div className="w-10 h-4 bg-gray-300 rounded" />
+              <div className="w-5 h-5 rounded-full bg-gray-300 dark:bg-muted" />
+              <div className="w-10 h-4 bg-gray-300 dark:bg-muted rounded" />
             </div>
           ) : (
             <>
               <div className="flex items-center gap-2">
-                <Image
+                <CoinImageFallback
                   src={selectedCoin.image}
                   alt={selectedCoin.name}
-                  width={22}
-                  height={22}
-                  className="rounded-full"
                 />
 
                 <span className="text-sm font-semibold tracking-wide">
