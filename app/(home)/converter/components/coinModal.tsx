@@ -2,12 +2,13 @@
 
 import { useEffect, useMemo, useState } from "react";
 import { Coin } from "@/types/coin";
+import Image from "next/image";
 import { StarIcon } from "@phosphor-icons/react";
 import CoinFilterTabs from "./coinFilterTabs";
+import useDebounce from "@/hooks/useDebounce";
 import { useCoinSearchQuery } from "@/hooks/useCoinSearchQuery";
-import { normalizeSearchCoin } from "@/(home)/converter/utils/coinMapper";
-import { ConverterCoin } from "@/types/converterCoin";
-import CoinImageFallback from "../utils/coinImageFallback";
+import { SearchCoin } from "@/types/searchCoin";
+import { mapSearchCoinToCoin } from "../utils/mapSearchCoinToCoin";
 
 export default function CoinModal({
   open,
@@ -18,69 +19,77 @@ export default function CoinModal({
   open: boolean;
   setOpen: (v: boolean) => void;
   coins: Coin[];
-  onSelectCoin: (coin: ConverterCoin) => void;
+  onSelectCoin: (coin: Coin) => void;
 }) {
   const [searchCoin, setSearchCoin] = useState("");
   const [viewMode, setViewMode] = useState<"all" | "watchlist">("all");
 
-  const { data: apiSearchedCoins } = useCoinSearchQuery(searchCoin);
-
-  const [watchlist, setWatchlist] = useState<ConverterCoin[]>(() => {
+  const [watchlist, setWatchlist] = useState<string[]>(() => {
     if (typeof window === "undefined") return [];
-
-    const stored = localStorage.getItem("watchlist");
-    return stored ? JSON.parse(stored) : [];
+    return JSON.parse(localStorage.getItem("watchlist") || "[]");
   });
 
   useEffect(() => {
     localStorage.setItem("watchlist", JSON.stringify(watchlist));
   }, [watchlist]);
 
-  const displayedCoins = useMemo(() => {
-    const searchText = searchCoin.toLowerCase();
+  const debouncedSearch = useDebounce(searchCoin, 300);
 
-    // 1. API search coins (convert FIRST)
-    const apiCoins: ConverterCoin[] =
-      apiSearchedCoins?.map(normalizeSearchCoin) ?? [];
+  // ----------------------------
+  // 1. LOCAL FILTER (Coin only)
+  // ----------------------------
+  const localFiltered = useMemo(() => {
+    const q = searchCoin.toLowerCase();
 
-    // 2. fallback local coins
-    const localCoins: ConverterCoin[] = coins
-      .filter(
-        (coin) =>
-          coin.name.toLowerCase().includes(searchText) ||
-          coin.symbol.toLowerCase().includes(searchText),
-      )
-      .map((coin) => ({
-        id: coin.id,
-        name: coin.name,
-        symbol: coin.symbol,
-        image: coin.image,
-      }));
+    let result = coins.filter(
+      (c) =>
+        c.name.toLowerCase().includes(q) || c.symbol.toLowerCase().includes(q),
+    );
 
-    // 3. priority: API > local
-    const result = apiCoins.length > 0 ? apiCoins : localCoins;
-
-    // 4. watchlist filter
     if (viewMode === "watchlist") {
-      return watchlist;
+      result = result.filter((c) => watchlist.includes(c.id));
     }
 
     return result;
-  }, [coins, searchCoin, apiSearchedCoins, viewMode, watchlist]);
+  }, [coins, searchCoin, viewMode, watchlist]);
+
+  const hasLocalResults = localFiltered.length > 0;
+
+  const shouldSearchAPI = searchCoin.trim().length >= 3 && !hasLocalResults;
+
+  // ----------------------------
+  // 2. API SEARCH (SearchCoin[])
+  // ----------------------------
+  const { data: remoteCoins = [] } = useCoinSearchQuery(
+    shouldSearchAPI ? debouncedSearch : "",
+  );
+
+  // ----------------------------
+  // 3. NORMALIZE API → Coin
+  // ----------------------------
+  const remoteAsCoins: Coin[] = useMemo(() => {
+    return remoteCoins.map((c: SearchCoin) => mapSearchCoinToCoin(c));
+  }, [remoteCoins]);
+
+  // ----------------------------
+  // FINAL LIST
+  // ----------------------------
+  const coinsToRender = shouldSearchAPI ? remoteAsCoins : localFiltered;
+
+  const noResults = searchCoin.trim().length >= 3 && coinsToRender.length === 0;
 
   if (!open) return null;
 
   return (
-    //Dark background overlay
     <div
       className="fixed inset-0 z-50 flex items-center justify-center"
       onClick={() => setOpen(false)}
     >
-      {/* Prevent closing coin modal when clicking inside */}
       <div
         className="w-[400px] h-[560px] bg-white/5 backdrop-blur-xl border border-white/20 rounded-2xl shadow-2xl overflow-hidden flex flex-col"
         onClick={(e) => e.stopPropagation()}
       >
+        {/* HEADER */}
         <div className="px-4 pt-4 pb-3">
           <h2 className="text-lg font-semibold">Select Coin</h2>
           <p className="text-sm text-muted-foreground">
@@ -88,71 +97,79 @@ export default function CoinModal({
           </p>
         </div>
 
+        {/* SEARCH */}
         <div className="px-4 pb-3">
           <input
             value={searchCoin}
             onChange={(e) => setSearchCoin(e.target.value)}
-            type="text"
             placeholder="Search coin..."
-            className="w-full bg-[var(--brand-white)] px-4 py-3 rounded-xl text-sm outline-none border border-black/10 shadow-sm placeholder:text-muted-foreground focus:border-[var(--brand-purple)] transition"
+            className="w-full px-4 py-3 rounded-xl border bg-white/80"
           />
         </div>
 
         <CoinFilterTabs viewMode={viewMode} setViewMode={setViewMode} />
 
+        {noResults && (
+          <p className="text-xs text-red-500 px-4 mt-2">
+            We searched. We tried. We found nothing.
+          </p>
+        )}
+
+        {/* LIST */}
         <div className="flex-1 overflow-y-auto px-3">
-          {displayedCoins.map((coin, index) => (
+          {coinsToRender.map((coin, index) => (
             <div key={coin.id}>
               <div className="flex items-center justify-between py-3 px-2">
+                {/* SELECT COIN */}
                 <button
                   type="button"
                   onClick={() => {
-                    onSelectCoin(coin);
+                    onSelectCoin(coin); // ALWAYS Coin now
                     setOpen(false);
                     setSearchCoin("");
                   }}
-                  className="flex items-center gap-3 flex-1 text-left cursor-pointer"
+                  className="flex items-center gap-3 flex-1 text-left"
                 >
-                  <CoinImageFallback src={coin.image} alt={coin.name} />
+                  <Image
+                    src={coin.image || "/placeholder.png"}
+                    alt={coin.name}
+                    width={24}
+                    height={24}
+                    className="rounded-full"
+                  />
+
                   <span className="text-sm">
                     {coin.name}{" "}
-                    <span className="text-[var(--brand-purple)] font-medium">
+                    <span className="text-purple-500 font-medium">
                       ({coin.symbol.toUpperCase()})
                     </span>
                   </span>
                 </button>
 
+                {/* WATCHLIST */}
                 <button
                   type="button"
-                  className="p-2 rounded-lg hover:bg-black/5 transition"
+                  onClick={() => {
+                    setWatchlist((prev) => {
+                      if (prev.includes(coin.id)) {
+                        return prev.filter((id) => id !== coin.id);
+                      }
+                      return [...prev, coin.id];
+                    });
+                  }}
                 >
                   <StarIcon
                     size={18}
-                    onClick={() => {
-                      setWatchlist((prev) => {
-                        const exists = prev.find(
-                          (watchlistCoin) => watchlistCoin.id === coin.id,
-                        );
-
-                        if (exists) {
-                          return prev.filter(
-                            (watchlistCoin) => watchlistCoin.id !== coin.id,
-                          );
-                        }
-
-                        return [...prev, coin];
-                      });
-                    }}
                     className={
-                      watchlist.find((c) => c.id === coin.id)
-                        ? "text-yellow-500 fill-yellow-500 cursor-pointer"
-                        : "text-gray-400 cursor-pointer"
+                      watchlist.includes(coin.id)
+                        ? "text-yellow-500 fill-yellow-500"
+                        : "text-gray-400"
                     }
                   />
                 </button>
               </div>
 
-              {index !== displayedCoins.length - 1 && (
+              {index !== coinsToRender.length - 1 && (
                 <div className="border-b border-black/10 mx-2" />
               )}
             </div>
