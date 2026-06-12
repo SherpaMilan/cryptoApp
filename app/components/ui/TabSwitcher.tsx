@@ -12,9 +12,23 @@ export default function TabSwitcher() {
   const pathname = usePathname();
 
   return (
-    <div className="w-full bg-[var(--background)] py-[25px]">
-      <div className="max-w-[1440px] mx-auto px-[72px]">
-        <nav className="flex w-[506px] h-[53px] bg-[var(--tab-bg)] rounded-[10px] p-[4px] ">
+    <div className="w-full py-6 bg-transparent">
+      <div className="max-w-[1440px] mx-auto px-6">
+        <nav
+          className="
+            w-[520px] h-[54px]
+            mx-auto
+            flex items-center
+            p-1
+            rounded-2xl
+
+            bg-white/60 dark:bg-zinc-900/60
+            backdrop-blur-xl
+            border border-black/5 dark:border-white/10
+
+            shadow-sm
+          "
+        >
           {tabs.map((tab) => {
             const isActive =
               tab.href === "/"
@@ -26,15 +40,24 @@ export default function TabSwitcher() {
                 key={tab.href}
                 href={tab.href}
                 className={`
-                  w-1/2 flex items-center justify-center
-                  rounded-[8px]
-                  cursor-pointer
+                  flex-1 h-full
+                  flex items-center justify-center
+                  rounded-xl
                   text-sm font-medium
                   transition-all duration-200
+
                   ${
                     isActive
-                      ? "bg-[var(--tab-active-bg)] text-[var(--tab-active-text)] font-bold "
-                      : "text-[var(--tab-inactive)] hover:bg-[var(--tab-hover)] hover:text-[var(--foreground)]"
+                      ? `
+                        bg-[var(--brand-purple)]/80
+                        text-gray-900 dark:text-white
+                        shadow-sm
+                      `
+                      : `
+                        text-gray-500 dark:text-gray-400
+                        hover:text-gray-900 dark:hover:text-white
+                        hover:bg-black/5 dark:hover:bg-white/5
+                      `
                   }
                 `}
               >

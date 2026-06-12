@@ -7,7 +7,7 @@ export function mapSearchCoinToCoin(coin: SearchCoin): Coin {
     name: coin.name,
     symbol: coin.symbol,
 
-    // 🔥 FIX IMAGE MAPPING
+    //  FIX IMAGE MAPPING
     image: coin.thumb,
 
     // safe UI defaults (required by Coin type)
@@ -16,7 +16,6 @@ export function mapSearchCoinToCoin(coin: SearchCoin): Coin {
     total_volume: 0,
     circulating_supply: 0,
     total_supply: 0,
-
     sparkline_in_7d: {
       price: [],
     },
@@ -24,7 +23,6 @@ export function mapSearchCoinToCoin(coin: SearchCoin): Coin {
     price_change_percentage_24h_in_currency: 0,
     price_change_percentage_7d_in_currency: 0,
     price_change_percentage_1h_in_currency: 0,
-
     last_updated: "",
     price_change_percentage_24h: null,
   };

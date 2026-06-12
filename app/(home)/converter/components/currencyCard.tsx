@@ -18,21 +18,38 @@ export default function CurrencyCard({
   selectedCoin,
 }: Props) {
   return (
-    <div className="relative bg-[var(--brand-white)] rounded-2xl p-5 h-[150px] flex flex-col">
-      <p className="text-sm text-muted-foreground">{label}</p>
+    <div
+      className="
+        relative rounded-2xl p-5 h-[150px] flex flex-col
+        bg-white/80 dark:bg-zinc-900/70
+        border border-black/5 dark:border-white/10
+        backdrop-blur-md
+      "
+    >
+      <p className="text-sm text-gray-500 dark:text-gray-400">{label}</p>
 
       <div className="flex items-center justify-between mt-8">
         <input
           type="text"
           placeholder="0.00"
-          className="bg-transparent outline-none text-4xl font-medium w-full"
+          className="
+            bg-transparent outline-none w-full
+            text-2xl font-medium
+            text-gray-900 dark:text-white
+            placeholder:text-gray-400 dark:placeholder:text-gray-500
+          "
         />
 
         <button
           onClick={openModal}
-          className="flex items-center gap-3 px-3 py-2 rounded-xl bg-white/60 border border-black/10"
+          className="
+            flex items-center gap-3 px-3 py-2 rounded-xl
+            bg-black/5 dark:bg-white/10
+            border border-black/10 dark:border-white/10
+            hover:bg-black/10 dark:hover:bg-white/20
+            transition
+          "
         >
-          {/* LEFT SIDE (coin display OR skeleton) */}
           <div className="flex items-center gap-2">
             {isLoading || !selectedCoin ? (
               <>
@@ -50,15 +67,17 @@ export default function CurrencyCard({
                   />
                 )}
 
-                <span className="text-sm font-semibold">
+                <span className="text-sm font-semibold text-gray-800 dark:text-white">
                   {selectedCoin.symbol.toUpperCase()}
                 </span>
               </>
             )}
           </div>
 
-          {/* ALWAYS VISIBLE */}
-          <CaretDownIcon size={16} />
+          <CaretDownIcon
+            size={16}
+            className="text-gray-500 dark:text-gray-300"
+          />
         </button>
       </div>
     </div>
