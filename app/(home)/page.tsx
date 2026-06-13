@@ -20,7 +20,7 @@ export default function HomePage() {
   const { defaultCurrency, isCurrencyLoaded } = useCurrency();
 
   const [selectedCoin, setSelectedCoin] = useState<Coin | null>(null);
-  const [timeRange, setTimeRange] = useState<TimeRangeKey>("6M");
+  const [timeRange, setTimeRange] = useState<TimeRangeKey>("1Y");
 
   // ---------------- COINS ----------------
   const {

@@ -1,9 +1,8 @@
 export const TIME_RANGES = {
-  "1D": 1,
+  "24H": 1,
   "7D": 7,
-  "14D": 14,
   "1M": 30,
-  "6M": 30 * 6,
+  "3M": 90,
   "1Y": 365,
 } as const;
 

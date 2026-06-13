@@ -16,6 +16,7 @@ interface CoinStore {
   closeModal: () => void;
   setCoin: (coin: Coin) => void;
   addRecentCoin: (coin: Coin) => void;
+  swapCoins: () => void;
 }
 
 // create store
@@ -55,7 +56,14 @@ export const useCoinStore = create<CoinStore>()(
         // add to recent coins
         get().addRecentCoin(coin);
       },
+      swapCoins: () => {
+        const state = get();
 
+        set({
+          fromCoin: state.toCoin,
+          toCoin: state.fromCoin,
+        });
+      },
       addRecentCoin: (coin) =>
         set((state) => {
           const exists = state.recentCoins.find((c) => c.id === coin.id);
