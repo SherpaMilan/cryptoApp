@@ -46,13 +46,13 @@ export default function ChartPanel({
     TIME_RANGES[timeRange],
   );
 
-  const fromPrices = from.data?.prices ?? [];
-  const toPrices = to.data?.prices ?? [];
-
   const isLoading = from.isLoading || to.isLoading;
   const hasError = from.isError || to.isError;
 
   const chartData = React.useMemo(() => {
+    const fromPrices = from.data?.prices ?? [];
+    const toPrices = to.data?.prices ?? [];
+
     if (!fromPrices.length || !toPrices.length) return [];
 
     const toMap = new Map<number, number>();
@@ -74,7 +74,7 @@ export default function ChartPanel({
     }
 
     return result;
-  }, [fromPrices, toPrices]);
+  }, [from.data?.prices, to.data?.prices]);
 
   const latest = chartData[chartData.length - 1];
 
