@@ -5,6 +5,7 @@ import { Area, AreaChart, XAxis } from "recharts";
 import { Coin } from "@/types/coin";
 
 import { useCurrency } from "@/context/currencyContext";
+import { useStableCurrencyKey } from "@/hooks/useStableCurrencyKey";
 import { useCoinChartQuery } from "@/hooks/useCoinChartQuery";
 import { formatCurrencyCompact } from "@/utils/formatCurrency";
 
@@ -12,11 +13,13 @@ import { TIME_RANGES, TimeRangeKey } from "@/constants/timeRanges";
 import { ChartCard } from "@/components/charts/ChartCard";
 import { ChartDefaultToolTip } from "@/components/charts/ChartToolTip";
 import { CHART_COLORS } from "@/constants/chartColors";
+
 const isDark =
   typeof window !== "undefined" &&
   document.documentElement.classList.contains("dark");
 
 const colors = isDark ? CHART_COLORS.dark : CHART_COLORS.light;
+
 const chartConfig = {
   price: {
     label: "Price",
@@ -31,11 +34,12 @@ export function PriceChart({
   coin: Coin | null;
   timeRange: TimeRangeKey;
 }) {
-  const { currencyKey, currencySymbol } = useCurrency();
+  const { currencySymbol } = useCurrency();
+  const stableCurrencyKey = useStableCurrencyKey();
 
   const { data, isLoading, error } = useCoinChartQuery(
     coin?.id,
-    currencyKey,
+    stableCurrencyKey,
     TIME_RANGES[timeRange],
   );
 
@@ -50,7 +54,7 @@ export function PriceChart({
       title={`${coin?.name} (${coin?.symbol?.toUpperCase()})`}
       description={formatCurrencyCompact(
         coin?.market_cap ?? 0,
-        currencyKey,
+        stableCurrencyKey,
         currencySymbol,
       )}
       lastUpdated={coin?.last_updated}

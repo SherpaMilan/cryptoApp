@@ -42,6 +42,7 @@ body {
   --tab-active-text: #ffffff;
   --tab-hover: #eef0ff;
   --chart-bg: rgba(255, 255, 255, 0.85);
+  --chart-muted: #6b7280;
 
   --time-bg: rgba(120, 120, 255, 0.08);
   --time-border: rgba(0, 0, 0, 0.06);
@@ -77,6 +78,7 @@ body {
   --tab-hover: #6cadbd;
 
   --chart-bg: rgba(18, 20, 30, 0.85);
+  --chart-muted: #9ca3af;
 
   --time-bg: rgba(120, 120, 255, 0.06);
   --time-border: rgba(255, 255, 255, 0.08);

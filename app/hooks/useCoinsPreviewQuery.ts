@@ -20,5 +20,6 @@ export function useCoinsPreviewQuery(currency: string, enabled: boolean) {
     },
 
     staleTime: 1000 * 60 * 2,
+    refetchOnWindowFocus: false,
   });
 }

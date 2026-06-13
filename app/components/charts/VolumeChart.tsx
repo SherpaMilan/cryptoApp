@@ -5,6 +5,7 @@ import { Bar, BarChart, XAxis } from "recharts";
 
 import { Coin } from "@/types/coin";
 import { useCurrency } from "@/context/currencyContext";
+import { useStableCurrencyKey } from "@/hooks/useStableCurrencyKey";
 import { useCoinChartQuery } from "@/hooks/useCoinChartQuery";
 import { TIME_RANGES, TimeRangeKey } from "@/constants/timeRanges";
 import { formatCurrencyCompact } from "@/utils/formatCurrency";
@@ -12,6 +13,7 @@ import { ChartCard } from "@/components/charts/ChartCard";
 import { ChartDefaultToolTip } from "@/components/charts/ChartToolTip";
 import { CHART_COLORS } from "@/constants/chartColors";
 import { ChartConfig } from "@/components/ui/Chart";
+
 const isDark =
   typeof window !== "undefined" &&
   document.documentElement.classList.contains("dark");
@@ -32,11 +34,12 @@ export function VolumeChart({
   coin: Coin | null;
   timeRange: TimeRangeKey;
 }) {
-  const { currencyKey, currencySymbol } = useCurrency();
+  const { currencySymbol } = useCurrency();
+  const stableCurrencyKey = useStableCurrencyKey();
 
   const { data, isLoading, error } = useCoinChartQuery(
     coin?.id,
-    currencyKey,
+    stableCurrencyKey,
     TIME_RANGES[timeRange],
   );
 
@@ -50,7 +53,7 @@ export function VolumeChart({
       title={"Volume 24h"}
       description={formatCurrencyCompact(
         coin?.total_volume ?? 0,
-        currencyKey,
+        stableCurrencyKey,
         currencySymbol,
       )}
       lastUpdated={coin?.last_updated}
