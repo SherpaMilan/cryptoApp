@@ -24,7 +24,6 @@ export default function ChartPanel({
   setTimeRange,
   fromCoin,
   toCoin,
-  fromAmount,
 }: Props) {
   const stableCurrency = useStableCurrencyKey();
 
@@ -84,17 +83,31 @@ export default function ChartPanel({
         <div className="flex flex-col gap-1">
           <div className="flex items-center gap-2">
             <RatioIcon />
-
-            <h2 className="text-sm font-medium text-gray-900 dark:text-white">
-              {fromCoin?.symbol?.toUpperCase() || "—"}/
-              {toCoin?.symbol?.toUpperCase() || "—"}
+            <h2 className="text-xl font-bold tracking-tight">
+              <span className="text-gray-900 dark:text-white">
+                {fromCoin?.symbol?.toUpperCase() || "—"}
+              </span>
+              <span className="mx-1 text-[var(--brand-purple)]">/</span>
+              <span className="text-gray-500 dark:text-gray-400">
+                {toCoin?.symbol?.toUpperCase() || "—"}
+              </span>
             </h2>
           </div>
+          {latest && (
+            <div className="inline-flex items-center gap-1.5 rounded-md border border-black/10 dark:border-white/10 px-2 py-1 bg-white/5">
+              <span className="text-[10px] uppercase tracking-wide text-muted-foreground">
+                Exchange Rate
+              </span>
 
-          {fromAmount && latest && (
-            <div className="text-xs font-bold p-2 text-gray-900 dark:text-white">
-              1 {fromCoin?.symbol?.toUpperCase()} = {latest.ratio.toFixed(2)}{" "}
-              {toCoin?.symbol?.toUpperCase()}
+              <span className="text-xs font-medium text-gray-700 dark:text-gray-300">
+                1 {fromCoin?.symbol?.toUpperCase()} =
+                <span className="ml-1 text-sm font-bold text-[var(--brand-purple)]">
+                  {latest.ratio.toFixed(4)}
+                </span>{" "}
+                <span className="text-gray-500 dark:text-gray-400">
+                  {toCoin?.symbol?.toUpperCase()}
+                </span>
+              </span>
             </div>
           )}
         </div>

@@ -64,7 +64,7 @@ export default function Converter() {
       <div className="max-w-[1440px] mx-auto px-6 lg:px-[72px] py-6">
         <div className="mb-8">
           <h1 className="text-2xl lg:text-3xl font-semibold tracking-tight">
-            Binance Convert{" "}
+            Convert{" "}
             <span className="text-[var(--brand-purple)]">
               {activeFromCoin?.name?.toUpperCase()}
             </span>{" "}
@@ -73,9 +73,8 @@ export default function Converter() {
               {activeToCoin?.name?.toUpperCase()}
             </span>
           </h1>
-
           <p className="text-sm text-muted-foreground mt-2">
-            Convert crypto assets instantly with live market rates
+            View real-time exchange rates and historical price trends.
           </p>
         </div>
 

@@ -22,15 +22,17 @@ type Props = {
   toSymbol?: string;
 };
 
-function formatDate(v: unknown) {
-  if (typeof v !== "number" && typeof v !== "string") return "";
+function formatDate(value: unknown) {
+  if (typeof value !== "number") return "";
 
-  const d = new Date(v);
+  const date = new Date(value);
 
-  const day = String(d.getDate()).padStart(2, "0");
-  const month = String(d.getMonth() + 1).padStart(2, "0");
+  if (Number.isNaN(date.getTime())) return "";
 
-  return `${day}-${month}`;
+  return date.toLocaleDateString("en-GB", {
+    day: "2-digit",
+    month: "2-digit",
+  });
 }
 
 export default function RatioChart({ data, fromSymbol, toSymbol }: Props) {
@@ -78,9 +80,13 @@ export default function RatioChart({ data, fromSymbol, toSymbol }: Props) {
 
           <Tooltip
             labelFormatter={(value) => {
-              if (!value) return "";
+              const date = new Date(Number(value));
 
-              return new Date(value).toLocaleDateString("en-US", {
+              if (Number.isNaN(date.getTime())) {
+                return "Invalid date";
+              }
+
+              return date.toLocaleDateString("en-US", {
                 month: "short",
                 day: "2-digit",
                 year: "numeric",
@@ -89,22 +95,28 @@ export default function RatioChart({ data, fromSymbol, toSymbol }: Props) {
             content={({ active, payload, label }) => {
               if (!active || !payload?.length) return null;
 
-              const d = payload[0].payload as ChartPoint;
+              const point = payload[0].payload as ChartPoint;
 
-              const date = new Date(String(label)).toLocaleDateString("en-US", {
-                month: "short",
-                day: "2-digit",
-                year: "numeric",
-              });
+              const date = new Date(Number(label));
+
+              const formattedDate = Number.isNaN(date.getTime())
+                ? "Invalid date"
+                : date.toLocaleDateString("en-US", {
+                    month: "short",
+                    day: "2-digit",
+                    year: "numeric",
+                  });
 
               return (
                 <div className="bg-white/95 dark:bg-zinc-900/95 border border-black/10 dark:border-white/10 rounded-lg shadow-lg px-3 py-2 min-w-[160px]">
-                  <div className="text-[11px] text-gray-500 mb-2">{date}</div>
+                  <div className="text-[11px] text-gray-500 mb-2">
+                    {formattedDate}
+                  </div>
 
                   <div className="text-sm font-medium text-gray-900 dark:text-white">
                     1 {fromSymbol?.toUpperCase()} ={" "}
                     <span className="text-[var(--brand-purple)] font-semibold">
-                      {d.ratio.toFixed(4)}
+                      {point.ratio.toFixed(4)}
                     </span>{" "}
                     {toSymbol?.toUpperCase()}
                   </div>
