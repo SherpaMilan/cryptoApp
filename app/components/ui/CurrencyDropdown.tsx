@@ -99,7 +99,7 @@ export default function CurrencyDropdown() {
               </button>
 
               {index !== CURRENCIES.length - 1 && (
-                <li aria-hidden="true" className="h-px bg-border/30 mx-3" />
+                <div aria-hidden="true" className="h-px bg-border/30 mx-3" />
               )}
             </li>
           ))}

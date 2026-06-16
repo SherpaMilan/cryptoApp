@@ -1,15 +1,23 @@
 import "./globals.css";
+import type { Metadata } from "next";
+
 import Navbar from "./components/ui/Navbar";
 import MarketStatsBar from "./components/ui/MarketStatsBar";
-import { Space_Grotesk, Geist } from "next/font/google";
-import type { Metadata } from "next";
-import CurrencyProvider from "./context/currencyContext";
-import { cn } from "@/lib/utils";
-import Providers from "./provider/providers";
-import { Analytics } from "@vercel/analytics/next";
 import Footer from "@/components/ui/Footer";
+
+import { Space_Grotesk, Geist } from "next/font/google";
+import { cn } from "@/lib/utils";
+
+import CurrencyProvider from "./context/currencyContext";
 import ThemeProvider from "./context/themeContext";
-const geist = Geist({ subsets: ["latin"], variable: "--font-sans" });
+import Providers from "./provider/providers";
+
+import { Analytics } from "@vercel/analytics/next";
+
+const geist = Geist({
+  subsets: ["latin"],
+  variable: "--font-sans",
+});
 
 const spaceGrotesk = Space_Grotesk({
   weight: ["400", "500", "600"],
@@ -28,28 +36,30 @@ export const metadata: Metadata = {
 
 export default function RootLayout({
   children,
-}: Readonly<{
+}: {
   children: React.ReactNode;
-}>) {
+}) {
   return (
     <html lang="en" className={cn("font-sans", geist.variable)}>
       <body
-        className={`${spaceGrotesk.variable} font-[family-name:var(--font-space-grotesk)] antialiased bg-background text-foreground`}
+        className={cn(
+          spaceGrotesk.variable,
+          "font-[family-name:var(--font-space-grotesk)] antialiased bg-background text-foreground flex flex-col min-h-screen",
+        )}
       >
         <Providers>
           <ThemeProvider>
             <CurrencyProvider>
-              <div className="sticky top-0 z-100">
+              <div className="sticky top-0 z-50">
                 <MarketStatsBar />
                 <Navbar />
               </div>
-
-              <main className="w-full min-h-screen pt-[22px]">{children}</main>
-
+              <main className="flex-1 w-full pt-[22px]">{children}</main>
               <Footer />
             </CurrencyProvider>
           </ThemeProvider>
         </Providers>
+
         <Analytics />
       </body>
     </html>

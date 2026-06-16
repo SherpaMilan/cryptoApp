@@ -13,6 +13,7 @@ import {
 
 import { useCoinChartQuery } from "@/hooks/useCoinChartQuery";
 import { useCurrency } from "@/context/currencyContext";
+import { useStableCurrencyKey } from "@/hooks/useStableCurrencyKey";
 import { TimeRangeKey, TIME_RANGES } from "@/constants/timeRanges";
 import CoinPageChartSkeleton from "@/components/skeletons/CoinPageChartSkeleton";
 
@@ -22,11 +23,14 @@ type Props = {
 };
 
 export function CoinPageChart({ coinId, timeRange }: Props) {
-  const { currencyKey, currencySymbol } = useCurrency();
+  const { currencySymbol } = useCurrency();
+
+  //  USE STABLE CURRENCY HERE
+  const stableCurrency = useStableCurrencyKey();
 
   const { data, isLoading } = useCoinChartQuery(
     coinId,
-    currencyKey,
+    stableCurrency,
     TIME_RANGES[timeRange],
   );
 
