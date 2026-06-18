@@ -1,9 +1,8 @@
 import "./globals.css";
 import type { Metadata } from "next";
 
-import Navbar from "./components/ui/Navbar";
 import MarketStatsBar from "./components/ui/MarketStatsBar";
-import Footer from "@/components/ui/Footer";
+import Footer from "@/components/layouts/Footer";
 
 import { Space_Grotesk, Geist } from "next/font/google";
 import { cn } from "@/lib/utils";
@@ -13,6 +12,7 @@ import ThemeProvider from "./context/themeContext";
 import Providers from "./provider/providers";
 
 import { Analytics } from "@vercel/analytics/next";
+import Navbar from "./components/layouts/Navbar";
 
 const geist = Geist({
   subsets: ["latin"],

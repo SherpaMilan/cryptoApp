@@ -6,8 +6,8 @@ import { usePathname } from "next/navigation";
 import { VscLayers } from "react-icons/vsc";
 import { IoLayersSharp } from "react-icons/io5";
 import CurrencyDropdown from "@/components/ui/CurrencyDropdown";
-import Search from "./Search";
-import Theme from "./Theme";
+import Search from "../ui/Search";
+import Theme from "../ui/Theme";
 
 const links = [
   {
