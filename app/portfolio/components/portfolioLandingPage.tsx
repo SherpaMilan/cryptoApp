@@ -1,12 +1,11 @@
 "use client";
 
-import { useState } from "react";
 import { StackPlusIcon, ArrowCircleRightIcon } from "@phosphor-icons/react";
-import PortfolioCreationForm from "./portfolioCreationForm";
+type Props = {
+  onOpenPortfolioForm: () => void;
+};
 
-export default function LandingPage() {
-  const [showCreateForm, setShowCreateForm] = useState(false);
-
+export default function LandingPage({ onOpenPortfolioForm }: Props) {
   return (
     <main className="overflow-x-hidden text-[var(--brand-black)] dark:bg-background dark:text-foreground">
       <section className="relative mx-auto max-w-[1440px] overflow-hidden px-[72px] py-6">
@@ -138,7 +137,7 @@ export default function LandingPage() {
 
             <button
               type="button"
-              onClick={() => setShowCreateForm(true)}
+              onClick={onOpenPortfolioForm}
               className="group relative mt-6 flex w-full items-center justify-center rounded-xl bg-[var(--brand-black)] px-5 py-3 text-sm font-medium text-[var(--brand-white)] transition hover:scale-[1.02] dark:bg-white dark:text-black"
             >
               <span>Launch portfolio</span>
@@ -151,10 +150,6 @@ export default function LandingPage() {
           </aside>
         </div>
       </section>
-
-      {showCreateForm && (
-        <PortfolioCreationForm onClose={() => setShowCreateForm(false)} />
-      )}
     </main>
   );
 }

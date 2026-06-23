@@ -1,7 +1,7 @@
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
 
-type Portfolio = {
+export type Portfolio = {
   id: string;
   name: string;
   icon: string;

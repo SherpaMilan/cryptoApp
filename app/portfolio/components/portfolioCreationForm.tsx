@@ -3,36 +3,54 @@
 import { useState } from "react";
 import { XIcon } from "@phosphor-icons/react";
 
-import { usePortfolioStore } from "../store/usePortfolioStore";
+import { Portfolio, usePortfolioStore } from "../store/usePortfolioStore";
 import { portfolioIcons } from "../constants/portfolioIcons";
 import PortfolioIconPicker from "./portfolioIconPicker";
 
 type Props = {
+  mode: "create" | "edit";
+  portfolio: Portfolio | null;
   onClose: () => void;
 };
 
-export default function PortfolioCreationForm({ onClose }: Props) {
-  const addPortfolio = usePortfolioStore((state) => state.createPortfolio);
-  const [portfolioName, setPortfolioName] = useState("");
-  const [avatar, setAvatar] = useState(portfolioIcons[0]);
+export default function PortfolioCreationForm({
+  mode,
+  portfolio,
+  onClose,
+}: Props) {
+  const createPortfolio = usePortfolioStore((state) => state.createPortfolio);
+
+  const [portfolioName, setPortfolioName] = useState(
+    mode === "edit" && portfolio ? portfolio.name : "",
+  );
+
+  const [avatar, setAvatar] = useState(
+    mode === "edit" && portfolio ? portfolio.icon : portfolioIcons[0],
+  );
+
   const [outsideClick, setOutsideClick] = useState(false);
+
   const PORTFOLIO_NAME_REGEX = /^[a-zA-Z0-9 _-]*$/;
   const MAX_CHARACTERS = 24;
-  const canCreatePortfolio =
+
+  const canSavePortfolio =
     portfolioName.trim().length > 0 &&
     PORTFOLIO_NAME_REGEX.test(portfolioName.trim());
 
   function savePortfolio() {
-    if (!canCreatePortfolio) return;
-    const newPortfolio = {
-      id: crypto.randomUUID(),
+    if (!canSavePortfolio) return;
+
+    createPortfolio({
+      id: mode === "edit" && portfolio ? portfolio.id : crypto.randomUUID(),
       name: portfolioName.trim(),
       icon: avatar,
-    };
+    });
 
-    addPortfolio(newPortfolio);
     onClose();
   }
+
+  const title = mode === "edit" ? "Edit Portfolio" : "New Portfolio";
+  const buttonLabel = mode === "edit" ? "Save Changes" : "Create Portfolio";
 
   return (
     <div
@@ -52,12 +70,12 @@ export default function PortfolioCreationForm({ onClose }: Props) {
       >
         <div className="flex items-center justify-between">
           <h1 className="text-xl font-semibold tracking-tight text-foreground">
-            New Portfolio
+            {title}
           </h1>
 
           <button
             onClick={onClose}
-            className="rounded-lg p-1 text-muted-foreground transition hover:bg-muted hover:text-foreground"
+            className="cursor-pointer rounded-lg p-1 text-muted-foreground transition hover:bg-muted hover:text-foreground"
           >
             <XIcon size={22} />
           </button>
@@ -72,6 +90,7 @@ export default function PortfolioCreationForm({ onClose }: Props) {
             <div className="flex size-[72px] items-center justify-center rounded-full bg-[var(--brand-purple)] text-4xl shadow-sm">
               {avatar}
             </div>
+
             <PortfolioIconPicker avatar={avatar} onAvatarChange={setAvatar} />
           </div>
         </div>
@@ -101,11 +120,11 @@ export default function PortfolioCreationForm({ onClose }: Props) {
 
         <div className="mt-7 flex justify-center">
           <button
-            disabled={!canCreatePortfolio}
+            disabled={!canSavePortfolio}
             onClick={savePortfolio}
-            className="w-full cursor-pointer rounded-xl bg-blue-600 py-3 text-sm font-semibold text-white transition hover:bg-blue-700 hover:-translate-y-[1px] disabled:cursor-not-allowed disabled:opacity-30"
+            className="w-full cursor-pointer rounded-xl bg-blue-600 py-3 text-sm font-semibold text-white transition hover:-translate-y-[1px] hover:bg-blue-700 disabled:cursor-not-allowed disabled:opacity-30"
           >
-            Create Portfolio
+            {buttonLabel}
           </button>
         </div>
       </div>
