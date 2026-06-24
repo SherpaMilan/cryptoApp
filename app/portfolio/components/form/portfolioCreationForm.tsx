@@ -3,9 +3,12 @@
 import { useState } from "react";
 import { XIcon } from "@phosphor-icons/react";
 
-import { Portfolio, usePortfolioStore } from "../store/usePortfolioStore";
-import { portfolioIcons } from "../constants/portfolioIcons";
+import { portfolioIcons } from "../../constants/portfolioIcons";
 import PortfolioIconPicker from "./portfolioIconPicker";
+import {
+  Portfolio,
+  usePortfolioStore,
+} from "@/portfolio/store/usePortfolioStore";
 
 type Props = {
   mode: "create" | "edit";

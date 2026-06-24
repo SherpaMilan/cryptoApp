@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { portfolioIcons } from "../constants/portfolioIcons";
+import { portfolioIcons } from "../../constants/portfolioIcons";
 
 type Props = {
   avatar: string;

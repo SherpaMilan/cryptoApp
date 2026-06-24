@@ -1,6 +1,7 @@
 "use client";
 
 import { PlusIcon } from "@phosphor-icons/react";
+
 import ActionMenu from "./actionMenu";
 
 type Props = {
@@ -20,7 +21,7 @@ export default function PortfolioSidebar({
   onEditPortfolio,
 }: Props) {
   return (
-    <aside className="rounded-[28px] border border-black/10 bg-white/35 p-4 shadow-[0_20px_80px_rgba(15,23,42,0.08)] backdrop-blur-2xl dark:border-white/10 dark:bg-white/[0.04]">
+    <aside className="sticky top-6 min-h-[620px] rounded-[28px] border border-black/10 bg-white/35 p-4 shadow-[0_20px_80px_rgba(15,23,42,0.08)] backdrop-blur-2xl dark:border-white/10 dark:bg-white/[0.04]">
       <div className="mb-4 flex items-center justify-between">
         <h2 className="text-sm font-semibold uppercase text-slate-600 dark:text-white/50">
           Portfolios
