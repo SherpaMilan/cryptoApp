@@ -1,4 +1,5 @@
-import { MinusIcon, PlusIcon } from "@phosphor-icons/react";
+import { MinusIcon } from "@phosphor-icons/react";
+import AddButton from "../buttons/addButton";
 
 export default function PortfolioHeader() {
   return (
@@ -30,14 +31,38 @@ export default function PortfolioHeader() {
           </div>
         </div>
 
-        <div className="flex items-center gap-2">
-          <button className="inline-flex h-8 items-center gap-1.5 rounded-lg bg-foreground px-3 text-xs font-semibold text-background transition hover:opacity-90">
-            <PlusIcon size={14} weight="bold" />
-            Add
-          </button>
+        <div className="flex items-center gap-3">
+          <AddButton>Add Coin</AddButton>
 
-          <button className="inline-flex h-8 items-center gap-1.5 rounded-lg border border-black/10 bg-white/60 px-3 text-xs font-semibold text-foreground transition hover:bg-white dark:border-white/10 dark:bg-white/[0.06] dark:hover:bg-white/[0.1]">
-            <MinusIcon size={14} weight="bold" />
+          <button
+            className="
+      inline-flex
+      h-10
+      w-[120px]
+      items-center
+      justify-center
+      gap-2
+      rounded-xl
+      border
+      border-white/40
+      bg-white/55
+      backdrop-blur-xl
+      text-sm
+      font-semibold
+      text-foreground
+      shadow-[0_8px_24px_rgba(15,23,42,0.08)]
+      transition-all
+      duration-200
+      hover:-translate-y-0.5
+      hover:bg-white/75
+      hover:shadow-[0_12px_30px_rgba(15,23,42,0.12)]
+      active:translate-y-0
+      dark:border-white/10
+      dark:bg-white/[0.08]
+      dark:hover:bg-white/[0.12]
+    "
+          >
+            <MinusIcon size={16} weight="bold" />
             Remove
           </button>
         </div>

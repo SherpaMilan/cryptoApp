@@ -38,7 +38,7 @@ export default function PortfolioSidebar({
 
       <div className="flex items-center justify-between rounded-2xl border border-black/10 bg-white/65 px-3 py-3 dark:border-white/10 dark:bg-white/[0.06]">
         <div className="flex min-w-0 flex-1 items-center gap-3">
-          <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-black/10 bg-white text-lg dark:border-white/10 dark:bg-white/[0.08]">
+          <div className="flex h-6 w-10 shrink-0 items-center justify-center rounded-xl border border-black/10 bg-white text-lg dark:border-white/10 dark:bg-white/[0.08]">
             {portfolio.icon}
           </div>
 
