@@ -1,21 +1,19 @@
 "use client";
 
 import { PlusIcon } from "@phosphor-icons/react";
-
 import ActionMenu from "./actionMenu";
+import { Portfolio } from "@/portfolio/store/usePortfolioStore";
 
 type Props = {
-  portfolio: {
-    name: string;
-    icon: string;
-  };
-  onDelete: () => void;
+  portfolios: Portfolio[];
+  currentPortfolio: Portfolio;
+  onDelete: (portfolioId: string) => void;
   onOpenPortfolioForm: () => void;
-  onEditPortfolio: () => void;
+  onEditPortfolio: (portfolio: Portfolio) => void;
 };
 
 export default function PortfolioSidebar({
-  portfolio,
+  portfolios,
   onDelete,
   onOpenPortfolioForm,
   onEditPortfolio,
@@ -36,27 +34,34 @@ export default function PortfolioSidebar({
         </button>
       </div>
 
-      <div className="flex items-center justify-between rounded-2xl border border-black/10 bg-white/65 px-3 py-3 dark:border-white/10 dark:bg-white/[0.06]">
-        <div className="flex min-w-0 flex-1 items-center gap-3">
-          <div className="flex h-6 w-10 shrink-0 items-center justify-center rounded-xl border border-black/10 bg-white text-lg dark:border-white/10 dark:bg-white/[0.08]">
-            {portfolio.icon}
-          </div>
-
-          <p
-            title={portfolio.name}
-            className="truncate text-sm font-semibold text-slate-950 dark:text-white"
+      <ul className="mt-4 max-h-[500px] space-y-2 overflow-y-auto">
+        {portfolios.map((portfolio) => (
+          <li
+            key={portfolio.id}
+            className="flex items-center justify-between rounded-2xl border border-black/10 bg-white/65 px-3 py-3 dark:border-white/10 dark:bg-white/[0.06]"
           >
-            {portfolio.name}
-          </p>
-        </div>
+            <div className="flex min-w-0 flex-1 items-center gap-3">
+              <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full border border-black/10 bg-white shadow-sm text-lg dark:border-white/10 dark:bg-white/[0.08]">
+                {portfolio.icon}
+              </div>
 
-        <ActionMenu
-          editLabel="Edit"
-          deleteLabel="Delete"
-          onEdit={onEditPortfolio}
-          onDelete={onDelete}
-        />
-      </div>
+              <p
+                title={portfolio.name}
+                className="truncate text-sm font-semibold text-slate-950 dark:text-white"
+              >
+                {portfolio.name}
+              </p>
+            </div>
+
+            <ActionMenu
+              editLabel="Edit"
+              deleteLabel="Delete"
+              onEdit={() => onEditPortfolio(portfolio)}
+              onDelete={() => onDelete(portfolio.id)}
+            />
+          </li>
+        ))}
+      </ul>
     </aside>
   );
 }

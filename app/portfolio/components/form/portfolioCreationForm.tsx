@@ -22,6 +22,7 @@ export default function PortfolioCreationForm({
   onClose,
 }: Props) {
   const createPortfolio = usePortfolioStore((state) => state.createPortfolio);
+  const editPortfolio = usePortfolioStore((state) => state.editPortfolio);
 
   const [portfolioName, setPortfolioName] = useState(
     mode === "edit" && portfolio ? portfolio.name : "",
@@ -43,11 +44,17 @@ export default function PortfolioCreationForm({
   function savePortfolio() {
     if (!canSavePortfolio) return;
 
-    createPortfolio({
+    const savedPortfolio = {
       id: mode === "edit" && portfolio ? portfolio.id : crypto.randomUUID(),
       name: portfolioName.trim(),
       icon: avatar,
-    });
+    };
+
+    if (mode === "edit") {
+      editPortfolio(savedPortfolio);
+    } else {
+      createPortfolio(savedPortfolio);
+    }
 
     onClose();
   }

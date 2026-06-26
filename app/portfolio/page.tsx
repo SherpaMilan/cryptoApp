@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 
-import { usePortfolioStore } from "./store/usePortfolioStore";
+import { Portfolio, usePortfolioStore } from "./store/usePortfolioStore";
 
 import LandingPage from "./components/landingPage/portfolioLandingPage";
 import PortfolioCreationForm from "./components/form/portfolioCreationForm";
@@ -15,7 +15,11 @@ export default function PortfolioPage() {
   const [portfolioFormMode, setPortfolioFormMode] = useState<
     "create" | "edit" | null
   >(null);
+  const [editingPortfolio, setEditingPortfolio] = useState<Portfolio | null>(
+    null,
+  );
 
+  const portfolios = usePortfolioStore((state) => state.portfolios);
   const currentPortfolio = usePortfolioStore((state) => state.currentPortfolio);
   const removePortfolio = usePortfolioStore((state) => state.removePortfolio);
 
@@ -25,12 +29,14 @@ export default function PortfolioPage() {
         <LandingPage
           onOpenPortfolioForm={() => setPortfolioFormMode("create")}
         />
-
         {portfolioFormMode && (
           <PortfolioCreationForm
             mode={portfolioFormMode}
-            portfolio={null}
-            onClose={() => setPortfolioFormMode(null)}
+            portfolio={portfolioFormMode === "edit" ? editingPortfolio : null}
+            onClose={() => {
+              setPortfolioFormMode(null);
+              setEditingPortfolio(null);
+            }}
           />
         )}
       </>
@@ -41,10 +47,17 @@ export default function PortfolioPage() {
     <div className="min-h-screen bg-background text-foreground">
       <div className="mx-auto grid min-h-screen max-w-[1440px] grid-cols-[260px_1fr] items-start gap-4 px-[72px] py-6">
         <PortfolioSidebar
-          portfolio={currentPortfolio}
+          portfolios={portfolios}
+          currentPortfolio={currentPortfolio}
           onDelete={removePortfolio}
-          onOpenPortfolioForm={() => setPortfolioFormMode("create")}
-          onEditPortfolio={() => setPortfolioFormMode("edit")}
+          onOpenPortfolioForm={() => {
+            setEditingPortfolio(null);
+            setPortfolioFormMode("create");
+          }}
+          onEditPortfolio={(portfolio) => {
+            setEditingPortfolio(portfolio);
+            setPortfolioFormMode("edit");
+          }}
         />
 
         <main className="flex min-h-[calc(100vh-48px)] min-w-0 flex-col gap-4">
@@ -55,8 +68,11 @@ export default function PortfolioPage() {
         {portfolioFormMode && (
           <PortfolioCreationForm
             mode={portfolioFormMode}
-            portfolio={currentPortfolio}
-            onClose={() => setPortfolioFormMode(null)}
+            portfolio={portfolioFormMode === "edit" ? editingPortfolio : null}
+            onClose={() => {
+              setPortfolioFormMode(null);
+              setEditingPortfolio(null);
+            }}
           />
         )}
       </div>

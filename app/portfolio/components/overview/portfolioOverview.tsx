@@ -17,7 +17,7 @@ export default function PortfolioOverview() {
         />
 
         <p className="text-xl font-semibold tracking-tight text-foreground">
-          Ready when you are
+          Ready when you are..
         </p>
 
         <p className="mt-3 max-w-md text-sm leading-6 text-muted-foreground">
