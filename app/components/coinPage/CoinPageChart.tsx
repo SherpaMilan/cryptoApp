@@ -12,7 +12,7 @@ import {
 } from "recharts";
 
 import { useCoinChartQuery } from "@/hooks/useCoinChartQuery";
-import { useCurrency } from "@/context/currencyContext";
+import { useCurrency } from "@/store/useCurrencyStore";
 import { useStableCurrencyKey } from "@/hooks/useStableCurrencyKey";
 import { TimeRangeKey, TIME_RANGES } from "@/constants/timeRanges";
 import CoinPageChartSkeleton from "@/components/skeletons/CoinPageChartSkeleton";

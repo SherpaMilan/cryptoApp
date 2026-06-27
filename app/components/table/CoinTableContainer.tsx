@@ -3,7 +3,7 @@
 import InfiniteScroll from "react-infinite-scroll-component";
 import CoinTable from "@/components/table/CoinTable";
 import { useCoinsInfiniteQuery } from "@/hooks/useCoinsInfiniteQuery";
-import { useCurrency } from "@/context/currencyContext";
+import { useCurrency } from "@/store/useCurrencyStore";
 
 const MAX_PAGES = 5;
 
