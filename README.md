@@ -29,12 +29,11 @@ A real-time crypto intelligence platform built with discipline, patience, and ob
 ## 📸 Preview
 
 <p align="center">
-  <img width="96%" style="border-radius:14px;"
-  src="https://github.com/user-attachments/assets/e819f01e-fdb1-4e88-b65b-91a125ab3012" />
-</p>
-
-<p align="center">
-  Desktop • Mobile • Tablet responsive experience
+  <img
+    width="96%"
+    src="public/images/cryptium-responsive.png"
+    alt="Cryptium Responsive Experience"
+  />
 </p>
 
 ---
@@ -61,20 +60,6 @@ And so it kept going — line by line, commit by commit, until it became what it
 
 <br/>
 
-## 🧠 Rules I didn’t write down, but followed anyway
-
-> Discipline is doing it when you don’t feel like it.
-
-- No rushed components  
-- No messy API calls  
-- No shortcuts in architecture  
-- No “good enough” UI  
-- Only clarity, or nothing  
-
----
-
-<br/>
-
 ## ⚙️ System Architecture
 
 Built like a clean chain — nothing unnecessary.
@@ -93,3 +78,4 @@ UI System (Tailwind + shadcn/ui)
 shadcn charts (data visualization layer)
      ↓
 Final Experience (fast, minimal, intentional UI)
+```
