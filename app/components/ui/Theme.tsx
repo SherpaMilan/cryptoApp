@@ -1,5 +1,6 @@
 import { STATS_BAR_ICON_PROPS } from "@/constants/statsbarIcons";
-import { useTheme } from "@/context/themeContext";
+import { useTheme } from "@/store/useThemeStore";
+
 import { MoonIcon, SunIcon } from "@phosphor-icons/react";
 
 export default function Theme() {

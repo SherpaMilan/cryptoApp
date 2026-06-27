@@ -1,6 +1,6 @@
 "use client";
 
-import { useCurrency } from "@/context/currencyContext";
+import { useCurrency } from "@/store/useCurrencyStore";
 import MarketStatsBarItem from "@/components/ui/MarketStatsBarItem";
 import getColorbar from "@/utils/getColorbar";
 import { formatCurrencyCompact } from "@/utils/formatCurrency";

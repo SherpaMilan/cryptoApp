@@ -4,7 +4,7 @@ import React from "react";
 import { Area, AreaChart, XAxis } from "recharts";
 import { Coin } from "@/types/coin";
 
-import { useCurrency } from "@/context/currencyContext";
+import { useCurrency } from "@/store/useCurrencyStore";
 import { useStableCurrencyKey } from "@/hooks/useStableCurrencyKey";
 import { useCoinChartQuery } from "@/hooks/useCoinChartQuery";
 import { formatCurrencyCompact } from "@/utils/formatCurrency";

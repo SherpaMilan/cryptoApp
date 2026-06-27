@@ -3,7 +3,7 @@
 import { useState } from "react";
 
 import { useCoinDetailQuery } from "@/hooks/useCoinDetailQuery";
-import { useCurrency } from "@/context/currencyContext";
+import { useCurrency } from "@/store/useCurrencyStore";
 import { TIME_RANGES, TimeRangeKey } from "@/constants/timeRanges";
 
 import CoinPageSkeleton from "@/components/skeletons/CoinPageSkeleton";
