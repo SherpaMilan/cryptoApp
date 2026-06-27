@@ -7,7 +7,7 @@ import { MdArrowDropUp, MdOutlineArrowDropDown } from "react-icons/md";
 import { Coin } from "@/types/coin";
 import MetricBar from "@/components/table/MetricBar";
 import { formatCurrencyCompact } from "@/utils/formatCurrency";
-import { useCurrency } from "@/context/currencyContext";
+import { useCurrency } from "@/store/useCurrencyStore";
 import { SparklineChart } from "@/components/charts/SparklineChart";
 
 type Props = {

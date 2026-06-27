@@ -5,7 +5,6 @@ import { MdArrowDropUp, MdOutlineArrowDropDown } from "react-icons/md";
 import { useState } from "react";
 
 import { Coin } from "@/types/coin";
-import { useCurrency } from "@/context/currencyContext";
 
 import type { TimeRangeKey } from "@/constants/timeRanges";
 
@@ -15,6 +14,7 @@ import { useCoinsPreviewQuery } from "@/hooks/useCoinsPreviewQuery";
 import { PriceChart } from "@/components/charts/PriceChart";
 import { VolumeChart } from "@/components/charts/VolumeChart";
 import HomePageSkeleton from "@/components/skeletons/HomeSkeleton";
+import { useCurrency } from "@/store/useCurrencyStore";
 
 export default function HomePage() {
   const { defaultCurrency, isCurrencyLoaded } = useCurrency();

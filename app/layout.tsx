@@ -7,12 +7,11 @@ import Footer from "@/components/layouts/Footer";
 import { Space_Grotesk, Geist } from "next/font/google";
 import { cn } from "@/lib/utils";
 
-import CurrencyProvider from "./context/currencyContext";
-import ThemeProvider from "./context/themeContext";
 import Providers from "./provider/providers";
 
 import { Analytics } from "@vercel/analytics/next";
 import Navbar from "./components/layouts/Navbar";
+import ThemeSync from "./components/providers/themeSync";
 
 const geist = Geist({
   subsets: ["latin"],
@@ -47,16 +46,13 @@ export default function RootLayout({
         )}
       >
         <Providers>
-          <ThemeProvider>
-            <CurrencyProvider>
-              <div className="sticky top-0 z-50">
-                <MarketStatsBar />
-                <Navbar />
-              </div>
-              <main className="flex-1 w-full pt-[22px]">{children}</main>
-              <Footer />
-            </CurrencyProvider>
-          </ThemeProvider>
+          <ThemeSync />
+          <div className="sticky top-0 z-50">
+            <MarketStatsBar />
+            <Navbar />
+          </div>
+          <main className="flex-1 w-full pt-[22px]">{children}</main>
+          <Footer />
         </Providers>
 
         <Analytics />

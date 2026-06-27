@@ -10,7 +10,7 @@ import ChartPanel from "./components/chartPanel";
 import CoinModal from "./components/coinModal";
 import SwapIcon from "./components/swapIcon";
 import { useCoinsPreviewQuery } from "@/hooks/useCoinsPreviewQuery";
-import { useCurrency } from "@/context/currencyContext";
+import { useCurrency } from "@/store/useCurrencyStore";
 
 export default function Converter() {
   const [timeRange, setTimeRange] = useState<TimeRangeKey>("1Y");

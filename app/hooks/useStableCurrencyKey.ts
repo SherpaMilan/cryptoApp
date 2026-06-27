@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useCurrency } from "@/context/currencyContext";
+import { useCurrency } from "@/store/useCurrencyStore";
 
 export function useStableCurrencyKey(delay = 300) {
   const { currencyKey } = useCurrency();

@@ -1,6 +1,6 @@
 "use client";
 
-import { useCurrency } from "@/context/currencyContext";
+import { useCurrency } from "@/store/useCurrencyStore";
 import { useEffect, useRef, useState } from "react";
 import {
   HiMiniCurrencyDollar,
