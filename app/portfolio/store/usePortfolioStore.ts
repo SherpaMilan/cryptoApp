@@ -10,6 +10,9 @@ export type Portfolio = {
 interface PortfolioStore {
   portfolios: Portfolio[];
   currentPortfolio: Portfolio | null;
+  hasHydrated: boolean;
+  setHasHydrated: (value: boolean) => void;
+
   createPortfolio: (portfolio: Portfolio) => void;
   editPortfolio: (portfolio: Portfolio) => void;
   removePortfolio: (portfolioId: string) => void;
@@ -20,6 +23,9 @@ export const usePortfolioStore = create<PortfolioStore>()(
     (set) => ({
       portfolios: [],
       currentPortfolio: null,
+      hasHydrated: false, // At this moment it has not read localStorage yet.
+
+      setHasHydrated: (value) => set({ hasHydrated: value }),
 
       createPortfolio: (portfolio) =>
         set((state) => ({
@@ -55,6 +61,9 @@ export const usePortfolioStore = create<PortfolioStore>()(
     }),
     {
       name: "portfolio-storage",
+      onRehydrateStorage: () => (state) => {
+        state?.setHasHydrated(true);
+      },
     },
   ),
 );

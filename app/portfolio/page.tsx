@@ -19,9 +19,14 @@ export default function PortfolioPage() {
     null,
   );
 
+  const hasHydrated = usePortfolioStore((state) => state.hasHydrated);
   const portfolios = usePortfolioStore((state) => state.portfolios);
   const currentPortfolio = usePortfolioStore((state) => state.currentPortfolio);
   const removePortfolio = usePortfolioStore((state) => state.removePortfolio);
+
+  if (!hasHydrated) {
+    return null;
+  }
 
   if (!currentPortfolio) {
     return (
