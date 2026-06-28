@@ -192,3 +192,12 @@ p {
 @utility shadow-form-warning {
   box-shadow: var(--warning-shadow);
 }
+
+.hide-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.hide-scrollbar::-webkit-scrollbar {
+  display: none;
+}

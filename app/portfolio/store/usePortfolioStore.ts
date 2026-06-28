@@ -16,6 +16,7 @@ interface PortfolioStore {
   createPortfolio: (portfolio: Portfolio) => void;
   editPortfolio: (portfolio: Portfolio) => void;
   removePortfolio: (portfolioId: string) => void;
+  setCurrentPortfolio: (portfolio: Portfolio) => void;
 }
 
 export const usePortfolioStore = create<PortfolioStore>()(
@@ -32,6 +33,11 @@ export const usePortfolioStore = create<PortfolioStore>()(
           portfolios: [...state.portfolios, portfolio],
           currentPortfolio: portfolio,
         })),
+
+      setCurrentPortfolio: (portfolio) =>
+        set({
+          currentPortfolio: portfolio,
+        }),
 
       editPortfolio: (editedPortfolio) =>
         set((state) => ({

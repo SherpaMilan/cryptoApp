@@ -35,6 +35,7 @@ export default function AddButton({
         hover:-translate-y-0.5
         hover:opacity-90
         active:translate-y-0
+        cursor-pointer
         ${className}
       `}
     >
