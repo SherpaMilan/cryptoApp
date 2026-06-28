@@ -9,6 +9,16 @@ body {
   height: 100%;
   margin: 0;
 }
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p {
+  margin: 0;
+  padding: 0;
+}
 
 /* =========================
    BRAND COLORS (RAW TOKENS)
@@ -29,7 +39,6 @@ body {
   --brand-dark-purple: #353570;
   --brand-medium-gray: #e7e1e1;
   --brand-purple-text: #424286;
-  --brand-green: #0c8c30;
 
   --background: var(--brand-gray);
   --foreground: var(--brand-black);
@@ -61,6 +70,9 @@ body {
 
   --metric-label: #374151;
   --metric-max-label: #111827;
+
+  --form-shadow: 0 25px 60px rgba(0, 0, 0, 0.18);
+  --warning-shadow: 0 0 40px rgba(239, 68, 68, 0.55);
 }
 
 .dark {
@@ -99,6 +111,9 @@ body {
 
   --metric-label: rgba(255, 255, 255, 0.85);
   --metric-max-label: rgba(255, 255, 255, 0.95);
+
+  --form-shadow: 0 25px 60px rgba(0, 0, 0, 0.5);
+  --warning-shadow: 0 0 40px rgba(239, 68, 68, 0.7);
 }
 
 @theme inline {
@@ -168,4 +183,21 @@ body {
 
 .dark ::-webkit-scrollbar-thumb:hover {
   background-color: rgba(255, 255, 255, 1);
+}
+
+@utility shadow-form {
+  box-shadow: var(--form-shadow);
+}
+
+@utility shadow-form-warning {
+  box-shadow: var(--warning-shadow);
+}
+
+.hide-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.hide-scrollbar::-webkit-scrollbar {
+  display: none;
 }
