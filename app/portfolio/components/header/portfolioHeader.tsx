@@ -1,5 +1,5 @@
 import { MinusIcon } from "@phosphor-icons/react";
-import AddButton from "../buttons/addButton";
+import AddButton from "../buttons/actionButton";
 
 export default function PortfolioHeader() {
   return (
