@@ -2,9 +2,9 @@
 
 import Image from "next/image";
 import { MinusIcon, PlusIcon } from "@phosphor-icons/react";
+import { useState } from "react";
 
 import ActionButton from "../buttons/actionButton";
-import { useState } from "react";
 import AddCoinModal from "../modals/addCoinModal";
 
 type Props = {
@@ -15,7 +15,7 @@ export default function PortfolioOverview({ portfolioName }: Props) {
   const [showAddCoinModal, setShowAddCoinModal] = useState(false);
 
   return (
-    <section className="flex min-h-[70vh] flex-col ">
+    <section className="flex flex-col">
       <div className="flex items-start justify-between">
         <div>
           <p className="text-xs font-medium uppercase tracking-[0.22em] text-muted-foreground">
@@ -44,22 +44,10 @@ export default function PortfolioOverview({ portfolioName }: Props) {
         </div>
       </div>
 
-      <div className="flex flex-1 items-center justify-center">
+      <div className="flex justify-center pt-16">
         <div className="relative flex max-w-[650px] flex-col items-center text-center">
           <div className="relative mb-8">
             <div className="absolute left-1/2 top-1/2 h-[260px] w-[260px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-[var(--brand-purple)]/10 blur-3xl" />
-
-            <div className="absolute -left-10 top-14 rounded-2xl border border-black/10 bg-white/70 px-3 py-2 text-sm font-semibold shadow-lg backdrop-blur-xl dark:border-white/10 dark:bg-white/[0.06]">
-              ₿ BTC
-            </div>
-
-            <div className="absolute -right-10 top-20 rounded-2xl border border-black/10 bg-white/70 px-3 py-2 text-sm font-semibold shadow-lg backdrop-blur-xl dark:border-white/10 dark:bg-white/[0.06]">
-              Ξ ETH
-            </div>
-
-            <div className="absolute bottom-12 -right-4 rounded-2xl border border-black/10 bg-white/70 px-3 py-2 text-sm font-semibold shadow-lg backdrop-blur-xl dark:border-white/10 dark:bg-white/[0.06]">
-              ◎ SOL
-            </div>
 
             <Image
               src="/images/portfolio-empty.png"
@@ -78,18 +66,13 @@ export default function PortfolioOverview({ portfolioName }: Props) {
           <ActionButton
             onClick={() => setShowAddCoinModal(true)}
             icon={<PlusIcon size={18} weight="bold" />}
-            className="
-              mt-8
-              bg-[var(--brand-purple)]
-              px-6
-              text-black
-              shadow-[0_15px_40px_rgba(124,58,237,0.35)]
-            "
+            className="mt-8 bg-[var(--blue-energy)] px-6 text-white"
           >
             Add First Coin
           </ActionButton>
         </div>
       </div>
+
       {showAddCoinModal && (
         <AddCoinModal onClose={() => setShowAddCoinModal(false)} />
       )}

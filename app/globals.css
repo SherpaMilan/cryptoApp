@@ -73,6 +73,31 @@ p {
 
   --form-shadow: 0 25px 60px rgba(0, 0, 0, 0.18);
   --warning-shadow: 0 0 40px rgba(239, 68, 68, 0.55);
+  --blue-energy: #4895ef;
+}
+.bright-amber {
+  background-color: #ffd000;
+}
+.antique-white {
+  background-color: #ffedd8;
+}
+
+.soft-cyan {
+  background-color: #a9fff7;
+}
+
+.papaya-whip {
+  background-color: #fdf0d5;
+}
+
+.pink-mist {
+  background-color: #f49cbb;
+}
+.cherry-blossom {
+  background-color: #fbb1bd;
+}
+.mint-leaf {
+  background-color: #74c69d;
 }
 
 .dark {

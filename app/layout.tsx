@@ -52,7 +52,7 @@ export default function RootLayout({
             <MarketStatsBar />
             <Navbar />
           </div>
-          <main className="flex-1 w-full pt-[22px]">{children}</main>
+          <main className="w-full pt-[22px]">{children}</main>
           <Footer />
         </Providers>
 

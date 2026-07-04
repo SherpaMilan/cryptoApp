@@ -7,6 +7,7 @@ type Props = {
   children: ReactNode;
   className?: string;
   icon?: ReactNode;
+  disabled?: boolean;
 };
 
 export default function ActionButton({
@@ -14,11 +15,35 @@ export default function ActionButton({
   children,
   className = "",
   icon,
+  disabled,
 }: Props) {
   return (
     <button
       onClick={onClick}
-      className={`inline-flex h-10 items-center justify-center gap-2 whitespace-nowrap rounded-xl bg-[var(--brand-gray)] px-4 text-sm font-semibold text-foreground shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:opacity-90 active:translate-y-0 cursor-pointer dark:bg-white/[0.08] dark:text-white ${className}`}
+      disabled={disabled}
+      className={`
+        inline-flex
+        h-10
+        items-center
+        justify-center
+        gap-2
+        whitespace-nowrap
+        rounded-xl
+        px-4
+        text-sm
+        font-semibold
+        text-foreground
+        shadow-sm
+        transition-all
+        duration-200
+        hover:-translate-y-0.5
+        hover:opacity-90
+        active:translate-y-0
+        cursor-pointer
+        dark:bg-white/[0.08]
+        dark:text-white
+        ${className}
+      `}
     >
       {icon && <span className="flex items-center">{icon}</span>}
       <span>{children}</span>

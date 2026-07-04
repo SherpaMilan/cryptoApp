@@ -16,4 +16,6 @@ export interface Coin {
   total_volume: number;
   last_updated: string;
   price_change_percentage_24h: number | null;
+  rank?: number;
+  description?: string;
 }
