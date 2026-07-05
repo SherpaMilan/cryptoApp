@@ -65,7 +65,10 @@ export default function PortfolioPage() {
           onDeletePortfolio={removePortfolio}
         />
 
-        <PortfolioOverview portfolioName={currentPortfolio.name} />
+        <PortfolioOverview
+          portfolioName={currentPortfolio.name}
+          coins={currentPortfolio.coins ?? []}
+        />
 
         {portfolioFormMode && (
           <PortfolioCreationForm

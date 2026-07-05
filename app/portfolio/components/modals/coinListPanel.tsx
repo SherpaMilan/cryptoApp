@@ -50,8 +50,7 @@ export default function CoinListPanel({
 
                 <div className="flex min-w-0 items-center gap-2">
                   <p className="truncate text-sm font-semibold">{coin.name}</p>
-
-                  <span className="shrink-0 text-xs font-semibold uppercase text-muted-foreground">
+                  <span className="shrink-0 rounded-full border border-black/5 bg-gradient-to-b from-white to-slate-50 px-3 py-1 text-[11px] font-bold uppercase tracking-[0.14em] text-slate-600 shadow-[0_2px_10px_rgba(15,23,42,0.06)]">
                     {coin.symbol}
                   </span>
                 </div>

@@ -6,52 +6,86 @@ import { MagnifyingGlassIcon, XIcon } from "@phosphor-icons/react";
 import CoinListPanel from "./coinListPanel";
 import CoinPreviewPanel from "./coinPreviewPanel";
 import CoinModalFooter from "./coinModalFooter";
+import CoinFilterTabs from "./coinFilterTabs";
 import PortfolioCoinModalSkeleton from "@/portfolio/skeletons/portfolioCoinModalSkeleton";
 
 import { useCurrency } from "@/store/useCurrencyStore";
 import { useCoinsPreviewQuery } from "@/hooks/useCoinsPreviewQuery";
 import { useCoinDetailQuery } from "@/hooks/useCoinDetailQuery";
-import CoinFilterTabs from "./coinFilterTabs";
+import { usePortfolioStore } from "@/portfolio/store/usePortfolioStore";
 
 type Props = {
   onClose: () => void;
 };
+type CoinFilter = "top" | "gainers" | "losers";
 
 export default function AddCoinModal({ onClose }: Props) {
   const [search, setSearch] = useState("");
-  const [previewCoinId, setPreviewCoinId] = useState<string | null>(null);
+  const [previewedCoinId, setPreviewedCoinId] = useState<string | null>(null);
   const [selectedCoinIds, setSelectedCoinIds] = useState<string[]>([]);
-
-  const { defaultCurrency, isCurrencyLoaded } = useCurrency();
+  const [activeFilter, setActiveFilter] = useState<CoinFilter>("top");
+  const { defaultCurrency, currencyKey, currencySymbol, isCurrencyLoaded } =
+    useCurrency();
 
   const {
-    data: previewCoins = [],
+    data: coins = [],
     isLoading,
     isError,
   } = useCoinsPreviewQuery(defaultCurrency, isCurrencyLoaded);
 
-  const visibleCoins = previewCoins.filter((coin) => {
-    const searchValue = search.toLowerCase().trim();
+  const displayedCoins = coins
+    .filter((coin) => {
+      const searchValue = search.toLowerCase().trim();
 
-    return (
-      coin.name.toLowerCase().includes(searchValue) ||
-      coin.symbol.toLowerCase().includes(searchValue)
+      return (
+        coin.name.toLowerCase().includes(searchValue) ||
+        coin.symbol.toLowerCase().includes(searchValue)
+      );
+    })
+    .sort((a, b) => {
+      if (activeFilter === "gainers") {
+        return (
+          (b.price_change_percentage_24h_in_currency ?? -Infinity) -
+          (a.price_change_percentage_24h_in_currency ?? -Infinity)
+        );
+      }
+
+      if (activeFilter === "losers") {
+        return (
+          (a.price_change_percentage_24h_in_currency ?? Infinity) -
+          (b.price_change_percentage_24h_in_currency ?? Infinity)
+        );
+      }
+
+      return 0;
+    });
+  const noMatchingCoins =
+    search.trim().length > 0 && displayedCoins.length === 0;
+
+  const coinBeingPreviewed =
+    displayedCoins.find((coin) => coin.id === previewedCoinId) ??
+    displayedCoins[0];
+
+  const { data: coinDetail } = useCoinDetailQuery(coinBeingPreviewed?.id ?? "");
+
+  function handleCoinSelection(coinId: string) {
+    setSelectedCoinIds((selectedCoins) =>
+      selectedCoins.includes(coinId)
+        ? selectedCoins.filter((id) => id !== coinId)
+        : [...selectedCoins, coinId],
     );
-  });
+  }
+  const addCoinsToPortfolio = usePortfolioStore(
+    (state) => state.addCoinsToCurrentPortfolio,
+  );
 
-  const activeCoinId = previewCoinId ?? visibleCoins[0]?.id ?? null;
-
-  const activeCoin =
-    visibleCoins.find((coin) => coin.id === activeCoinId) ?? visibleCoins[0];
-
-  const { data: coinDetail } = useCoinDetailQuery(activeCoinId ?? "");
-
-  function toggleCoin(coinId: string) {
-    setSelectedCoinIds((current) =>
-      current.includes(coinId)
-        ? current.filter((id) => id !== coinId)
-        : [...current, coinId],
+  function handleAddCoins() {
+    const coinsToAdd = coins.filter((coin) =>
+      selectedCoinIds.includes(coin.id),
     );
+
+    addCoinsToPortfolio(coinsToAdd);
+    onClose();
   }
 
   return (
@@ -74,50 +108,68 @@ export default function AddCoinModal({ onClose }: Props) {
           <div className="relative overflow-hidden rounded-[22px] bg-[var(--brand-purple)]/[0.04]">
             <MagnifyingGlassIcon
               size={18}
-              className="absolute left-5 top-1/2 -translate-y-1/2 text-[var(--brand-purple)]"
+              className="absolute top-1/2 left-5 -translate-y-1/2 text-[var(--brand-purple)]"
             />
 
             <input
               value={search}
               onChange={(event) => setSearch(event.target.value)}
               placeholder="Search by name or symbol..."
-              className="h-14 w-full bg-transparent pl-14 pr-4 text-sm font-medium outline-none"
+              className="h-14 w-full bg-transparent pr-4 pl-14 text-sm font-medium outline-none"
             />
           </div>
 
-          <CoinFilterTabs />
+          <CoinFilterTabs
+            coinCount={coins.length}
+            activeFilter={activeFilter}
+            onChangeFilter={setActiveFilter}
+          />
         </div>
 
-        <div className="grid min-h-0 flex-1 grid-cols-1 overflow-hidden lg:grid-cols-[0.92fr_1.08fr]">
+        <div className="grid min-h-0 flex-1 grid-cols-1 overflow-hidden lg:grid-cols-[50%_50%]">
           {isLoading ? (
             <PortfolioCoinModalSkeleton />
           ) : isError ? (
             <div className="col-span-full flex items-center justify-center p-10 text-sm text-muted-foreground">
               Could not load coins. Please try again.
             </div>
+          ) : noMatchingCoins ? (
+            <div className="col-span-full flex flex-col items-center justify-center p-12 text-center">
+              <p className="text-base font-semibold text-foreground">
+                No coins found
+              </p>
+
+              <p className="mt-2 max-w-sm text-sm text-muted-foreground">
+                “{search}” is not available in the current coin list. Try
+                another name or symbol.
+              </p>
+            </div>
           ) : (
             <>
               <CoinListPanel
-                coins={visibleCoins}
-                previewCoinId={activeCoinId ?? ""}
+                coins={displayedCoins}
+                previewCoinId={coinBeingPreviewed?.id ?? ""}
                 selectedCoinIds={selectedCoinIds}
-                onPreviewCoin={(coin) => setPreviewCoinId(coin.id)}
-                onToggleCoin={toggleCoin}
+                onPreviewCoin={(coin) => setPreviewedCoinId(coin.id)}
+                onToggleCoin={handleCoinSelection}
               />
 
-              {activeCoin && (
+              {coinBeingPreviewed && (
                 <CoinPreviewPanel
-                  coin={{
-                    ...activeCoin,
-                    description: coinDetail?.description,
-                  }}
+                  coin={coinBeingPreviewed}
+                  description={coinDetail?.description.en}
+                  currencyKey={currencyKey}
+                  currencySymbol={currencySymbol}
                 />
               )}
             </>
           )}
         </div>
 
-        <CoinModalFooter selectedCount={selectedCoinIds.length} />
+        <CoinModalFooter
+          selectedCount={selectedCoinIds.length}
+          onAddCoins={handleAddCoins}
+        />
       </div>
     </div>
   );

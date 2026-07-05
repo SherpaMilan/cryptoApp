@@ -2,12 +2,11 @@
 
 import { PlusIcon } from "@phosphor-icons/react";
 
-import { cn } from "@/lib/utils";
 import { Portfolio } from "@/portfolio/store/usePortfolioStore";
 import ActionMenu from "../sidebar/actionMenu";
 
 const portfolioColors = [
-  "bright-amber ",
+  "bright-amber",
   "soft-cyan",
   "antique-white",
   "papaya-whip",
@@ -44,32 +43,27 @@ export default function PortfolioTabs({
             return (
               <div
                 key={portfolio.id}
-                className={cn(
-                  "flex h-[48px] shrink-0 items-center gap-2 rounded-full px-3 transition-all duration-200",
+                className={`flex h-[48px] shrink-0 items-center gap-2 rounded-full px-3 transition-all duration-200 ${
                   isActive
                     ? "bg-black/[0.04] text-foreground dark:bg-white/[0.06]"
-                    : "text-foreground/65 hover:bg-black/[0.03] hover:text-foreground dark:hover:bg-white/[0.04]",
-                )}
+                    : "text-foreground/65 hover:bg-black/[0.03] hover:text-foreground dark:hover:bg-white/[0.04]"
+                }`}
               >
                 <button
                   onClick={() => onSelectPortfolio(portfolio)}
                   className="flex min-w-0 cursor-pointer items-center gap-2"
                 >
                   <span
-                    className={cn(
-                      "flex h-8 w-8 shrink-0 items-center justify-center rounded-full text-lg",
-                      colorClass,
-                    )}
+                    className={`flex h-8 w-8 shrink-0 items-center justify-center rounded-full text-lg ${colorClass}`}
                   >
                     {portfolio.icon}
                   </span>
 
                   <span
                     title={portfolio.name}
-                    className={cn(
-                      "max-w-[140px] truncate text-[15px]",
-                      isActive ? "font-semibold" : "font-medium",
-                    )}
+                    className={`max-w-[140px] truncate text-[15px] ${
+                      isActive ? "font-semibold" : "font-medium"
+                    }`}
                   >
                     {portfolio.name}
                   </span>

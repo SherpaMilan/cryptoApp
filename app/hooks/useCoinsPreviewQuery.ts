@@ -11,7 +11,7 @@ export function useCoinsPreviewQuery(currency: string, enabled: boolean) {
       const { data } = await axios.get("/api/coins", {
         params: {
           currency,
-          perPage: 20,
+          perPage: 100,
           page: 1,
         },
       });

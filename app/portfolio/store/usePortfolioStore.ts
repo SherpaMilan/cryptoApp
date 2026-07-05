@@ -1,3 +1,4 @@
+import { Coin } from "@/types/coin";
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
 
@@ -5,6 +6,7 @@ export type Portfolio = {
   id: string;
   name: string;
   icon: string;
+  coins?: Coin[];
 };
 
 interface PortfolioStore {
@@ -17,6 +19,7 @@ interface PortfolioStore {
   editPortfolio: (portfolio: Portfolio) => void;
   removePortfolio: (portfolioId: string) => void;
   setCurrentPortfolio: (portfolio: Portfolio) => void;
+  addCoinsToCurrentPortfolio: (coins: Coin[]) => void;
 }
 
 export const usePortfolioStore = create<PortfolioStore>()(
@@ -62,6 +65,31 @@ export const usePortfolioStore = create<PortfolioStore>()(
               state.currentPortfolio?.id === portfolioId
                 ? (remainingPortfolios[0] ?? null)
                 : state.currentPortfolio,
+          };
+        }),
+      addCoinsToCurrentPortfolio: (coins) =>
+        set((state) => {
+          if (!state.currentPortfolio) return state;
+
+          const existingCoins = state.currentPortfolio.coins ?? [];
+
+          const newCoins = coins.filter(
+            (coin) =>
+              !existingCoins.some((existing) => existing.id === coin.id),
+          );
+
+          const updatedPortfolio = {
+            ...state.currentPortfolio,
+            coins: [...existingCoins, ...newCoins],
+          };
+
+          return {
+            currentPortfolio: updatedPortfolio,
+            portfolios: state.portfolios.map((portfolio) =>
+              portfolio.id === updatedPortfolio.id
+                ? updatedPortfolio
+                : portfolio,
+            ),
           };
         }),
     }),
