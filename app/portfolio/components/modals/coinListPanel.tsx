@@ -4,6 +4,7 @@ import Image from "next/image";
 
 import { Coin } from "@/types/coin";
 import { PlusIcon } from "@phosphor-icons/react";
+import { usePortfolioStore } from "@/portfolio/store/usePortfolioStore";
 
 type Props = {
   coins: Coin[];
@@ -20,10 +21,14 @@ export default function CoinListPanel({
   onPreviewCoin,
   onToggleCoin,
 }: Props) {
+  const currentPortfolio = usePortfolioStore((state) => state.currentPortfolio);
+  const existingCoinIds = currentPortfolio?.coins?.map((coin) => coin.id) ?? [];
+
   return (
     <div className="flex min-h-0 flex-col border-b border-black/10 p-7 dark:border-white/10 lg:border-b-0 lg:border-r">
       <div className="mt-2 min-h-0 flex-1 space-y-1.5 overflow-y-auto pr-2">
         {coins.map((coin) => {
+          const isAlreadyAdded = existingCoinIds.includes(coin.id);
           const isSelected = selectedCoinIds.includes(coin.id);
           const isPreviewed = previewCoinId === coin.id;
 
@@ -58,13 +63,14 @@ export default function CoinListPanel({
 
               <button
                 onClick={() => onToggleCoin(coin.id)}
-                className={`flex h-8 w-8 shrink-0 cursor-pointer items-center justify-center rounded-full transition-all duration-200 ${
-                  isSelected
+                disabled={isAlreadyAdded}
+                className={`flex h-8 w-8 shrink-0 items-center justify-center rounded-full transition-all duration-200 ${
+                  isSelected || isAlreadyAdded
                     ? "bg-[var(--brand-purple)]/10"
                     : "text-[var(--brand-purple)] hover:bg-[var(--brand-purple)]/10"
                 }`}
               >
-                {isSelected ? (
+                {isAlreadyAdded || isSelected ? (
                   <Image
                     src="/images/selectedCoin.png"
                     alt="Selected"

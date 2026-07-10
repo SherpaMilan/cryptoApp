@@ -1,7 +1,10 @@
 import { Coin } from "@/types/coin";
+
 import MetricRow from "./metricRow";
-import { formatCurrencyCompact } from "@/utils/formatCurrency";
+import CoinPreviewChart from "./coinPreviewChart";
+
 import ReadMore from "@/components/coinPage/ReadMore";
+import { formatCurrencyCompact } from "@/utils/formatCurrency";
 
 type Props = {
   coin: Coin;
@@ -16,7 +19,7 @@ export default function CoinPreviewPanel({
   currencySymbol,
   description,
 }: Props) {
-  const rank = coin?.market_cap_rank ?? null;
+  const rank = coin.market_cap_rank ?? null;
   const price = coin.current_price ?? 0;
   const marketCap = coin.market_cap ?? 0;
   const volume = coin.total_volume ?? 0;
@@ -36,28 +39,22 @@ export default function CoinPreviewPanel({
         : "text-[var(--brand-red)]";
 
   return (
-    <div className="min-h-0 p-5">
-      <div className="relative flex h-full min-h-0 flex-col overflow-hidden rounded-[28px] border border-black/5 bg-white/70 shadow-[0_20px_70px_rgba(15,23,42,0.08)] backdrop-blur-xl dark:border-white/10 dark:bg-white/[0.04]">
-        <div className="pointer-events-none absolute -top-16 -right-16 h-44 w-44 rounded-full bg-[var(--brand-purple)]/10 blur-3xl" />
-        <div className="pointer-events-none absolute -bottom-20 -left-20 h-44 w-44 rounded-full bg-slate-400/10 blur-3xl" />
+    <div className="min-h-0 p-2.5">
+      <div className="relative flex h-full min-h-0 flex-col overflow-hidden rounded-[22px] border border-black/5 bg-white/70 shadow-[0_16px_50px_rgba(15,23,42,0.07)] backdrop-blur-xl dark:border-white/10 dark:bg-white/[0.04]">
+        <div className="pointer-events-none absolute -top-16 -right-16 h-40 w-40 rounded-full bg-[var(--brand-purple)]/10 blur-3xl" />
 
-        <div className="relative min-h-0 flex-1 overflow-y-auto px-5 py-5">
-          <div className="mb-4 flex items-center justify-between gap-3">
-            <div>
-              <p className="text-[11px] font-bold uppercase tracking-[0.18em] text-muted-foreground">
-                Market Snapshot
-              </p>
-              <h3 className="mt-1 text-lg font-bold tracking-tight">
-                {coin.name}
-              </h3>
-            </div>
+        <div className="relative min-h-0 flex-1 overflow-y-auto p-3">
+          <div className="mb-3 flex items-center justify-between">
+            <p className="text-xs font-bold uppercase tracking-[0.18em] text-muted-foreground">
+              Market Snapshot
+            </p>
 
-            <span className="shrink-0 rounded-full border border-black/5 bg-gradient-to-b from-white to-slate-50 px-3 py-1 text-[11px] font-bold uppercase tracking-[0.14em] text-slate-600 shadow-[0_2px_10px_rgba(15,23,42,0.06)]">
-              {currencyKey.toUpperCase()}
+            <span className="rounded-full border border-black/5 bg-white/75 px-3 py-1.5 text-xs font-bold uppercase tracking-[0.14em] text-slate-600 shadow-sm dark:border-white/10 dark:bg-white/[0.05] dark:text-white/70">
+              {coin.symbol.toUpperCase()}
             </span>
           </div>
 
-          <div className="rounded-3xl border border-black/5 bg-white/65 p-4 shadow-[0_14px_40px_rgba(15,23,42,0.05)] dark:border-white/10 dark:bg-white/[0.03]">
+          <div className="rounded-2xl border border-black/5 bg-white/65 px-3.5 py-1.5 shadow-[0_10px_30px_rgba(15,23,42,0.04)] dark:border-white/10 dark:bg-white/[0.03]">
             <MetricRow label="Rank" value={`#${rank ?? "-"}`} />
 
             <MetricRow
@@ -84,29 +81,26 @@ export default function CoinPreviewPanel({
             />
           </div>
 
-          <div className="mt-4 rounded-3xl border border-black/5 bg-white/55 p-4 shadow-[0_14px_40px_rgba(15,23,42,0.05)] dark:border-white/10 dark:bg-white/[0.03]">
-            <div className="mb-3 flex items-center justify-between">
-              <p className="text-sm font-bold tracking-tight">Last 7 days</p>
-              <span className="text-[11px] font-semibold text-muted-foreground">
+          <div className="mt-2 rounded-2xl border border-black/5 bg-white/55 px-3 py-2.5 shadow-[0_10px_30px_rgba(15,23,42,0.04)] dark:border-white/10 dark:bg-white/[0.03]">
+            <div className="mb-0.5 flex items-center justify-between">
+              <p className="text-xs font-bold tracking-tight">Last 7 days</p>
+
+              <span className="text-[10px] font-semibold text-muted-foreground">
                 Trend
               </span>
             </div>
 
-            <div className="relative h-[115px] overflow-hidden rounded-2xl bg-slate-100/70 dark:bg-white/[0.04]">
-              {/* Chart goes here */}
+            <div className="h-[100px] w-full overflow-hidden">
+              <CoinPreviewChart coinId={coin.id} />
             </div>
           </div>
 
-          <div className="mt-4 rounded-3xl border border-black/5 bg-gradient-to-b from-white/80 to-white/45 p-4 shadow-[0_18px_50px_rgba(15,23,42,0.07)] backdrop-blur-xl dark:border-white/10 dark:from-white/[0.05] dark:to-white/[0.02]">
-            <div className="mb-3 flex items-center justify-between gap-3">
-              <div>
-                <p className="text-[11px] font-bold uppercase tracking-[0.16em] text-muted-foreground">
-                  About
-                </p>
-              </div>
-            </div>
+          <div className="mt-2 rounded-2xl border border-black/5 bg-gradient-to-b from-white/80 to-white/45 px-3.5 py-2.5 shadow-[0_12px_35px_rgba(15,23,42,0.05)] backdrop-blur-xl dark:border-white/10 dark:from-white/[0.05] dark:to-white/[0.02]">
+            <p className="mb-1.5 text-[10px] font-bold uppercase tracking-[0.16em] text-muted-foreground">
+              About
+            </p>
 
-            <ReadMore text={description} collapsedHeight={88} />
+            <ReadMore text={description} collapsedHeight={48} />
           </div>
         </div>
       </div>

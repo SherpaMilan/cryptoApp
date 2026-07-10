@@ -43,17 +43,16 @@ export default function AddCoinModal({ onClose }: Props) {
       );
     })
     .sort((a, b) => {
-      if (activeFilter === "gainers") {
-        return (
-          (b.price_change_percentage_24h_in_currency ?? -Infinity) -
-          (a.price_change_percentage_24h_in_currency ?? -Infinity)
-        );
-      }
-
       if (activeFilter === "losers") {
         return (
           (a.price_change_percentage_24h_in_currency ?? Infinity) -
           (b.price_change_percentage_24h_in_currency ?? Infinity)
+        );
+      }
+      if (activeFilter === "gainers") {
+        return (
+          (b.price_change_percentage_24h_in_currency ?? -Infinity) -
+          (a.price_change_percentage_24h_in_currency ?? -Infinity)
         );
       }
 
@@ -99,7 +98,7 @@ export default function AddCoinModal({ onClose }: Props) {
 
             <button
               onClick={onClose}
-              className="flex h-10 w-10 items-center justify-center rounded-full bg-black/[0.04] text-muted-foreground transition hover:bg-black/[0.08] hover:text-foreground dark:bg-white/[0.06]"
+              className="flex h-10 w-10  cursor-pointer items-center justify-center rounded-full bg-black/[0.04] text-muted-foreground transition hover:bg-black/[0.08] hover:text-foreground dark:bg-white/[0.06]"
             >
               <XIcon size={20} />
             </button>
