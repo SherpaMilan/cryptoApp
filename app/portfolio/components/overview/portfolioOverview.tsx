@@ -7,6 +7,8 @@ import { useState } from "react";
 import ActionButton from "../buttons/actionButton";
 import AddCoinModal from "../modals/addCoinModal";
 import { Coin } from "@/types/coin";
+import PortfolioCoinTable from "../coinTable/portfolioCoinTable";
+import { usePortfolioStore } from "@/portfolio/store/usePortfolioStore";
 
 type Props = {
   portfolioName: string;
@@ -18,15 +20,18 @@ export default function PortfolioOverview({
   coins = [],
 }: Props) {
   const [showAddCoinModal, setShowAddCoinModal] = useState(false);
-
   const hasCoins = coins.length > 0;
+
+  const removeCoinFromCurrentPortfolio = usePortfolioStore(
+    (state) => state.removeCoinFromCurrentPortfolio,
+  );
 
   return (
     <section className="flex flex-col">
       <div className="flex items-start justify-between">
         <div>
           <p className="text-xs font-medium uppercase tracking-[0.22em] text-muted-foreground">
-            Portfolio Overview
+            Overview
           </p>
 
           <h1 className="mt-2 text-2xl font-bold tracking-tight">
@@ -53,60 +58,11 @@ export default function PortfolioOverview({
       </div>
 
       {hasCoins ? (
-        <div className="mt-8 rounded-[28px] border border-black/10 bg-white/70 p-5 shadow-[0_18px_60px_rgba(15,23,42,0.06)] dark:border-white/10 dark:bg-white/[0.04]">
-          <div className="mb-4 flex items-center justify-between">
-            <h2 className="text-lg font-bold tracking-tight">Your Coins</h2>
-
-            <p className="text-sm text-muted-foreground">
-              {coins.length} selected
-            </p>
-          </div>
-
-          <div className="space-y-3">
-            {coins.map((coin) => (
-              <div
-                key={coin.id}
-                className="flex items-center justify-between rounded-2xl border border-black/5 bg-background px-4 py-3 transition hover:-translate-y-0.5 hover:shadow-[0_12px_30px_rgba(15,23,42,0.06)] dark:border-white/10"
-              >
-                <div className="flex min-w-0 items-center gap-3">
-                  <Image
-                    src={coin.image}
-                    alt={coin.name}
-                    width={34}
-                    height={34}
-                    className="h-[34px] w-[34px] rounded-full object-contain"
-                  />
-
-                  <div className="min-w-0">
-                    <p className="truncate text-sm font-bold">{coin.name}</p>
-                    <p className="text-xs uppercase text-muted-foreground">
-                      {coin.symbol}
-                    </p>
-                  </div>
-                </div>
-
-                <div className="text-right">
-                  <p className="text-sm font-bold">
-                    ${coin.current_price?.toLocaleString() ?? "-"}
-                  </p>
-
-                  <p
-                    className={`text-xs font-semibold ${
-                      (coin.price_change_percentage_24h_in_currency ?? 0) >= 0
-                        ? "text-[var(--brand-green)]"
-                        : "text-[var(--brand-red)]"
-                    }`}
-                  >
-                    {coin.price_change_percentage_24h_in_currency === null ||
-                    coin.price_change_percentage_24h_in_currency === undefined
-                      ? "N/A"
-                      : `${coin.price_change_percentage_24h_in_currency >= 0 ? "+" : ""}${coin.price_change_percentage_24h_in_currency.toFixed(2)}%`}
-                  </p>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
+        <PortfolioCoinTable
+          coins={coins}
+          // onAddTransaction={(coin) => {}}
+          onRemoveCoin={removeCoinFromCurrentPortfolio}
+        />
       ) : (
         <div className="flex justify-center pt-16">
           <div className="relative flex max-w-[650px] flex-col items-center text-center">
