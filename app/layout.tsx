@@ -26,7 +26,8 @@ const spaceGrotesk = Space_Grotesk({
 
 export const metadata: Metadata = {
   title: "Cryptium",
-  description: "Track cryptocurrency prices and manage your portfolio",
+  description:
+    "Track crypto prices, convert currencies, and monitor your portfolio holdings.",
   icons: {
     icon: "/logo.png",
   },
@@ -51,7 +52,7 @@ export default function RootLayout({
             <MarketStatsBar />
             <Navbar />
           </div>
-          <main className="flex-1 w-full pt-[22px]">{children}</main>
+          <main className="w-full pt-[22px]">{children}</main>
           <Footer />
         </Providers>
 
