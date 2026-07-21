@@ -22,7 +22,7 @@ export default function CoinListPanel({
   onToggleCoin,
 }: Props) {
   const currentPortfolio = usePortfolioStore((state) => state.currentPortfolio);
-  const existingCoinIds = currentPortfolio?.coins?.map((coin) => coin.id) ?? [];
+  const existingCoinIds = currentPortfolio?.coinIds ?? [];
 
   return (
     <div className="flex min-h-0 flex-col border-b border-black/10 p-7 dark:border-white/10 lg:border-b-0 lg:border-r">

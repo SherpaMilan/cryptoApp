@@ -27,10 +27,10 @@ export default function PortfolioCoinRow({
   onRemoveCoin,
 }: Props) {
   const { currencyKey, currencySymbol } = useCurrency();
-  const currentPrice = coin.current_price ?? 0;
-  const marketCap = coin.market_cap ?? 0;
-  const priceChange = coin.price_change_percentage_24h_in_currency ?? 0;
-  const isPositive = (priceChange ?? 0) >= 0;
+  const currentPrice = coin.current_price;
+  const marketCap = coin.market_cap;
+  const priceChange = coin.price_change_percentage_24h_in_currency;
+  const isPositive = priceChange != null && priceChange >= 0;
 
   return (
     <tr className="border-b border-black/5 transition-colors hover:bg-black/[0.025] dark:border-white/[0.06] dark:hover:bg-white/[0.03]">

@@ -19,20 +19,20 @@ export default function CoinPreviewPanel({
   currencySymbol,
   description,
 }: Props) {
-  const rank = coin.market_cap_rank ?? null;
-  const price = coin.current_price ?? 0;
-  const marketCap = coin.market_cap ?? 0;
-  const volume = coin.total_volume ?? 0;
+  const rank = coin.market_cap_rank;
+  const price = coin.current_price;
+  const marketCap = coin.market_cap;
+  const volume = coin.total_volume;
 
-  const change24h = coin.price_change_percentage_24h_in_currency ?? null;
+  const change24h = coin.price_change_percentage_24h_in_currency;
 
   const change24hText =
-    change24h === null
+    change24h == null
       ? "N/A (24h)"
       : `${change24h >= 0 ? "+" : ""}${change24h.toFixed(2)}% (24h)`;
 
   const change24hClassName =
-    change24h === null
+    change24h == null
       ? "text-muted-foreground"
       : change24h >= 0
         ? "text-[var(--brand-green)]"
@@ -55,29 +55,41 @@ export default function CoinPreviewPanel({
           </div>
 
           <div className="rounded-2xl border border-black/5 bg-white/65 px-3.5 py-1.5 shadow-[0_10px_30px_rgba(15,23,42,0.04)] dark:border-white/10 dark:bg-white/[0.03]">
-            <MetricRow label="Rank" value={`#${rank ?? "-"}`} />
+            <MetricRow label="Rank" value={rank == null ? "N/A" : `#${rank}`} />
 
             <MetricRow
               label="Current Price"
-              value={`${currencySymbol}${price.toLocaleString(undefined, {
-                maximumFractionDigits: 2,
-              })}`}
+              value={
+                price == null
+                  ? "N/A"
+                  : `${currencySymbol}${price.toLocaleString(undefined, {
+                      maximumFractionDigits: 2,
+                    })}`
+              }
               subValue={change24hText}
               subValueClassName={change24hClassName}
             />
 
             <MetricRow
               label="Market Cap"
-              value={formatCurrencyCompact(
-                marketCap,
-                currencyKey,
-                currencySymbol,
-              )}
+              value={
+                marketCap == null
+                  ? "N/A"
+                  : formatCurrencyCompact(
+                      marketCap,
+                      currencyKey,
+                      currencySymbol,
+                    )
+              }
             />
 
             <MetricRow
               label="24h Volume"
-              value={formatCurrencyCompact(volume, currencyKey, currencySymbol)}
+              value={
+                volume == null
+                  ? "N/A"
+                  : formatCurrencyCompact(volume, currencyKey, currencySymbol)
+              }
             />
           </div>
 

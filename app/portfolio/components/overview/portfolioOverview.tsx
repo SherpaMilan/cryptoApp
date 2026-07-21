@@ -6,21 +6,20 @@ import { useState } from "react";
 
 import ActionButton from "../buttons/actionButton";
 import AddCoinModal from "../modals/addCoinModal";
-import { Coin } from "@/types/coin";
 import PortfolioCoinTable from "../coinTable/portfolioCoinTable";
 import { usePortfolioStore } from "@/portfolio/store/usePortfolioStore";
 
 type Props = {
   portfolioName: string;
-  coins?: Coin[];
+  coinIds: string[];
 };
 
 export default function PortfolioOverview({
   portfolioName,
-  coins = [],
+  coinIds = [],
 }: Props) {
   const [showAddCoinModal, setShowAddCoinModal] = useState(false);
-  const hasCoins = coins.length > 0;
+  const hasCoins = coinIds.length > 0;
 
   const removeCoinFromCurrentPortfolio = usePortfolioStore(
     (state) => state.removeCoinFromCurrentPortfolio,
@@ -59,7 +58,7 @@ export default function PortfolioOverview({
 
       {hasCoins ? (
         <PortfolioCoinTable
-          coins={coins}
+          coinIds={coinIds}
           // onAddTransaction={(coin) => {}}
           onRemoveCoin={removeCoinFromCurrentPortfolio}
         />

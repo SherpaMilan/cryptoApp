@@ -11,7 +11,7 @@ import PortfolioCoinRow from "./portfolioCoinRow";
 import PortfolioCoinTableHeader from "./portfolioCoinTableHeader";
 
 type Props = {
-  coins: Coin[];
+  coinIds: string[];
   onAddTransaction?: (coin: Coin) => void;
   onRemoveCoin: (coinId: string) => void;
 };
@@ -22,7 +22,7 @@ const paginationButtonClass =
   "flex h-8 min-w-8 cursor-pointer items-center justify-center rounded-lg px-2 text-xs font-bold transition-all duration-200 hover:bg-black/5 disabled:cursor-not-allowed disabled:opacity-30 dark:hover:bg-white/10";
 
 export default function PortfolioCoinTable({
-  coins,
+  coinIds,
   onAddTransaction,
   onRemoveCoin,
 }: Props) {
@@ -36,10 +36,10 @@ export default function PortfolioCoinTable({
     isCurrencyLoaded,
   );
 
-  // Get the IDs of coins saved in this portfolio.
-  const portfolioCoinIds = new Set(coins.map((coin) => coin.id));
+  // Convert saved portfolio coin IDs into a Set for quick lookup.
+  const portfolioCoinIds = new Set(coinIds);
 
-  // Keep only the live coins that belong to this portfolio.
+  // Match portfolio coin IDs with the currently available live market data.
   const livePortfolioCoins = liveCoins.filter((coin) =>
     portfolioCoinIds.has(coin.id),
   );

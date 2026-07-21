@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { MagnifyingGlassIcon, XIcon } from "@phosphor-icons/react";
 
 import CoinListPanel from "./coinListPanel";
@@ -33,31 +33,35 @@ export default function AddCoinModal({ onClose }: Props) {
     isError,
   } = useCoinsPreviewQuery(defaultCurrency, isCurrencyLoaded);
 
-  const displayedCoins = coins
-    .filter((coin) => {
-      const searchValue = search.toLowerCase().trim();
+  const displayedCoins = useMemo(() => {
+    const searchValue = search.toLowerCase().trim();
 
-      return (
-        coin.name.toLowerCase().includes(searchValue) ||
-        coin.symbol.toLowerCase().includes(searchValue)
-      );
-    })
-    .sort((a, b) => {
-      if (activeFilter === "losers") {
+    return coins
+      .filter((coin) => {
         return (
-          (a.price_change_percentage_24h_in_currency ?? Infinity) -
-          (b.price_change_percentage_24h_in_currency ?? Infinity)
+          coin.name.toLowerCase().includes(searchValue) ||
+          coin.symbol.toLowerCase().includes(searchValue)
         );
-      }
-      if (activeFilter === "gainers") {
-        return (
-          (b.price_change_percentage_24h_in_currency ?? -Infinity) -
-          (a.price_change_percentage_24h_in_currency ?? -Infinity)
-        );
-      }
+      })
+      .sort((a, b) => {
+        if (activeFilter === "losers") {
+          return (
+            (a.price_change_percentage_24h_in_currency ?? Infinity) -
+            (b.price_change_percentage_24h_in_currency ?? Infinity)
+          );
+        }
 
-      return 0;
-    });
+        if (activeFilter === "gainers") {
+          return (
+            (b.price_change_percentage_24h_in_currency ?? -Infinity) -
+            (a.price_change_percentage_24h_in_currency ?? -Infinity)
+          );
+        }
+
+        return 0;
+      });
+  }, [coins, search, activeFilter]);
+
   const noMatchingCoins =
     search.trim().length > 0 && displayedCoins.length === 0;
 
@@ -79,11 +83,7 @@ export default function AddCoinModal({ onClose }: Props) {
   );
 
   function handleAddCoins() {
-    const coinsToAdd = coins.filter((coin) =>
-      selectedCoinIds.includes(coin.id),
-    );
-
-    addCoinsToPortfolio(coinsToAdd);
+    addCoinsToPortfolio(selectedCoinIds);
     onClose();
   }
 
@@ -156,7 +156,7 @@ export default function AddCoinModal({ onClose }: Props) {
               {coinBeingPreviewed && (
                 <CoinPreviewPanel
                   coin={coinBeingPreviewed}
-                  description={coinDetail?.description.en}
+                  description={coinDetail?.description?.en}
                   currencyKey={currencyKey}
                   currencySymbol={currencySymbol}
                 />

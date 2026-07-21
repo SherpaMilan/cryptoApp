@@ -1,4 +1,3 @@
-import { Coin } from "@/types/coin";
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
 
@@ -6,7 +5,7 @@ export type Portfolio = {
   id: string;
   name: string;
   icon: string;
-  coins?: Coin[];
+  coinIds: string[];
 };
 
 interface PortfolioStore {
@@ -19,7 +18,7 @@ interface PortfolioStore {
   editPortfolio: (portfolio: Portfolio) => void;
   removePortfolio: (portfolioId: string) => void;
   setCurrentPortfolio: (portfolio: Portfolio) => void;
-  addCoinsToCurrentPortfolio: (coins: Coin[]) => void;
+  addCoinsToCurrentPortfolio: (coinIds: string[]) => void;
   removeCoinFromCurrentPortfolio: (coinId: string) => void;
 }
 
@@ -33,10 +32,17 @@ export const usePortfolioStore = create<PortfolioStore>()(
       setHasHydrated: (value) => set({ hasHydrated: value }),
 
       createPortfolio: (portfolio) =>
-        set((state) => ({
-          portfolios: [...state.portfolios, portfolio],
-          currentPortfolio: portfolio,
-        })),
+        set((state) => {
+          const newPortfolio = {
+            ...portfolio,
+            coinIds: portfolio.coinIds ?? [],
+          };
+
+          return {
+            portfolios: [...state.portfolios, newPortfolio],
+            currentPortfolio: newPortfolio,
+          };
+        }),
 
       setCurrentPortfolio: (portfolio) =>
         set({
@@ -68,20 +74,19 @@ export const usePortfolioStore = create<PortfolioStore>()(
                 : state.currentPortfolio,
           };
         }),
-      addCoinsToCurrentPortfolio: (coins) =>
+      addCoinsToCurrentPortfolio: (coinIds) =>
         set((state) => {
           if (!state.currentPortfolio) return state;
 
-          const existingCoins = state.currentPortfolio.coins ?? [];
+          const existingCoinIds = state.currentPortfolio.coinIds ?? [];
 
-          const newCoins = coins.filter(
-            (coin) =>
-              !existingCoins.some((existing) => existing.id === coin.id),
+          const newCoinIds = coinIds.filter(
+            (coinId) => !existingCoinIds.includes(coinId),
           );
 
           const updatedPortfolio = {
             ...state.currentPortfolio,
-            coins: [...existingCoins, ...newCoins],
+            coinIds: [...existingCoinIds, ...newCoinIds],
           };
 
           return {
@@ -98,14 +103,13 @@ export const usePortfolioStore = create<PortfolioStore>()(
         set((state) => {
           if (!state.currentPortfolio) return state;
 
-          const existingCoins = state.currentPortfolio.coins ?? [];
-          const updatedCoins = existingCoins.filter(
-            (coin) => coin.id !== coinId,
+          const updatedCoinIds = state.currentPortfolio.coinIds.filter(
+            (id) => id !== coinId,
           );
 
           const updatedPortfolio = {
             ...state.currentPortfolio,
-            coins: updatedCoins,
+            coinIds: updatedCoinIds,
           };
 
           return {

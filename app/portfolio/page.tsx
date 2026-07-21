@@ -67,7 +67,7 @@ export default function PortfolioPage() {
 
         <PortfolioOverview
           portfolioName={currentPortfolio.name}
-          coins={currentPortfolio.coins ?? []}
+          coinIds={currentPortfolio.coinIds}
         />
 
         {portfolioFormMode && (
