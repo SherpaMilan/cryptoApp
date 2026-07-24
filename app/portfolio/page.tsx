@@ -49,7 +49,7 @@ export default function PortfolioPage() {
 
   return (
     <div className="bg-background text-foreground">
-      <main className="mx-auto flex max-w-[1440px] flex-col gap-5 px-[72px] py-6">
+      <main className="mx-auto flex max-w-[1440px] flex-col gap-5 px-[72px] py-6 ">
         <PortfolioTabs
           portfolios={portfolios}
           currentPortfolio={currentPortfolio}

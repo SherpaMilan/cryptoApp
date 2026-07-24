@@ -6,8 +6,11 @@ import { useState } from "react";
 
 import ActionButton from "../buttons/actionButton";
 import AddCoinModal from "../modals/addCoinModal";
-import PortfolioCoinTable from "../coinTable/portfolioCoinTable";
 import { usePortfolioStore } from "@/portfolio/store/usePortfolioStore";
+
+import PortfolioViewTabs from "../dashboard/portfolioViewTabs";
+import PortfolioAnalytics from "../analytics/portfolioAnalytics";
+import PortfolioAssets from "../assets/portfolioAssets";
 
 type Props = {
   portfolioName: string;
@@ -19,6 +22,11 @@ export default function PortfolioOverview({
   coinIds = [],
 }: Props) {
   const [showAddCoinModal, setShowAddCoinModal] = useState(false);
+
+  const [activeView, setActiveView] = useState<"assets" | "analytics">(
+    "assets",
+  );
+
   const hasCoins = coinIds.length > 0;
 
   const removeCoinFromCurrentPortfolio = usePortfolioStore(
@@ -26,14 +34,14 @@ export default function PortfolioOverview({
   );
 
   return (
-    <section className="flex flex-col">
-      <div className="flex items-start justify-between">
+    <section className="flex flex-col ">
+      <div className="flex items-start justify-between px-3">
         <div>
           <p className="text-xs font-medium uppercase tracking-[0.22em] text-muted-foreground">
             Overview
           </p>
 
-          <h1 className="mt-2 text-2xl font-bold tracking-tight">
+          <h1 className="mt-2 text-xl font-bold tracking-tight">
             {portfolioName}
           </h1>
         </div>
@@ -56,12 +64,21 @@ export default function PortfolioOverview({
         </div>
       </div>
 
+      {hasCoins && (
+        <div className="mt-8 px-3">
+          <PortfolioViewTabs activeView={activeView} onChange={setActiveView} />
+        </div>
+      )}
+
       {hasCoins ? (
-        <PortfolioCoinTable
-          coinIds={coinIds}
-          // onAddTransaction={(coin) => {}}
-          onRemoveCoin={removeCoinFromCurrentPortfolio}
-        />
+        activeView === "assets" ? (
+          <PortfolioAssets
+            coinIds={coinIds}
+            onRemoveCoin={removeCoinFromCurrentPortfolio}
+          />
+        ) : (
+          <PortfolioAnalytics />
+        )
       ) : (
         <div className="flex justify-center pt-16">
           <div className="relative flex max-w-[650px] flex-col items-center text-center">

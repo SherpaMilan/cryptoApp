@@ -33,7 +33,7 @@ export default function PortfolioTabs({
   onDeletePortfolio,
 }: Props) {
   return (
-    <section className="flex min-w-0 items-center gap-3">
+    <section className="flex min-w-0 items-center gap-3 ">
       <div className="hide-scrollbar min-w-0 flex-1 overflow-x-auto">
         <div className="flex w-max items-center gap-3">
           {portfolios.map((portfolio, index) => {
@@ -87,7 +87,7 @@ export default function PortfolioTabs({
 
       <button
         onClick={onOpenPortfolioForm}
-        className="flex shrink-0 cursor-pointer items-center gap-2 text-sm font-medium text-muted-foreground transition-all duration-200 hover:translate-x-0.5 hover:text-foreground"
+        className="flex shrink-0  px-2 cursor-pointer items-center gap-2 text-sm font-medium text-muted-foreground transition-all duration-200 hover:translate-x-0.5 hover:text-foreground"
       >
         <PlusIcon size={16} weight="bold" />
         New Portfolio

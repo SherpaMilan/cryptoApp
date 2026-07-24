@@ -12,8 +12,6 @@ type Props = {
   onRemoveCoin: (coinId: string) => void;
 };
 
-const cellClass = "px-5 py-4 text-right";
-
 const iconButtonClass =
   "flex h-8 w-8 cursor-pointer items-center justify-center rounded-lg text-muted-foreground transition duration-200 hover:scale-105 active:scale-95";
 
@@ -27,14 +25,24 @@ export default function PortfolioCoinRow({
   onRemoveCoin,
 }: Props) {
   const { currencyKey, currencySymbol } = useCurrency();
+
   const currentPrice = coin.current_price;
   const marketCap = coin.market_cap;
+  const volume24h = coin.total_volume;
   const priceChange = coin.price_change_percentage_24h_in_currency;
+  const rank = coin.market_cap_rank;
+
   const isPositive = priceChange != null && priceChange >= 0;
 
   return (
     <tr className="border-b border-black/5 transition-colors hover:bg-black/[0.025] dark:border-white/[0.06] dark:hover:bg-white/[0.03]">
-      <td className="px-5 py-4">
+      <td className="w-12 px-4 py-4 text-left">
+        <p className="text-sm font-bold tabular-nums text-muted-foreground">
+          {rank == null ? "—" : rank}
+        </p>
+      </td>
+
+      <td className="w-[260px] px-4 py-4 text-left">
         <div className="flex items-center gap-3">
           <Image
             src={coin.image}
@@ -54,7 +62,7 @@ export default function PortfolioCoinRow({
         </div>
       </td>
 
-      <td className={cellClass}>
+      <td className="px-4 py-4 text-right">
         <p className="text-sm font-bold tabular-nums">
           {currentPrice == null
             ? "—"
@@ -62,16 +70,24 @@ export default function PortfolioCoinRow({
         </p>
       </td>
 
-      <td className={cellClass}>
+      <td className="px-4 py-4 text-right">
         {priceChange == null ? (
           <span className="text-sm text-muted-foreground">N/A</span>
         ) : (
           <span
-            className={`rounded-full px-2.5 py-1 text-xs font-bold ${
-              isPositive
-                ? "bg-[var(--brand-green)]/10 text-[var(--brand-green)]"
-                : "bg-[var(--brand-red)]/10 text-[var(--brand-red)]"
-            }`}
+            className={`
+              rounded-full
+              px-2.5
+              py-1
+              text-xs
+              font-bold
+              tabular-nums
+              ${
+                isPositive
+                  ? "bg-[var(--brand-green)]/10 text-[var(--brand-green)]"
+                  : "bg-[var(--brand-red)]/10 text-[var(--brand-red)]"
+              }
+            `}
           >
             {priceChange >= 0 ? "+" : ""}
             {priceChange.toFixed(2)}%
@@ -79,7 +95,15 @@ export default function PortfolioCoinRow({
         )}
       </td>
 
-      <td className={cellClass}>
+      <td className="px-4 py-4 text-right">
+        <p className="text-sm font-bold tabular-nums">
+          {volume24h == null
+            ? "—"
+            : formatCurrencyCompact(volume24h, currencyKey, currencySymbol)}
+        </p>
+      </td>
+
+      <td className="px-4 py-4 text-right">
         <p className="text-sm font-bold tabular-nums">
           {marketCap == null
             ? "—"
@@ -87,7 +111,7 @@ export default function PortfolioCoinRow({
         </p>
       </td>
 
-      <td className={cellClass}>
+      <td className="px-4 py-4 text-right">
         <p className="text-sm font-semibold text-muted-foreground">
           No holdings
         </p>
@@ -97,7 +121,7 @@ export default function PortfolioCoinRow({
         </p>
       </td>
 
-      <td className={cellClass}>
+      <td className="px-4 py-4 text-right">
         <div className="flex justify-end gap-1">
           <button
             type="button"
