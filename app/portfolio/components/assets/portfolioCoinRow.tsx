@@ -44,14 +44,15 @@ export default function PortfolioCoinRow({
 
       <td className="w-[260px] px-4 py-4 text-left">
         <div className="flex items-center gap-3">
-          <Image
-            src={coin.image}
-            alt={coin.name}
-            width={36}
-            height={36}
-            className="h-9 w-9 rounded-full object-contain"
-          />
-
+          <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-white shadow-sm dark:bg-white/[0.08]">
+            <Image
+              src={coin.image}
+              alt={coin.name}
+              width={26}
+              height={26}
+              className="h-[26px] w-[26px] rounded-full object-contain"
+            />{" "}
+          </div>
           <div className="min-w-0">
             <p className="truncate text-sm font-bold">{coin.name}</p>
 

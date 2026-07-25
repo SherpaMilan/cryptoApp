@@ -11,6 +11,8 @@ import { usePortfolioStore } from "@/portfolio/store/usePortfolioStore";
 import PortfolioViewTabs from "../dashboard/portfolioViewTabs";
 import PortfolioAnalytics from "../analytics/portfolioAnalytics";
 import PortfolioAssets from "../assets/portfolioAssets";
+import { PortfolioView } from "./types";
+import RemoveCoinModal from "../modals/removeCoinModal";
 
 type Props = {
   portfolioName: string;
@@ -22,10 +24,9 @@ export default function PortfolioOverview({
   coinIds = [],
 }: Props) {
   const [showAddCoinModal, setShowAddCoinModal] = useState(false);
+  const [showRemoveCoinModal, setShowRemoveCoinModal] = useState(false);
 
-  const [activeView, setActiveView] = useState<"assets" | "analytics">(
-    "assets",
-  );
+  const [activeView, setActiveView] = useState<PortfolioView>("assets");
 
   const hasCoins = coinIds.length > 0;
 
@@ -56,10 +57,15 @@ export default function PortfolioOverview({
           </ActionButton>
 
           <ActionButton
-            className="dark:text-white"
+            disabled={!hasCoins}
+            onClick={() => {
+              console.log("remove clicked");
+              setShowRemoveCoinModal(true);
+            }}
+            className="dark:text-white disabled:cursor-not-allowed disabled:opacity-40 disabled:hover:translate-y-0 disabled:hover:opacity-40"
             icon={<MinusIcon size={16} weight="bold" />}
           >
-            Remove
+            Remove Coin
           </ActionButton>
         </div>
       </div>
@@ -112,6 +118,13 @@ export default function PortfolioOverview({
 
       {showAddCoinModal && (
         <AddCoinModal onClose={() => setShowAddCoinModal(false)} />
+      )}
+
+      {showRemoveCoinModal && (
+        <RemoveCoinModal
+          coinIds={coinIds}
+          onClose={() => setShowRemoveCoinModal(false)}
+        />
       )}
     </section>
   );

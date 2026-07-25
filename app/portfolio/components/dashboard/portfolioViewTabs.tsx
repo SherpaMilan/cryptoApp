@@ -1,19 +1,16 @@
 "use client";
 
-type View = "assets" | "analytics";
+import { PortfolioView } from "../overview/types";
 
 type Props = {
-  activeView: View;
-  onChange: (view: View) => void;
+  activeView: PortfolioView;
+  onChange: (view: PortfolioView) => void;
 };
 
 const tabClass =
   "relative cursor-pointer pb-3 text-xs font-semibold uppercase tracking-[0.16em] transition-colors";
-
 const activeClass = "text-foreground";
-
 const inactiveClass = "text-muted-foreground hover:text-foreground";
-
 const activeIndicator =
   "absolute bottom-0 left-0 h-[2px] w-full rounded-full bg-[var(--brand-purple)]";
 

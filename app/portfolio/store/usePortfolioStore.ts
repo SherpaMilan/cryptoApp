@@ -20,6 +20,7 @@ interface PortfolioStore {
   setCurrentPortfolio: (portfolio: Portfolio) => void;
   addCoinsToCurrentPortfolio: (coinIds: string[]) => void;
   removeCoinFromCurrentPortfolio: (coinId: string) => void;
+  removeCoinsFromCurrentPortfolio: (coinIds: string[]) => void;
 }
 
 export const usePortfolioStore = create<PortfolioStore>()(
@@ -110,6 +111,26 @@ export const usePortfolioStore = create<PortfolioStore>()(
           const updatedPortfolio = {
             ...state.currentPortfolio,
             coinIds: updatedCoinIds,
+          };
+
+          return {
+            currentPortfolio: updatedPortfolio,
+            portfolios: state.portfolios.map((portfolio) =>
+              portfolio.id === updatedPortfolio.id
+                ? updatedPortfolio
+                : portfolio,
+            ),
+          };
+        }),
+      removeCoinsFromCurrentPortfolio: (coinIds) =>
+        set((state) => {
+          if (!state.currentPortfolio) return state;
+
+          const updatedPortfolio = {
+            ...state.currentPortfolio,
+            coinIds: state.currentPortfolio.coinIds.filter(
+              (id) => !coinIds.includes(id),
+            ),
           };
 
           return {
