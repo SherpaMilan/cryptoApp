@@ -59,7 +59,6 @@ export default function PortfolioOverview({
           <ActionButton
             disabled={!hasCoins}
             onClick={() => {
-              console.log("remove clicked");
               setShowRemoveCoinModal(true);
             }}
             className="dark:text-white disabled:cursor-not-allowed disabled:opacity-40 disabled:hover:translate-y-0 disabled:hover:opacity-40"
