@@ -42,9 +42,9 @@ export default function HomePage() {
   return (
     <div className="w-full ">
       <div className="max-w-[1440px] mx-auto px-[72px]">
-        <div className="font-bold text-foreground">
+        <h2 className="mt-6 text-sm font-bold sticky text-foreground">
           Select the currency to view statistics
-        </div>
+        </h2>
         <div className="flex gap-4 mt-6 overflow-x-auto whitespace-nowrap [&::-webkit-scrollbar]:hidden">
           {coinsList?.map((coin) => {
             const isActive = activeCoin?.id === coin.id;

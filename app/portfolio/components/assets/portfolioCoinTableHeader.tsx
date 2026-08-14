@@ -1,5 +1,5 @@
 const tableHeaders = [
-  "Rank",
+  "#",
   "Coin",
   "Price",
   "24h",
@@ -17,22 +17,13 @@ export default function PortfolioCoinTableHeader() {
           <th
             key={header}
             scope="col"
-            className={`
-              h-11
-              px-4
-              text-[11px]
-              font-bold
-              uppercase
-              tracking-[0.14em]
-              text-muted-foreground
-              ${
-                index === 0
-                  ? "w-12 text-left"
-                  : index === 1
-                    ? "w-[260px] text-left"
-                    : "text-right"
-              }
-            `}
+            className={`h-11 px-4 text-[11px] font-semibold uppercase tracking-[0.12em] text-muted-foreground ${
+              index === 0
+                ? "w-12 text-left"
+                : index === 1
+                  ? "w-[260px] text-left"
+                  : "text-right"
+            }`}
           >
             {header}
           </th>

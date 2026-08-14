@@ -2,9 +2,13 @@ import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import { Coin } from "@/types/coin";
 
-export function useCoinsPreviewQuery(currency: string, enabled: boolean) {
+export function useCoinsPreviewQuery(
+  currency: string,
+  enabled: boolean,
+  ids?: string[],
+) {
   return useQuery({
-    queryKey: ["coins-preview", currency],
+    queryKey: ["coins-preview", currency, ids],
     enabled,
 
     queryFn: async () => {
@@ -13,6 +17,7 @@ export function useCoinsPreviewQuery(currency: string, enabled: boolean) {
           currency,
           perPage: 100,
           page: 1,
+          ...(ids?.length ? { ids: ids.join(",") } : {}),
         },
       });
 

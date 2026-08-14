@@ -8,7 +8,7 @@ import { STATS_BAR_ICON_PROPS } from "@/constants/statsbarIcons";
 
 type Props = {
   coin: Coin;
-  onAddTransaction?: (coin: Coin) => void;
+  onOpenTransactionModal?: (coin: Coin) => void;
   onRemoveCoin: (coinId: string) => void;
 };
 
@@ -21,7 +21,7 @@ function formatCurrentPrice(value: number, symbol: string) {
 
 export default function PortfolioCoinRow({
   coin,
-  onAddTransaction,
+  onOpenTransactionModal,
   onRemoveCoin,
 }: Props) {
   const { currencyKey, currencySymbol } = useCurrency();
@@ -64,7 +64,7 @@ export default function PortfolioCoinRow({
       </td>
 
       <td className="px-4 py-4 text-right">
-        <p className="text-sm font-bold tabular-nums">
+        <p className="text-sm tabular-nums ">
           {currentPrice == null
             ? "—"
             : formatCurrentPrice(currentPrice, currencySymbol)}
@@ -76,13 +76,7 @@ export default function PortfolioCoinRow({
           <span className="text-sm text-muted-foreground">N/A</span>
         ) : (
           <span
-            className={`
-              rounded-full
-              px-2.5
-              py-1
-              text-xs
-              font-bold
-              tabular-nums
+            className={`rounded-full px-2.5 py-1 text-xs font-bold tabular-nums
               ${
                 isPositive
                   ? "bg-[var(--brand-green)]/10 text-[var(--brand-green)]"
@@ -97,7 +91,7 @@ export default function PortfolioCoinRow({
       </td>
 
       <td className="px-4 py-4 text-right">
-        <p className="text-sm font-bold tabular-nums">
+        <p className="text-sm tabular-nums">
           {volume24h == null
             ? "—"
             : formatCurrencyCompact(volume24h, currencyKey, currencySymbol)}
@@ -105,7 +99,7 @@ export default function PortfolioCoinRow({
       </td>
 
       <td className="px-4 py-4 text-right">
-        <p className="text-sm font-bold tabular-nums">
+        <p className="text-sm tabular-nums">
           {marketCap == null
             ? "—"
             : formatCurrencyCompact(marketCap, currencyKey, currencySymbol)}
@@ -113,10 +107,6 @@ export default function PortfolioCoinRow({
       </td>
 
       <td className="px-4 py-4 text-right">
-        <p className="text-sm font-semibold text-muted-foreground">
-          No holdings
-        </p>
-
         <p className="text-[11px] text-muted-foreground/70">
           Add a transaction
         </p>
@@ -127,7 +117,7 @@ export default function PortfolioCoinRow({
           <button
             type="button"
             title="Add Transaction"
-            onClick={() => onAddTransaction?.(coin)}
+            onClick={() => onOpenTransactionModal?.(coin)}
             aria-label={`Add transaction for ${coin.name}`}
             className={`${iconButtonClass} hover:text-[var(--brand-purple)]`}
           >

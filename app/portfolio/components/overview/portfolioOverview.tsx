@@ -6,27 +6,28 @@ import { useState } from "react";
 
 import ActionButton from "../buttons/actionButton";
 import AddCoinModal from "../modals/addCoinModal";
-import { usePortfolioStore } from "@/portfolio/store/usePortfolioStore";
+import RemoveCoinModal from "../modals/removeCoinModal";
+import AddTransactionModal from "../transactions/addTransactionModal";
 
 import PortfolioViewTabs from "../dashboard/portfolioViewTabs";
 import PortfolioAnalytics from "../analytics/portfolioAnalytics";
 import PortfolioAssets from "../assets/portfolioAssets";
+
+import { usePortfolioStore } from "@/portfolio/store/usePortfolioStore";
+import { Coin } from "@/types/coin";
 import { PortfolioView } from "./types";
-import RemoveCoinModal from "../modals/removeCoinModal";
 
 type Props = {
-  portfolioName: string;
   coinIds: string[];
 };
 
-export default function PortfolioOverview({
-  portfolioName,
-  coinIds = [],
-}: Props) {
+export default function PortfolioOverview({ coinIds = [] }: Props) {
   const [showAddCoinModal, setShowAddCoinModal] = useState(false);
   const [showRemoveCoinModal, setShowRemoveCoinModal] = useState(false);
-
   const [activeView, setActiveView] = useState<PortfolioView>("assets");
+  const [coinForTransaction, setCoinForTransaction] = useState<Coin | null>(
+    null,
+  );
 
   const hasCoins = coinIds.length > 0;
 
@@ -34,20 +35,14 @@ export default function PortfolioOverview({
     (state) => state.removeCoinFromCurrentPortfolio,
   );
 
+  const openTransactionModal = (coin: Coin) => {
+    setCoinForTransaction(coin);
+  };
+
   return (
-    <section className="flex flex-col ">
-      <div className="flex items-start justify-between px-3">
-        <div>
-          <p className="text-xs font-medium uppercase tracking-[0.22em] text-muted-foreground">
-            Overview
-          </p>
-
-          <h1 className="mt-2 text-xl font-bold tracking-tight">
-            {portfolioName}
-          </h1>
-        </div>
-
-        <div className="flex gap-3">
+    <section className="flex flex-col">
+      <div className="flex w-full justify-end px-1">
+        <div className="ml-auto flex items-center gap-2.5">
           <ActionButton
             onClick={() => setShowAddCoinModal(true)}
             className="dark:text-white"
@@ -58,9 +53,7 @@ export default function PortfolioOverview({
 
           <ActionButton
             disabled={!hasCoins}
-            onClick={() => {
-              setShowRemoveCoinModal(true);
-            }}
+            onClick={() => setShowRemoveCoinModal(true)}
             className="dark:text-white disabled:cursor-not-allowed disabled:opacity-40 disabled:hover:translate-y-0 disabled:hover:opacity-40"
             icon={<MinusIcon size={16} weight="bold" />}
           >
@@ -79,6 +72,7 @@ export default function PortfolioOverview({
         activeView === "assets" ? (
           <PortfolioAssets
             coinIds={coinIds}
+            onOpenTransactionModal={openTransactionModal}
             onRemoveCoin={removeCoinFromCurrentPortfolio}
           />
         ) : (
@@ -123,6 +117,13 @@ export default function PortfolioOverview({
         <RemoveCoinModal
           coinIds={coinIds}
           onClose={() => setShowRemoveCoinModal(false)}
+        />
+      )}
+
+      {coinForTransaction && (
+        <AddTransactionModal
+          coin={coinForTransaction}
+          onClose={() => setCoinForTransaction(null)}
         />
       )}
     </section>

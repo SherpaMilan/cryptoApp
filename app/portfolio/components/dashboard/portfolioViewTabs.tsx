@@ -1,5 +1,7 @@
 "use client";
 
+import { ChartLineUpIcon, CoinsIcon } from "@phosphor-icons/react";
+
 import { PortfolioView } from "../overview/types";
 
 type Props = {
@@ -7,36 +9,39 @@ type Props = {
   onChange: (view: PortfolioView) => void;
 };
 
-const tabClass =
-  "relative cursor-pointer pb-3 text-xs font-semibold uppercase tracking-[0.16em] transition-colors";
-const activeClass = "text-foreground";
-const inactiveClass = "text-muted-foreground hover:text-foreground";
-const activeIndicator =
-  "absolute bottom-0 left-0 h-[2px] w-full rounded-full bg-[var(--brand-purple)]";
-
 export default function PortfolioViewTabs({ activeView, onChange }: Props) {
   return (
-    <div className="flex items-center gap-8 border-b border-black/5  dark:border-white/10">
+    <div className="inline-flex items-center gap-1 rounded-xl border border-black/[0.06] bg-black/[0.025] p-1 shadow-[0_4px_20px_rgba(0,0,0,0.04)] dark:border-white/[0.08] dark:bg-white/[0.035]">
       <button
         type="button"
         onClick={() => onChange("assets")}
-        className={`${tabClass} ${
-          activeView === "assets" ? activeClass : inactiveClass
+        className={`flex items-center gap-2 rounded-lg px-4 py-2 text-xs font-bold transition-all duration-200 ${
+          activeView === "assets"
+            ? "bg-background text-foreground shadow-[0_2px_8px_rgba(0,0,0,0.08)]"
+            : "text-muted-foreground hover:text-foreground"
         }`}
       >
+        <CoinsIcon
+          size={15}
+          weight={activeView === "assets" ? "fill" : "regular"}
+        />
         Assets
-        {activeView === "assets" && <span className={activeIndicator} />}
       </button>
 
       <button
         type="button"
         onClick={() => onChange("analytics")}
-        className={`${tabClass} ${
-          activeView === "analytics" ? activeClass : inactiveClass
+        className={`flex items-center gap-2 rounded-lg px-4 py-2 text-xs font-bold transition-all duration-200 ${
+          activeView === "analytics"
+            ? "bg-background text-foreground shadow-[0_2px_8px_rgba(0,0,0,0.08)]"
+            : "text-muted-foreground hover:text-foreground"
         }`}
       >
+        <ChartLineUpIcon
+          size={15}
+          weight={activeView === "analytics" ? "fill" : "regular"}
+        />
         Analytics
-        {activeView === "analytics" && <span className={activeIndicator} />}
       </button>
     </div>
   );

@@ -15,9 +15,7 @@ type Props = {
 
 export default function RemoveCoinModal({ coinIds, onClose }: Props) {
   const [selectedCoins, setSelectedCoins] = useState<string[]>([]);
-
   const { currencyKey, isCurrencyLoaded } = useCurrency();
-
   const { data: coins = [] } = useCoinsPreviewQuery(
     currencyKey,
     isCurrencyLoaded,
@@ -50,7 +48,6 @@ export default function RemoveCoinModal({ coinIds, onClose }: Props) {
         <div className="flex items-start justify-between px-6 pb-4 pt-6">
           <div>
             <h2 className="text-xl font-bold tracking-tight">Manage Assets</h2>
-
             <p className="mt-1 text-sm text-muted-foreground">
               Select coins you want to remove from your portfolio.
             </p>
@@ -58,7 +55,7 @@ export default function RemoveCoinModal({ coinIds, onClose }: Props) {
 
           <button
             onClick={onClose}
-            className="rounded-full p-2 text-muted-foreground transition hover:bg-black/5 hover:text-foreground dark:hover:bg-white/10"
+            className="rounded-full p-2  cursor-pointer text-muted-foreground transition hover:bg-black/5 hover:text-foreground dark:hover:bg-white/10"
           >
             <XIcon size={18} />
           </button>
@@ -72,7 +69,7 @@ export default function RemoveCoinModal({ coinIds, onClose }: Props) {
               <button
                 key={coin.id}
                 onClick={() => toggleCoin(coin.id)}
-                className={`group flex w-full items-center justify-between rounded-2xl border px-4 py-3.5 transition-all duration-200 ${
+                className={`group flex w-full items-center cursor-pointer justify-between rounded-2xl border px-4 py-3.5 transition-all duration-200 ${
                   selected
                     ? "border-[var(--brand-purple)] bg-[var(--brand-purple)]/10 shadow-sm"
                     : "border-black/5 bg-white/50 hover:-translate-y-[1px] hover:bg-black/[0.03] dark:border-white/10 dark:bg-white/[0.03] dark:hover:bg-white/[0.06]"

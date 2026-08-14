@@ -32,12 +32,12 @@ export default function CoinTable({ coins }: Props) {
   };
 
   return (
-    <div className="w-full max-w-[1440px] mx-auto px-[72px] text-foreground">
-      <h2 className="mt-6 text-sm font-bold sticky text-foreground">
+    <div className=" mt-6 w-full max-w-[1440px] mx-auto px-[72px] text-foreground">
+      <h2 className="text-sm font-bold sticky text-foreground">
         Market Overview
       </h2>
 
-      <div className="mt-6 overflow-x-auto max-h-[720px] relative">
+      <div className="mt-2 overflow-x-auto max-h-[720px] relative">
         <table className="w-full table-fixed border-separate border-spacing-y-2 ">
           <thead>
             <tr className="text-left text-sm text-foreground">

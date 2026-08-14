@@ -11,7 +11,7 @@ import PortfolioCoinTableHeader from "./portfolioCoinTableHeader";
 
 type Props = {
   coinIds: string[];
-  onAddTransaction?: (coin: Coin) => void;
+  onOpenTransactionModal?: (coin: Coin) => void;
   onRemoveCoin: (coinId: string) => void;
 };
 
@@ -19,35 +19,27 @@ const COINS_PER_PAGE = 5;
 
 export default function PortfolioCoinTable({
   coinIds,
-  onAddTransaction,
+  onOpenTransactionModal,
   onRemoveCoin,
 }: Props) {
   const [currentPage, setCurrentPage] = useState(1);
 
   const { currencyKey, isCurrencyLoaded } = useCurrency();
 
-  const { data: liveCoins = [] } = useCoinsPreviewQuery(
+  const { data: portfolioCoins = [] } = useCoinsPreviewQuery(
     currencyKey,
-    isCurrencyLoaded,
+    isCurrencyLoaded && coinIds.length > 0,
+    coinIds,
   );
 
-  const portfolioCoinIds = new Set(coinIds);
-
-  const livePortfolioCoins = liveCoins.filter((coin) =>
-    portfolioCoinIds.has(coin.id),
-  );
-
-  const totalCoins = livePortfolioCoins.length;
-
+  const totalCoins = portfolioCoins.length;
   const totalPages = Math.max(1, Math.ceil(totalCoins / COINS_PER_PAGE));
-
   const safeCurrentPage = Math.min(currentPage, totalPages);
 
   const startIndex = (safeCurrentPage - 1) * COINS_PER_PAGE;
-
   const endIndex = startIndex + COINS_PER_PAGE;
 
-  const coinsForCurrentPage = livePortfolioCoins.slice(startIndex, endIndex);
+  const coinsForCurrentPage = portfolioCoins.slice(startIndex, endIndex);
 
   const pageNumbers = Array.from(
     { length: totalPages },
@@ -65,7 +57,7 @@ export default function PortfolioCoinTable({
               <PortfolioCoinRow
                 key={coin.id}
                 coin={coin}
-                onAddTransaction={onAddTransaction}
+                onOpenTransactionModal={onOpenTransactionModal}
                 onRemoveCoin={onRemoveCoin}
               />
             ))}
@@ -77,7 +69,7 @@ export default function PortfolioCoinTable({
         <PortfolioPagination
           startIndex={startIndex}
           endIndex={endIndex}
-          totalItems={livePortfolioCoins.length}
+          totalItems={totalCoins}
           currentPage={safeCurrentPage}
           totalPages={totalPages}
           pageNumbers={pageNumbers}

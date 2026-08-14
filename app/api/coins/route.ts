@@ -7,6 +7,7 @@ export async function GET(request: Request) {
   const currency = searchParams.get("currency") || "usd";
   const perPage = searchParams.get("perPage") || "20";
   const page = searchParams.get("page") || "1";
+  const ids = searchParams.get("ids");
   if (!currency) {
     return NextResponse.json(
       { error: "currency query parameter is required" },
@@ -26,6 +27,7 @@ export async function GET(request: Request) {
           order: "market_cap_desc",
           price_change_percentage: "1h,24h,7d",
           sparkline: true,
+          ...(ids ? { ids } : {}),
         },
       },
     );

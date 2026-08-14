@@ -3,19 +3,19 @@ import PortfolioCoinTable from "./portfolioCoinTable";
 
 type Props = {
   coinIds: string[];
-  onAddTransaction?: (coin: Coin) => void;
+  onOpenTransactionModal?: (coin: Coin) => void;
   onRemoveCoin: (coinId: string) => void;
 };
 
 export default function PortfolioAssets({
   coinIds,
-  onAddTransaction,
+  onOpenTransactionModal,
   onRemoveCoin,
 }: Props) {
   return (
     <PortfolioCoinTable
       coinIds={coinIds}
-      onAddTransaction={onAddTransaction}
+      onOpenTransactionModal={onOpenTransactionModal}
       onRemoveCoin={onRemoveCoin}
     />
   );
