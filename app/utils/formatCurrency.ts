@@ -8,7 +8,7 @@ export const formatCurrencyCompact = (
     compactDisplay: "short",
   }).format(num);
 
-  return symbol ? `${symbol} ${formattedNumber}` : formattedNumber;
+  return symbol ? `${symbol}${formattedNumber}` : formattedNumber;
 };
 
 /**

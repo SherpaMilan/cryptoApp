@@ -6,7 +6,6 @@ import { MagnifyingGlassIcon, XIcon } from "@phosphor-icons/react";
 import CoinListPanel from "./coinListPanel";
 import CoinPreviewPanel from "./coinPreviewPanel";
 import CoinModalFooter from "./coinModalFooter";
-import CoinFilterTabs from "./coinFilterTabs";
 import PortfolioCoinModalSkeleton from "@/portfolio/skeletons/portfolioCoinModalSkeleton";
 
 import { useCurrency } from "@/store/useCurrencyStore";
@@ -15,21 +14,26 @@ import { useCoinDetailQuery } from "@/hooks/useCoinDetailQuery";
 import { usePortfolioStore } from "@/portfolio/store/usePortfolioStore";
 import { useCoinSearchQuery } from "@/hooks/useCoinSearchQuery";
 import { MIN_SEARCH_LENGTH } from "@/constants/search";
+import CoinFilterTabs, { type CoinFilter } from "./coinFilterTabs";
 
 type Props = {
   onClose: () => void;
 };
-type CoinFilter = "top" | "gainers" | "losers";
+const EMPTY_COIN_IDS: string[] = [];
 
 export default function AddCoinModal({ onClose }: Props) {
   const [search, setSearch] = useState("");
   const [previewedCoinId, setPreviewedCoinId] = useState<string | null>(null);
   const [selectedCoinIds, setSelectedCoinIds] = useState<string[]>([]);
   const [activeFilter, setActiveFilter] = useState<CoinFilter>("top");
+
   const { defaultCurrency, currencyKey, currencySymbol, isCurrencyLoaded } =
     useCurrency();
 
-  // Default Top 100
+  const recentlyAddedCoinIds = usePortfolioStore(
+    (state) => state.currentPortfolio?.recentlyAddedCoinIds ?? EMPTY_COIN_IDS,
+  );
+
   const {
     data: topCoins = [],
     isLoading: isLoadingTopCoins,
@@ -42,7 +46,6 @@ export default function AddCoinModal({ onClose }: Props) {
     isError: isSearchError,
   } = useCoinSearchQuery(search);
 
-  // Get full Coin objects from the search result IDs
   const searchedCoinIds = searchResults.map((coin) => coin.id);
 
   const {
@@ -55,24 +58,40 @@ export default function AddCoinModal({ onClose }: Props) {
     searchedCoinIds,
   );
 
+  const {
+    data: recentlyAddedCoins = [],
+    isLoading: isLoadingRecentlyAdded,
+    isError: isRecentlyAddedError,
+  } = useCoinsPreviewQuery(
+    defaultCurrency,
+    isCurrencyLoaded && recentlyAddedCoinIds.length > 0,
+    recentlyAddedCoinIds,
+  );
+
   const isSearching = search.trim().length > MIN_SEARCH_LENGTH;
 
-  // search results or the default filtered list
   const displayedCoins = useMemo(() => {
     if (isSearching) return searchedCoins;
+
+    if (activeFilter === "recentlyAdded") {
+      return recentlyAddedCoins;
+    }
 
     return [...topCoins].sort((a, b) => {
       const aChange = a.price_change_percentage_24h_in_currency ?? 0;
       const bChange = b.price_change_percentage_24h_in_currency ?? 0;
+
       if (activeFilter === "losers") {
         return aChange - bChange;
       }
+
       if (activeFilter === "gainers") {
         return bChange - aChange;
       }
+
       return 0;
     });
-  }, [topCoins, searchedCoins, isSearching, activeFilter]);
+  }, [topCoins, searchedCoins, recentlyAddedCoins, isSearching, activeFilter]);
 
   const coinBeingPreviewed =
     displayedCoins.find((coin) => coin.id === previewedCoinId) ??
@@ -80,14 +99,17 @@ export default function AddCoinModal({ onClose }: Props) {
 
   const { data: coinDetail } = useCoinDetailQuery(coinBeingPreviewed?.id ?? "");
 
-  // Use the loading/error state for the active data source
   const isLoading = isSearching
     ? isLoadingSearch || isLoadingSearchedCoins
-    : isLoadingTopCoins;
+    : activeFilter === "recentlyAdded"
+      ? isLoadingRecentlyAdded
+      : isLoadingTopCoins;
 
   const hasError = isSearching
     ? isSearchError || isSearchedCoinsError
-    : isTopCoinsError;
+    : activeFilter === "recentlyAdded"
+      ? isRecentlyAddedError
+      : isTopCoinsError;
 
   const noMatchingCoins =
     isSearching && !isLoadingSearch && searchResults.length === 0;

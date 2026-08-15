@@ -6,18 +6,20 @@ export type Portfolio = {
   name: string;
   icon: string;
   coinIds: string[];
+  recentlyAddedCoinIds: string[];
 };
 
 interface PortfolioStore {
   portfolios: Portfolio[];
   currentPortfolio: Portfolio | null;
   hasHydrated: boolean;
-  setHasHydrated: (value: boolean) => void;
 
+  setHasHydrated: (value: boolean) => void;
   createPortfolio: (portfolio: Portfolio) => void;
   editPortfolio: (portfolio: Portfolio) => void;
   removePortfolio: (portfolioId: string) => void;
   setCurrentPortfolio: (portfolio: Portfolio) => void;
+
   addCoinsToCurrentPortfolio: (coinIds: string[]) => void;
   removeCoinFromCurrentPortfolio: (coinId: string) => void;
   removeCoinsFromCurrentPortfolio: (coinIds: string[]) => void;
@@ -28,15 +30,16 @@ export const usePortfolioStore = create<PortfolioStore>()(
     (set) => ({
       portfolios: [],
       currentPortfolio: null,
-      hasHydrated: false, // At this moment it has not read localStorage yet.
+      hasHydrated: false,
 
       setHasHydrated: (value) => set({ hasHydrated: value }),
 
       createPortfolio: (portfolio) =>
         set((state) => {
-          const newPortfolio = {
+          const newPortfolio: Portfolio = {
             ...portfolio,
             coinIds: portfolio.coinIds ?? [],
+            recentlyAddedCoinIds: portfolio.recentlyAddedCoinIds ?? [],
           };
 
           return {
@@ -55,6 +58,7 @@ export const usePortfolioStore = create<PortfolioStore>()(
           portfolios: state.portfolios.map((portfolio) =>
             portfolio.id === editedPortfolio.id ? editedPortfolio : portfolio,
           ),
+
           currentPortfolio:
             state.currentPortfolio?.id === editedPortfolio.id
               ? editedPortfolio
@@ -75,19 +79,31 @@ export const usePortfolioStore = create<PortfolioStore>()(
                 : state.currentPortfolio,
           };
         }),
+
       addCoinsToCurrentPortfolio: (coinIds) =>
         set((state) => {
           if (!state.currentPortfolio) return state;
 
-          const existingCoinIds = state.currentPortfolio.coinIds ?? [];
+          const portfolio = state.currentPortfolio;
+
+          const existingCoinIds = portfolio.coinIds ?? [];
+          const recentlyAddedCoinIds = portfolio.recentlyAddedCoinIds ?? [];
 
           const newCoinIds = coinIds.filter(
-            (coinId) => !existingCoinIds.includes(coinId),
+            (id) => !existingCoinIds.includes(id),
+          );
+
+          const newRecentlyAdded = coinIds.filter(
+            (id) => !recentlyAddedCoinIds.includes(id),
           );
 
           const updatedPortfolio = {
-            ...state.currentPortfolio,
+            ...portfolio,
             coinIds: [...existingCoinIds, ...newCoinIds],
+            recentlyAddedCoinIds: [
+              ...recentlyAddedCoinIds,
+              ...newRecentlyAdded,
+            ],
           };
 
           return {
@@ -102,15 +118,15 @@ export const usePortfolioStore = create<PortfolioStore>()(
 
       removeCoinFromCurrentPortfolio: (coinId) =>
         set((state) => {
-          if (!state.currentPortfolio) return state;
+          if (!state.currentPortfolio) {
+            return state;
+          }
 
-          const updatedCoinIds = state.currentPortfolio.coinIds.filter(
-            (id) => id !== coinId,
-          );
-
-          const updatedPortfolio = {
+          const updatedPortfolio: Portfolio = {
             ...state.currentPortfolio,
-            coinIds: updatedCoinIds,
+            coinIds: state.currentPortfolio.coinIds.filter(
+              (id) => id !== coinId,
+            ),
           };
 
           return {
@@ -122,11 +138,14 @@ export const usePortfolioStore = create<PortfolioStore>()(
             ),
           };
         }),
+
       removeCoinsFromCurrentPortfolio: (coinIds) =>
         set((state) => {
-          if (!state.currentPortfolio) return state;
+          if (!state.currentPortfolio || coinIds.length === 0) {
+            return state;
+          }
 
-          const updatedPortfolio = {
+          const updatedPortfolio: Portfolio = {
             ...state.currentPortfolio,
             coinIds: state.currentPortfolio.coinIds.filter(
               (id) => !coinIds.includes(id),
@@ -145,6 +164,7 @@ export const usePortfolioStore = create<PortfolioStore>()(
     }),
     {
       name: "portfolio-storage",
+
       onRehydrateStorage: () => (state) => {
         state?.setHasHydrated(true);
       },

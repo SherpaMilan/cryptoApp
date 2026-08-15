@@ -16,7 +16,7 @@ const iconButtonClass =
   "flex h-8 w-8 cursor-pointer items-center justify-center rounded-lg text-muted-foreground transition duration-200 hover:scale-105 active:scale-95";
 
 function formatCurrentPrice(value: number, symbol: string) {
-  return `${symbol} ${value.toLocaleString()}`;
+  return `${symbol}${value.toLocaleString()}`;
 }
 
 export default function PortfolioCoinRow({
@@ -37,7 +37,7 @@ export default function PortfolioCoinRow({
   return (
     <tr className="border-b border-black/5 transition-colors hover:bg-black/[0.025] dark:border-white/[0.06] dark:hover:bg-white/[0.03]">
       <td className="w-12 px-4 py-4 text-left">
-        <p className="text-sm font-bold tabular-nums text-muted-foreground">
+        <p className="text-sm font-semibold tabular-nums text-muted-foreground">
           {rank == null ? "—" : rank}
         </p>
       </td>
@@ -51,8 +51,9 @@ export default function PortfolioCoinRow({
               width={26}
               height={26}
               className="h-[26px] w-[26px] rounded-full object-contain"
-            />{" "}
+            />
           </div>
+
           <div className="min-w-0">
             <p className="truncate text-sm font-bold">{coin.name}</p>
 
@@ -64,7 +65,7 @@ export default function PortfolioCoinRow({
       </td>
 
       <td className="px-4 py-4 text-right">
-        <p className="text-sm tabular-nums ">
+        <p className="text-sm font-semibold tabular-nums">
           {currentPrice == null
             ? "—"
             : formatCurrentPrice(currentPrice, currencySymbol)}
@@ -73,16 +74,16 @@ export default function PortfolioCoinRow({
 
       <td className="px-4 py-4 text-right">
         {priceChange == null ? (
-          <span className="text-sm text-muted-foreground">N/A</span>
+          <span className="text-sm font-semibold text-muted-foreground">
+            N/A
+          </span>
         ) : (
           <span
-            className={`rounded-full px-2.5 py-1 text-xs font-bold tabular-nums
-              ${
-                isPositive
-                  ? "bg-[var(--brand-green)]/10 text-[var(--brand-green)]"
-                  : "bg-[var(--brand-red)]/10 text-[var(--brand-red)]"
-              }
-            `}
+            className={`rounded-full px-2.5 py-1 text-xs font-bold tabular-nums ${
+              isPositive
+                ? "bg-[var(--brand-green)]/10 text-[var(--brand-green)]"
+                : "bg-[var(--brand-red)]/10 text-[var(--brand-red)]"
+            }`}
           >
             {priceChange >= 0 ? "+" : ""}
             {priceChange.toFixed(2)}%
@@ -91,7 +92,7 @@ export default function PortfolioCoinRow({
       </td>
 
       <td className="px-4 py-4 text-right">
-        <p className="text-sm tabular-nums">
+        <p className="text-sm font-semibold tabular-nums">
           {volume24h == null
             ? "—"
             : formatCurrencyCompact(volume24h, currencyKey, currencySymbol)}
@@ -99,7 +100,7 @@ export default function PortfolioCoinRow({
       </td>
 
       <td className="px-4 py-4 text-right">
-        <p className="text-sm tabular-nums">
+        <p className="text-sm font-semibold tabular-nums">
           {marketCap == null
             ? "—"
             : formatCurrencyCompact(marketCap, currencyKey, currencySymbol)}
@@ -107,7 +108,7 @@ export default function PortfolioCoinRow({
       </td>
 
       <td className="px-4 py-4 text-right">
-        <p className="text-[11px] text-muted-foreground/70">
+        <p className="text-[11px] font-medium text-muted-foreground/70">
           Add a transaction
         </p>
       </td>

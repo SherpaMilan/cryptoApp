@@ -16,16 +16,16 @@ type Props = {
 export default function RemoveCoinModal({ coinIds, onClose }: Props) {
   const [selectedCoins, setSelectedCoins] = useState<string[]>([]);
   const { currencyKey, isCurrencyLoaded } = useCurrency();
-  const { data: coins = [] } = useCoinsPreviewQuery(
+
+  const { data: portfolioCoins = [], isLoading } = useCoinsPreviewQuery(
     currencyKey,
-    isCurrencyLoaded,
+    isCurrencyLoaded && coinIds.length > 0,
+    coinIds,
   );
 
   const removeCoins = usePortfolioStore(
     (state) => state.removeCoinsFromCurrentPortfolio,
   );
-
-  const portfolioCoins = coins.filter((coin) => coinIds.includes(coin.id));
 
   function toggleCoin(coinId: string) {
     setSelectedCoins((current) =>
@@ -48,6 +48,7 @@ export default function RemoveCoinModal({ coinIds, onClose }: Props) {
         <div className="flex items-start justify-between px-6 pb-4 pt-6">
           <div>
             <h2 className="text-xl font-bold tracking-tight">Manage Assets</h2>
+
             <p className="mt-1 text-sm text-muted-foreground">
               Select coins you want to remove from your portfolio.
             </p>
@@ -55,68 +56,78 @@ export default function RemoveCoinModal({ coinIds, onClose }: Props) {
 
           <button
             onClick={onClose}
-            className="rounded-full p-2  cursor-pointer text-muted-foreground transition hover:bg-black/5 hover:text-foreground dark:hover:bg-white/10"
+            className="cursor-pointer rounded-full p-2 text-muted-foreground transition hover:bg-black/5 hover:text-foreground dark:hover:bg-white/10"
           >
             <XIcon size={18} />
           </button>
         </div>
 
         <div className="max-h-[380px] space-y-2 overflow-y-auto px-6 py-2">
-          {portfolioCoins.map((coin) => {
-            const selected = selectedCoins.includes(coin.id);
+          {isLoading ? (
+            <div className="flex justify-center py-10 text-sm text-muted-foreground">
+              Loading coins...
+            </div>
+          ) : portfolioCoins.length === 0 ? (
+            <div className="flex justify-center py-10 text-sm text-muted-foreground">
+              No coins in this portfolio.
+            </div>
+          ) : (
+            portfolioCoins.map((coin) => {
+              const selected = selectedCoins.includes(coin.id);
 
-            return (
-              <button
-                key={coin.id}
-                onClick={() => toggleCoin(coin.id)}
-                className={`group flex w-full items-center cursor-pointer justify-between rounded-2xl border px-4 py-3.5 transition-all duration-200 ${
-                  selected
-                    ? "border-[var(--brand-purple)] bg-[var(--brand-purple)]/10 shadow-sm"
-                    : "border-black/5 bg-white/50 hover:-translate-y-[1px] hover:bg-black/[0.03] dark:border-white/10 dark:bg-white/[0.03] dark:hover:bg-white/[0.06]"
-                }`}
-              >
-                <div className="flex items-center gap-4">
-                  <div className="relative">
-                    <div
-                      className={`flex h-11 w-11 items-center justify-center rounded-full border transition ${
-                        selected
-                          ? "border-[var(--brand-purple)] bg-[var(--brand-purple)]/10"
-                          : "border-black/5 bg-black/5 dark:border-white/10 dark:bg-white/10"
-                      }`}
-                    >
-                      <Image
-                        src={coin.image}
-                        alt={coin.name}
-                        width={28}
-                        height={28}
-                        className="rounded-full"
-                      />
+              return (
+                <button
+                  key={coin.id}
+                  onClick={() => toggleCoin(coin.id)}
+                  className={`group flex w-full cursor-pointer items-center justify-between rounded-2xl border px-4 py-3.5 transition-all duration-200 ${
+                    selected
+                      ? "border-[var(--brand-purple)] bg-[var(--brand-purple)]/10 shadow-sm"
+                      : "border-black/5 bg-white/50 hover:-translate-y-[1px] hover:bg-black/[0.03] dark:border-white/10 dark:bg-white/[0.03] dark:hover:bg-white/[0.06]"
+                  }`}
+                >
+                  <div className="flex items-center gap-4">
+                    <div className="relative">
+                      <div
+                        className={`flex h-11 w-11 items-center justify-center rounded-full border transition ${
+                          selected
+                            ? "border-[var(--brand-purple)] bg-[var(--brand-purple)]/10"
+                            : "border-black/5 bg-black/5 dark:border-white/10 dark:bg-white/10"
+                        }`}
+                      >
+                        <Image
+                          src={coin.image}
+                          alt={coin.name}
+                          width={28}
+                          height={28}
+                          className="rounded-full"
+                        />
+                      </div>
+
+                      {selected && (
+                        <div className="absolute -bottom-1 -right-1 flex h-5 w-5 items-center justify-center rounded-full bg-[var(--brand-purple)] text-white shadow">
+                          <CheckIcon size={12} weight="bold" />
+                        </div>
+                      )}
                     </div>
 
-                    {selected && (
-                      <div className="absolute -bottom-1 -right-1 flex h-5 w-5 items-center justify-center rounded-full bg-[var(--brand-purple)] text-white shadow">
-                        <CheckIcon size={12} weight="bold" />
-                      </div>
-                    )}
+                    <div className="text-left">
+                      <p className="font-semibold">{coin.name}</p>
+
+                      <p className="text-xs uppercase tracking-wide text-muted-foreground">
+                        {coin.symbol}
+                      </p>
+                    </div>
                   </div>
 
-                  <div className="text-left">
-                    <p className="font-semibold">{coin.name}</p>
-
-                    <p className="text-xs uppercase tracking-wide text-muted-foreground">
-                      {coin.symbol}
-                    </p>
-                  </div>
-                </div>
-
-                {selected && (
-                  <span className="text-xs font-semibold text-[var(--brand-purple)]">
-                    Selected
-                  </span>
-                )}
-              </button>
-            );
-          })}
+                  {selected && (
+                    <span className="text-xs font-semibold text-[var(--brand-purple)]">
+                      Selected
+                    </span>
+                  )}
+                </button>
+              );
+            })
+          )}
         </div>
 
         <div className="flex items-center justify-between border-t border-black/5 px-6 py-5 dark:border-white/10">
