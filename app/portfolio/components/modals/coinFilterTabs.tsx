@@ -1,13 +1,16 @@
 import {
   ChartLineDownIcon,
   ChartLineUpIcon,
-  CoinsIcon,
+  StarIcon,
+  TrophyIcon,
 } from "@phosphor-icons/react";
+
+export type CoinFilter = "top" | "gainers" | "losers" | "recentlyAdded";
 
 type Props = {
   coinCount: number;
-  activeFilter: "top" | "gainers" | "losers";
-  onChangeFilter: (filter: "top" | "gainers" | "losers") => void;
+  activeFilter: CoinFilter;
+  onChangeFilter: (filter: CoinFilter) => void;
 };
 
 export default function CoinFilterTabs({
@@ -16,7 +19,7 @@ export default function CoinFilterTabs({
   onChangeFilter,
 }: Props) {
   const baseClass =
-    "cursor-pointer select-none flex items-center gap-1.5 rounded-full px-3 py-1.5 text-[11px] font-semibold transition-all duration-200 hover:-translate-y-[1px] active:scale-[0.98]";
+    "cursor-pointer select-none flex items-center gap-1.5 rounded-full px-3.5 py-1.5 text-[11px] font-semibold transition-all duration-200 hover:-translate-y-[1px] active:scale-[0.98]";
 
   const activeClass =
     "border border-[var(--brand-purple)] bg-[var(--brand-purple)] text-white shadow-[0_8px_20px_rgba(124,58,237,0.25)]";
@@ -33,7 +36,7 @@ export default function CoinFilterTabs({
           activeFilter === "top" ? activeClass : inactiveClass
         }`}
       >
-        <CoinsIcon size={18} />
+        <TrophyIcon size={17} weight="bold" />
         Top {coinCount}
       </button>
 
@@ -44,7 +47,7 @@ export default function CoinFilterTabs({
           activeFilter === "gainers" ? activeClass : inactiveClass
         }`}
       >
-        <ChartLineUpIcon size={18} />
+        <ChartLineUpIcon size={17} weight="bold" />
         Gainers
       </button>
 
@@ -55,8 +58,19 @@ export default function CoinFilterTabs({
           activeFilter === "losers" ? activeClass : inactiveClass
         }`}
       >
-        <ChartLineDownIcon size={18} />
+        <ChartLineDownIcon size={17} weight="bold" />
         Losers
+      </button>
+
+      <button
+        type="button"
+        onClick={() => onChangeFilter("recentlyAdded")}
+        className={`${baseClass} ${
+          activeFilter === "recentlyAdded" ? activeClass : inactiveClass
+        }`}
+      >
+        <StarIcon size={17} weight="bold" />
+        Recently Added
       </button>
     </div>
   );

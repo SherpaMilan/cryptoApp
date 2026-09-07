@@ -9,6 +9,7 @@ body {
   height: 100%;
   margin: 0;
 }
+
 h1,
 h2,
 h3,
@@ -21,8 +22,9 @@ p {
 }
 
 /* =========================
-   BRAND COLORS (RAW TOKENS)
+   BRAND COLORS + TOKENS
 ========================= */
+
 :root {
   --brand-purple-light: #ccccfa66;
   --brand-purple: #6161d680;
@@ -35,21 +37,38 @@ p {
   --brand-light-gray: #fafafa;
   --brand-red: #fe2264;
   --brand-black: #181825;
+
   --brand-dark-gray: #e9edf3;
   --brand-dark-purple: #353570;
   --brand-medium-gray: #e7e1e1;
   --brand-purple-text: #424286;
 
+  /* =========================
+     FONT TOKENS
+  ========================= */
+
+  --font-body: var(--font-manrope);
+  --font-data: var(--font-plex-mono);
+  --font-heading: var(--font-manrope);
+
+  /* =========================
+     APP COLORS
+  ========================= */
+
   --background: var(--brand-gray);
   --foreground: var(--brand-black);
+
   --card: var(--brand-purple-light);
   --card-hover: var(--brand-light-gray);
+
   --border: rgb(7, 13, 57);
+
   --tab-bg: #ffffff;
   --tab-inactive: #6b7280;
   --tab-active-bg: var(--brand-indigo-light);
   --tab-active-text: #ffffff;
   --tab-hover: #eef0ff;
+
   --chart-bg: rgba(255, 255, 255, 0.85);
   --chart-muted: #6b7280;
 
@@ -58,7 +77,9 @@ p {
   --time-inactive: #181825;
   --time-hover: rgba(120, 120, 255, 0.1);
   --time-active-text: #181825;
+
   --time-active-shadow: 4px 4px 20px 8px rgba(120, 120, 255, 0.15);
+
   --table-row: rgba(255, 255, 255, 0.75);
   --table-hover: rgba(245, 247, 255, 0.95);
   --table-border: rgba(220, 225, 235, 0.6);
@@ -72,12 +93,20 @@ p {
   --metric-max-label: #111827;
 
   --form-shadow: 0 25px 60px rgba(0, 0, 0, 0.18);
+
   --warning-shadow: 0 0 40px rgba(239, 68, 68, 0.55);
+
   --blue-energy: #4895ef;
 }
+
+/* =========================
+   COLOR UTILITIES
+========================= */
+
 .bright-amber {
   background-color: #ffd000;
 }
+
 .antique-white {
   background-color: #ffedd8;
 }
@@ -93,12 +122,18 @@ p {
 .pink-mist {
   background-color: #f49cbb;
 }
+
 .cherry-blossom {
   background-color: #fbb1bd;
 }
+
 .mint-leaf {
   background-color: #74c69d;
 }
+
+/* =========================
+   DARK MODE
+========================= */
 
 .dark {
   --background: var(--brand-black);
@@ -106,6 +141,7 @@ p {
 
   --card: #202534;
   --card-hover: #313c5c;
+
   --border: rgba(244, 238, 238, 0.966);
 
   --tab-bg: #eaeef3;
@@ -123,6 +159,7 @@ p {
   --time-hover: rgba(120, 120, 255, 0.12);
 
   --time-active-text: #ffffff;
+
   --time-active-shadow: 0 0 25px rgba(168, 85, 247, 0.25);
 
   --table-row: rgba(32, 37, 52, 0.85);
@@ -138,8 +175,13 @@ p {
   --metric-max-label: rgba(255, 255, 255, 0.95);
 
   --form-shadow: 0 25px 60px rgba(0, 0, 0, 0.5);
+
   --warning-shadow: 0 0 40px rgba(239, 68, 68, 0.7);
 }
+
+/* =========================
+   TAILWIND THEME
+========================= */
 
 @theme inline {
   --color-background: var(--background);
@@ -147,35 +189,42 @@ p {
 
   --color-card: var(--card);
   --color-card-hover: var(--card-hover);
-  --color-card-accent: var(--card-accent);
 
   --color-border: var(--border);
-  --color-input: var(--input);
-  --color-ring: var(--ring);
 
-  --font-sans: var(--font-sans);
-  --font-mono: var(--font-geist-mono);
-  --font-heading: var(--font-sans);
+  --font-sans: var(--font-manrope);
+  --font-mono: var(--font-plex-mono);
+  --font-heading: var(--font-manrope);
 }
+
+/* =========================
+   BASE
+========================= */
 
 @layer base {
   * {
-    @apply border-border outline-ring/50;
+    @apply border-border;
   }
 
   body {
+    font-family: var(--font-inter);
     @apply bg-background text-foreground;
   }
 
   html {
-    @apply font-sans;
+    font-family: var(--font-inter);
   }
 }
+
+/* =========================
+   ANIMATIONS
+========================= */
 
 @keyframes shimmer {
   0% {
     background-position: -200% 0;
   }
+
   100% {
     background-position: 200% 0;
   }
@@ -183,9 +232,14 @@ p {
 
 .animate-shimmer {
   background: linear-gradient(90deg, #eef3f8 25%, #f5f9fc 50%, #eef3f8 75%);
+
   background-size: 200% 100%;
   animation: shimmer 1.4s linear infinite;
 }
+
+/* =========================
+   SCROLLBAR
+========================= */
 
 ::-webkit-scrollbar {
   width: 6px;
@@ -195,13 +249,11 @@ p {
   background: transparent;
 }
 
-/* LIGHT MODE */
 ::-webkit-scrollbar-thumb {
   background-color: rgba(100, 100, 120, 0.4);
   border-radius: 999px;
 }
 
-/* DARK MODE */
 .dark ::-webkit-scrollbar-thumb {
   background-color: rgba(255, 255, 255, 0.85);
 }
@@ -209,6 +261,10 @@ p {
 .dark ::-webkit-scrollbar-thumb:hover {
   background-color: rgba(255, 255, 255, 1);
 }
+
+/* =========================
+   CUSTOM UTILITIES
+========================= */
 
 @utility shadow-form {
   box-shadow: var(--form-shadow);

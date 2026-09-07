@@ -53,7 +53,7 @@ export default function CoinTableRow({
 
       <td className={tdClass}>
         <div className="flex items-center gap-2">
-          <div className="w-7 h-7 rounded-full overflow-hidden bg-background flex items-center justify-center border border-border">
+          <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-white shadow-sm dark:bg-white/[0.08]">
             <Image src={coin.image} alt={coin.name} width={28} height={28} />
           </div>
 

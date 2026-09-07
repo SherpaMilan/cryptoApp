@@ -49,6 +49,8 @@ export default function PortfolioCreationForm({
       name: portfolioName.trim(),
       icon: avatar,
       coinIds: mode === "edit" && portfolio ? portfolio.coinIds : [],
+      recentlyAddedCoinIds:
+        mode === "edit" && portfolio ? portfolio.recentlyAddedCoinIds : [],
     };
 
     if (mode === "edit") {

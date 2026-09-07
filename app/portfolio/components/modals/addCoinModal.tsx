@@ -6,64 +6,92 @@ import { MagnifyingGlassIcon, XIcon } from "@phosphor-icons/react";
 import CoinListPanel from "./coinListPanel";
 import CoinPreviewPanel from "./coinPreviewPanel";
 import CoinModalFooter from "./coinModalFooter";
-import CoinFilterTabs from "./coinFilterTabs";
 import PortfolioCoinModalSkeleton from "@/portfolio/skeletons/portfolioCoinModalSkeleton";
 
 import { useCurrency } from "@/store/useCurrencyStore";
 import { useCoinsPreviewQuery } from "@/hooks/useCoinsPreviewQuery";
 import { useCoinDetailQuery } from "@/hooks/useCoinDetailQuery";
 import { usePortfolioStore } from "@/portfolio/store/usePortfolioStore";
+import { useCoinSearchQuery } from "@/hooks/useCoinSearchQuery";
+import { MIN_SEARCH_LENGTH } from "@/constants/search";
+import CoinFilterTabs, { type CoinFilter } from "./coinFilterTabs";
 
 type Props = {
   onClose: () => void;
 };
-type CoinFilter = "top" | "gainers" | "losers";
+const EMPTY_COIN_IDS: string[] = [];
 
 export default function AddCoinModal({ onClose }: Props) {
   const [search, setSearch] = useState("");
   const [previewedCoinId, setPreviewedCoinId] = useState<string | null>(null);
   const [selectedCoinIds, setSelectedCoinIds] = useState<string[]>([]);
   const [activeFilter, setActiveFilter] = useState<CoinFilter>("top");
+
   const { defaultCurrency, currencyKey, currencySymbol, isCurrencyLoaded } =
     useCurrency();
 
+  const recentlyAddedCoinIds = usePortfolioStore(
+    (state) => state.currentPortfolio?.recentlyAddedCoinIds ?? EMPTY_COIN_IDS,
+  );
+
   const {
-    data: coins = [],
-    isLoading,
-    isError,
+    data: topCoins = [],
+    isLoading: isLoadingTopCoins,
+    isError: isTopCoinsError,
   } = useCoinsPreviewQuery(defaultCurrency, isCurrencyLoaded);
 
+  const {
+    data: searchResults = [],
+    isLoading: isLoadingSearch,
+    isError: isSearchError,
+  } = useCoinSearchQuery(search);
+
+  const searchedCoinIds = searchResults.map((coin) => coin.id);
+
+  const {
+    data: searchedCoins = [],
+    isLoading: isLoadingSearchedCoins,
+    isError: isSearchedCoinsError,
+  } = useCoinsPreviewQuery(
+    defaultCurrency,
+    isCurrencyLoaded && searchedCoinIds.length > 0,
+    searchedCoinIds,
+  );
+
+  const {
+    data: recentlyAddedCoins = [],
+    isLoading: isLoadingRecentlyAdded,
+    isError: isRecentlyAddedError,
+  } = useCoinsPreviewQuery(
+    defaultCurrency,
+    isCurrencyLoaded && recentlyAddedCoinIds.length > 0,
+    recentlyAddedCoinIds,
+  );
+
+  const isSearching = search.trim().length > MIN_SEARCH_LENGTH;
+
   const displayedCoins = useMemo(() => {
-    const searchValue = search.toLowerCase().trim();
+    if (isSearching) return searchedCoins;
 
-    return coins
-      .filter((coin) => {
-        return (
-          coin.name.toLowerCase().includes(searchValue) ||
-          coin.symbol.toLowerCase().includes(searchValue)
-        );
-      })
-      .sort((a, b) => {
-        if (activeFilter === "losers") {
-          return (
-            (a.price_change_percentage_24h_in_currency ?? Infinity) -
-            (b.price_change_percentage_24h_in_currency ?? Infinity)
-          );
-        }
+    if (activeFilter === "recentlyAdded") {
+      return recentlyAddedCoins;
+    }
 
-        if (activeFilter === "gainers") {
-          return (
-            (b.price_change_percentage_24h_in_currency ?? -Infinity) -
-            (a.price_change_percentage_24h_in_currency ?? -Infinity)
-          );
-        }
+    return [...topCoins].sort((a, b) => {
+      const aChange = a.price_change_percentage_24h_in_currency ?? 0;
+      const bChange = b.price_change_percentage_24h_in_currency ?? 0;
 
-        return 0;
-      });
-  }, [coins, search, activeFilter]);
+      if (activeFilter === "losers") {
+        return aChange - bChange;
+      }
 
-  const noMatchingCoins =
-    search.trim().length > 0 && displayedCoins.length === 0;
+      if (activeFilter === "gainers") {
+        return bChange - aChange;
+      }
+
+      return 0;
+    });
+  }, [topCoins, searchedCoins, recentlyAddedCoins, isSearching, activeFilter]);
 
   const coinBeingPreviewed =
     displayedCoins.find((coin) => coin.id === previewedCoinId) ??
@@ -71,13 +99,29 @@ export default function AddCoinModal({ onClose }: Props) {
 
   const { data: coinDetail } = useCoinDetailQuery(coinBeingPreviewed?.id ?? "");
 
+  const isLoading = isSearching
+    ? isLoadingSearch || isLoadingSearchedCoins
+    : activeFilter === "recentlyAdded"
+      ? isLoadingRecentlyAdded
+      : isLoadingTopCoins;
+
+  const hasError = isSearching
+    ? isSearchError || isSearchedCoinsError
+    : activeFilter === "recentlyAdded"
+      ? isRecentlyAddedError
+      : isTopCoinsError;
+
+  const noMatchingCoins =
+    isSearching && !isLoadingSearch && searchResults.length === 0;
+
   function handleCoinSelection(coinId: string) {
-    setSelectedCoinIds((selectedCoins) =>
-      selectedCoins.includes(coinId)
-        ? selectedCoins.filter((id) => id !== coinId)
-        : [...selectedCoins, coinId],
+    setSelectedCoinIds((selected) =>
+      selected.includes(coinId)
+        ? selected.filter((id) => id !== coinId)
+        : [...selected, coinId],
     );
   }
+
   const addCoinsToPortfolio = usePortfolioStore(
     (state) => state.addCoinsToCurrentPortfolio,
   );
@@ -98,13 +142,13 @@ export default function AddCoinModal({ onClose }: Props) {
 
             <button
               onClick={onClose}
-              className="flex h-10 w-10  cursor-pointer items-center justify-center rounded-full bg-black/[0.04] text-muted-foreground transition hover:bg-black/[0.08] hover:text-foreground dark:bg-white/[0.06]"
+              className="flex h-10 w-10 cursor-pointer items-center justify-center rounded-full bg-black/[0.04] text-muted-foreground transition hover:bg-black/[0.08] hover:text-foreground dark:bg-white/[0.06]"
             >
               <XIcon size={20} />
             </button>
           </div>
 
-          <div className="relative overflow-hidden rounded-[22px] bg-[var(--brand-purple)]/[0.04]">
+          <div className="relative mt-4 overflow-hidden rounded-[22px] bg-[var(--brand-purple)]/[0.04]">
             <MagnifyingGlassIcon
               size={18}
               className="absolute top-1/2 left-5 -translate-y-1/2 text-[var(--brand-purple)]"
@@ -118,19 +162,23 @@ export default function AddCoinModal({ onClose }: Props) {
             />
           </div>
 
-          <CoinFilterTabs
-            coinCount={coins.length}
-            activeFilter={activeFilter}
-            onChangeFilter={setActiveFilter}
-          />
+          {!isSearching && (
+            <CoinFilterTabs
+              coinCount={topCoins.length}
+              activeFilter={activeFilter}
+              onChangeFilter={setActiveFilter}
+            />
+          )}
         </div>
 
         <div className="grid min-h-0 flex-1 grid-cols-1 overflow-hidden lg:grid-cols-[50%_50%]">
           {isLoading ? (
             <PortfolioCoinModalSkeleton />
-          ) : isError ? (
+          ) : hasError ? (
             <div className="col-span-full flex items-center justify-center p-10 text-sm text-muted-foreground">
-              Could not load coins. Please try again.
+              {isSearching
+                ? "Could not search coins. Please try again."
+                : "Could not load coins. Please try again."}
             </div>
           ) : noMatchingCoins ? (
             <div className="col-span-full flex flex-col items-center justify-center p-12 text-center">
@@ -139,8 +187,7 @@ export default function AddCoinModal({ onClose }: Props) {
               </p>
 
               <p className="mt-2 max-w-sm text-sm text-muted-foreground">
-                “{search}” is not available in the current coin list. Try
-                another name or symbol.
+                “{search}” is not available. Try another name or symbol.
               </p>
             </div>
           ) : (

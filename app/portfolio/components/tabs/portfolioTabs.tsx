@@ -33,9 +33,9 @@ export default function PortfolioTabs({
   onDeletePortfolio,
 }: Props) {
   return (
-    <section className="flex min-w-0 items-center gap-3">
+    <section className="flex min-w-0 items-center gap-4">
       <div className="hide-scrollbar min-w-0 flex-1 overflow-x-auto">
-        <div className="flex w-max items-center gap-3">
+        <div className="flex w-max items-center gap-1.5 rounded-2xl border border-black/[0.06] bg-black/[0.02] p-1 dark:border-white/[0.07] dark:bg-white/[0.025]">
           {portfolios.map((portfolio, index) => {
             const isActive = portfolio.id === currentPortfolio.id;
             const colorClass = portfolioColors[index % portfolioColors.length];
@@ -43,25 +43,30 @@ export default function PortfolioTabs({
             return (
               <div
                 key={portfolio.id}
-                className={`flex h-[48px] shrink-0 items-center gap-2 rounded-full px-3 transition-all duration-200 ${
+                className={`group flex h-[44px] shrink-0 items-center rounded-xl transition-all duration-200 ${
                   isActive
-                    ? "bg-black/[0.04] text-foreground dark:bg-white/[0.06]"
-                    : "text-foreground/65 hover:bg-black/[0.03] hover:text-foreground dark:hover:bg-white/[0.04]"
+                    ? "bg-background shadow-[0_2px_10px_rgba(0,0,0,0.07)] dark:bg-white/[0.08]"
+                    : "hover:bg-black/[0.035] dark:hover:bg-white/[0.04]"
                 }`}
               >
                 <button
+                  type="button"
                   onClick={() => onSelectPortfolio(portfolio)}
-                  className="flex min-w-0 cursor-pointer items-center gap-2"
+                  className={`flex h-full min-w-0 cursor-pointer items-center gap-2.5 px-3 ${
+                    isActive
+                      ? "text-foreground"
+                      : "text-muted-foreground hover:text-foreground"
+                  }`}
                 >
                   <span
-                    className={`flex h-8 w-8 shrink-0 items-center justify-center rounded-full text-lg ${colorClass}`}
+                    className={`flex h-7 w-7 shrink-0 items-center justify-center rounded-lg text-base shadow-sm ${colorClass}`}
                   >
                     {portfolio.icon}
                   </span>
 
                   <span
                     title={portfolio.name}
-                    className={`max-w-[140px] truncate text-[15px] ${
+                    className={`max-w-[140px] truncate text-[13px] ${
                       isActive ? "font-semibold" : "font-medium"
                     }`}
                   >
@@ -70,7 +75,7 @@ export default function PortfolioTabs({
                 </button>
 
                 {isActive && (
-                  <div className="ml-1 shrink-0">
+                  <div className="mr-1 shrink-0">
                     <ActionMenu
                       editLabel="Edit"
                       deleteLabel="Delete"
@@ -86,10 +91,13 @@ export default function PortfolioTabs({
       </div>
 
       <button
+        type="button"
         onClick={onOpenPortfolioForm}
-        className="flex shrink-0 cursor-pointer items-center gap-2 text-sm font-medium text-muted-foreground transition-all duration-200 hover:translate-x-0.5 hover:text-foreground"
+        className="group flex shrink-0 cursor-pointer items-center gap-2 rounded-xl border border-black/[0.06] bg-background px-3.5 py-2.5 text-xs font-semibold text-muted-foreground shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:border-black/[0.1] hover:text-foreground hover:shadow-md dark:border-white/[0.08] dark:bg-white/[0.025]"
       >
-        <PlusIcon size={16} weight="bold" />
+        <span className="flex h-5 w-5 items-center justify-center rounded-md bg-[var(--brand-purple)]/10 text-[var(--brand-purple)] transition-transform duration-200 group-hover:rotate-90">
+          <PlusIcon size={13} weight="bold" />
+        </span>
         New Portfolio
       </button>
     </section>
